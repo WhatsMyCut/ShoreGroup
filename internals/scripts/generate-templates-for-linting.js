@@ -24,6 +24,7 @@ const checkForErrors = result => {
 const reportErrorsFor = title => err => {
   // TODO Replace with our own helpers/log that is guaranteed to be blocking?
   xmark(() =>
+    // eslint-disable-next-line no-console
     console.error(
       chalk.red(` ERROR generating '${title}': `),
       prettyStringify(err),

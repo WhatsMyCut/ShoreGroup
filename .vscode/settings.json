@@ -1,0 +1,7 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/cca5a1a6-a6ce-4775-a535-fc1f118aebe5/resourceGroups/Front-End/providers/Microsoft.Web/sites/CompliChainFrontend",
+    "appService.deploySubpath": ""
+}
