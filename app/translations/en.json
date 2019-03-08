@@ -1,0 +1,15 @@
+{
+  "app.components.Footer.author.message": " ",
+  "app.components.Footer.license.message": "",
+  "app.components.Header.features": "Add Job",
+  "app.components.Header.home": "Home",
+  "app.containers.FeaturePage.header": "Add Job",
+  "app.containers.HomePage.start_project.header": "Welcome to CompliChain",
+  "app.containers.HomePage.start_project.message": "Manage all jobs",
+  "app.containers.HomePage.tryme.atPrefix": "#",
+  "app.containers.HomePage.tryme.header": "All Jobs",
+  "app.containers.HomePage.tryme.message": "Search Jobs",
+  "app.containers.LocaleToggle.de": "de",
+  "app.containers.LocaleToggle.en": "en",
+  "app.containers.NotFoundPage.header": "Page not found."
+}
