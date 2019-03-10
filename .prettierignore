@@ -1,7 +1,8 @@
 build/
 node_modules/
-internals/generators/
-internals/scripts/
+webpack/
+src/dist/
 package-lock.json
-yarn.lock
 package.json
+webpack.config.js
+webpack.config.vendor.js
