@@ -1,11 +1,11 @@
-import AuthorizedLayout from '@Layouts/AuthorizedLayout';
-import GuestLayout from "@Layouts/GuestLayout";
-import LoginPage from '@Pages/LoginPage';
-import { AppRoute } from "@Components/shared/AppRoute";
+import AuthorizedLayout from './containers/AuthorizedLayout';
+import GuestLayout from "./containers/GuestLayout";
+import LoginPage from './pages/LoginPage';
+import AppRoute from "./components/shared/AppRoute";
 import * as React from 'react';
 import { Switch } from 'react-router-dom';
-import HomePage from '@Pages/HomePage';
-import JobsPage from '@Pages/JobsPage';
+import HomePage from './pages/HomePage';
+import JobsPage from './pages/JobsPage';
 
 export const routes = <Switch>
     <AppRoute layout={GuestLayout} exact path="/login" component={LoginPage} />

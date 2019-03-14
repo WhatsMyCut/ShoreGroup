@@ -1,24 +1,22 @@
 import * as React from "react";
-import AppComponent from "@Components/shared/AppComponent";
-import bind from 'bind-decorator';
 
 export interface IProps extends React.DetailedHTMLProps<React.SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement> {
 
 }
 
-export class MultiSelect extends AppComponent<IProps, {}> {
-    constructor(props) {
-        super(props);
+const MultiSelect = (props: IProps) => {
+    let elSelect: HTMLSelectElement,
+        renderKey = 0;
+
+    const forceUpdate = () => {
+        renderKey = Math.random();
     }
 
-    protected elSelect: HTMLSelectElement;
-    
-    @bind
-    getValues(): string[] {
+    function getValues(): string[] {
         return Array.apply(null, this.elSelect.options).filter(x => x.selected).map(x => x.value);
     }
 
-    render() {
-        return <select ref={x => this.elSelect = x} key={this.renderKey} {...this.props} multiple={true}>{this.props.children}</select>;
-    }
+    return <select ref={x => elSelect = x} key={renderKey} {...props} multiple={true}>{props.children}</select>;
 }
+
+export default MultiSelect;

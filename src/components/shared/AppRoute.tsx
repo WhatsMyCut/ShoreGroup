@@ -1,13 +1,16 @@
 import { Route, RouteProps, Redirect } from "react-router";
 import * as React from "react";
-import Globals from "@Globals";
+import Globals from "../../Globals";
+import { RouteComponentProps } from "react-router"
 
-export interface IProps extends RouteProps {
-    layout: React.ComponentClass<any>;
+interface IProps extends RouteProps {
+    layout: React.FC<any>,
+    component?: React.FC<any> | React.ComponentType<RouteComponentProps<any>> | React.ComponentType<any> 
 }
 
-export const AppRoute = ({ component: Component, layout: Layout, path: Path, ...rest }: IProps) => {
+type Props = IProps;
 
+const AppRoute = ({ component: Component, layout: Layout, path: Path, ...rest }: Props) => {
     var isLoginPath = Path === "/login";
     if (!Globals.isAuthenticated && !isLoginPath) {
         return <Redirect to="/login" />;
@@ -21,4 +24,6 @@ export const AppRoute = ({ component: Component, layout: Layout, path: Path, ...
             <Component {...props} />
         </Layout>
     )} />;
-}
+};
+
+export default AppRoute;

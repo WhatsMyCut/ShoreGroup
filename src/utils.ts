@@ -1,4 +1,4 @@
-﻿import { AppThunkActionAsync } from "@Store/index";
+import { AppThunkActionAsync } from "./store/index";
 
 declare var process: any;
 
@@ -18,7 +18,7 @@ export function isNode(): boolean {
     return typeof process === 'object' && process.versions && !!process.versions.node;
 }
 
-export function isObjectEmpty(obj): boolean {
+export function isObjectEmpty(obj: any): boolean {
     for (var key in obj) {
         if (obj.hasOwnProperty(key))
             return false;

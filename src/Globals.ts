@@ -1,6 +1,6 @@
-﻿import { IServiceUser } from "@Models/IServiceUser";
+﻿import { IServiceUser } from "./models/IServiceUser";
 import { NSerializeJson } from "nserializejson";
-import { INodeSession } from "@Models/INodeSession";
+import { INodeSession } from "./models/INodeSession";
 
 /**
  * Contains global isomorphic session.
@@ -46,7 +46,8 @@ export default class Globals {
     }
 
     public static get serviceUser(): IServiceUser {
-        return this.getData().public.serviceUser;
+        let data = this.getData();
+        if (data) return data.public.serviceUser;
     }
 
     public static set serviceUser(serviceUser: IServiceUser) {

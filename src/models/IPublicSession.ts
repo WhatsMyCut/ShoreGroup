@@ -1,4 +1,4 @@
-import { IServiceUser } from "@Models/IServiceUser";
+import { IServiceUser } from "../models/IServiceUser";
 
 /**
  * Isomorphic application session data.

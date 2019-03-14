@@ -1,5 +1,5 @@
-import { IPublicSession } from "@Models/IPublicSession";
-import { IPrivateSession } from "@Models/IPrivateSession";
+import { IPublicSession } from "../models/IPublicSession";
+import { IPrivateSession } from "../models/IPrivateSession";
 
 /**
  * Represents the isomorphic session.
