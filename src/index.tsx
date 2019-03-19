@@ -10,6 +10,15 @@ import { ApplicationState } from './store';
 import * as RoutesModule from './routes';
 import './styles/main.scss';
 import 'react-toastify/dist/ReactToastify.css';
+import Globals from './Globals';
+import { IPublicSession } from './models/IPublicSession';
+import { IPrivateSession } from './models/IPrivateSession';
+
+Globals.reset();
+Globals.init({
+  public: window['publicSession'] as IPublicSession,
+  private: {} as IPrivateSession,
+});
 
 document.addEventListener('DOMContentLoaded', () => {
   var preloader = document.getElementById('preloader');
