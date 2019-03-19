@@ -24,8 +24,7 @@
       "dom"
     ],
     "types": [
-      "redux",
-      "jest"
+      "redux"
     ]
   },
   "include": [
