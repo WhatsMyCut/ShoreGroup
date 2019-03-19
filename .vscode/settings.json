@@ -1,4 +1,0 @@
-{
-  "appService.defaultWebAppToDeploy": "/subscriptions/74589b7a-441a-4fd7-b776-8affa07e070f/resourceGroups/neewest/providers/Microsoft.Web/sites/testingfrontdeployment",
-  "appService.deploySubpath": ""
-}
