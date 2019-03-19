@@ -1,51 +1,64 @@
 import * as React from "react";
-import { Modal } from "bootstrap";
+import { Modal } from "bootstrap3-native";
+import bind from 'bind-decorator';
 
 export interface IProps {
-    title: JSX.Element | JSX.Element[] | any;
-    buttons?: any;
-    children?: JSX.Element | JSX.Element[] | any;
-    onShow?: () => void;
-    onHide?: () => void;
+  title: JSX.Element | JSX.Element[] | any;
+  buttons?: any;
+  children?: JSX.Element | JSX.Element[] | any;
+  onShow?: () => void;
+  onHide?: () => void;
 }
 
-const ModalComponent = (props: IProps) => {
+export class ModalComponent extends React.Component<IProps, {}> {
 
-    let modalPlugin: Modal,
-        elModal: HTMLElement;
+  constructor(props) {
+    super(props);
+  }
 
-    const show = () => modalPlugin.show();
-    const hide = () => modalPlugin.hide();
+  protected modalPlugin: Modal;
+  protected elModal: HTMLDivElement;
 
-    React.useLayoutEffect(() => {
-        modalPlugin = new Modal(elModal);
-        if (props.onShow) {
-            elModal.addEventListener("show.bs.modal" as any, () => props.onShow());
-        }
-        if (props.onHide) {
-            elModal.addEventListener("hide.bs.modal" as any, () => props.onHide());
-        }
+  @bind
+  public show() {
+    this.modalPlugin.show();
+  }
 
-        return () => {
-            modalPlugin.hide()
-        }
-    }, [elModal, props.onShow]);
+  @bind
+  public hide() {
+    this.modalPlugin.hide();
+  }
 
-    return <div className="modal fade" tabIndex={-1} role="dialog" ref={x => elModal = x}>
-                <div className="modal-dialog" role="document">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 className="modal-title">{props.title}</h4>
-                        </div>
-                        <div className="modal-body">
-                            {props.children}
-                        </div>
-                        <div className="modal-footer">
-                        {props.buttons}
-                        </div>
-                    </div>
-                </div>
-            </div>;
-    
+  componentDidMount() {
+    this.modalPlugin = new Modal(this.elModal);
+    if (this.props.onShow) {
+      this.elModal.addEventListener("show.bs.modal" as any, () => this.props.onShow());
+    }
+    if (this.props.onHide) {
+      this.elModal.addEventListener("hide.bs.modal" as any, () => this.props.onHide());
+    }
+  }
+
+  componentWillUnmount() {
+    this.modalPlugin.hide();
+  }
+
+  render() {
+    return <div className="modal fade" tabIndex={-1} role="dialog" ref={x => this.elModal = x}>
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 className="modal-title">{this.props.title}</h4>
+          </div>
+          <div className="modal-body">
+            {this.props.children}
+          </div>
+          <div className="modal-footer">
+            {this.props.buttons}
+          </div>
+        </div>
+      </div>
+    </div>;
+  }
 }

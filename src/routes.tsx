@@ -1,8 +1,8 @@
-import AuthorizedLayout from './containers/AuthorizedLayout';
-import GuestLayout from "./containers/GuestLayout";
-import LoginPage from './pages/LoginPage';
-import AppRoute from "./components/shared/AppRoute";
 import * as React from 'react';
+import AuthorizedLayout from './containers/AuthorizedLayout';
+import GuestLayout from './containers/GuestLayout';
+import LoginPage from './pages/LoginPage';
+import { AppRoute } from './components/shared/AppRoute';
 import { Switch } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import JobsPage from './pages/JobsPage';

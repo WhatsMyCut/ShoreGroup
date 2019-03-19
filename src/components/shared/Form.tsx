@@ -1,29 +1,40 @@
 import * as React from "react";
 import { NSerializeJson } from "nserializejson";
 import { emptyForm } from "../../Utils";
-import { NValTippy } from "nval-tippy";
+import bind from 'bind-decorator';
 
 export interface IProps extends React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> {
-    children: any;
+  children: any;
 }
 
-const Form = (props: IProps) => {
-    let validator: NValTippy;
-    let elForm: HTMLFormElement;
+export class Form extends React.Component<IProps, {}> {
+  constructor(props) {
+    super(props);
+  }
 
-    const isValid = () => {
-        return validator.isValid();
-    }
-    
-    function getData<T>(): T {
-        return NSerializeJson.serializeForm(this.elForm) as any as T;
-    }
+  public validator: any;
+  protected elForm: HTMLFormElement;
 
-    React.useLayoutEffect(() => {
-        validator = new NValTippy(elForm);
-    });
+  @bind
+  public isValid(): boolean {
+    return true;// this.validator.isValid();
+  }
 
-    return <form {...props} ref={x => elForm = x}>{props.children}</form>;
+  @bind
+  public emptyForm(): void {
+    emptyForm(this.elForm);
+  }
+
+  @bind
+  public getData<T>(): T {
+    return NSerializeJson.serializeForm(this.elForm) as any as T;
+  }
+
+  componentDidMount() {
+    this.validator = {}; //new NValTippy(this.elForm);
+  }
+
+  render() {
+    return <form {...this.props} ref={x => this.elForm = x}>{this.props.children}</form>;
+  }
 }
-
-export default Form;

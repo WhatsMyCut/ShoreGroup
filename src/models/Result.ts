@@ -1,3 +1,8 @@
+/**
+ * Base Result Class
+ * 
+ * Used to normalize the API response data.
+ */
 export default class Result<T> {
     public value: T;
     public errors: string[];

@@ -1,12 +1,4 @@
 {
-    "appService.zipIgnorePattern": [
-        ".vscode"
-    ],
-    "appService.defaultWebAppToDeploy": "/subscriptions/cca5a1a6-a6ce-4775-a535-fc1f118aebe5/resourceGroups/Front-End/providers/Microsoft.Web/sites/CompliChainFrontend",
-    "appService.deploySubpath": "",
-    "files.eol": "\r\n",
-    "editor.tabSize": 2,
-    "editor.fontSize": 13,
-    "editor.suggestFontSize": 13,
-    "terminal.integrated.fontSize": 13
+  "appService.defaultWebAppToDeploy": "/subscriptions/74589b7a-441a-4fd7-b776-8affa07e070f/resourceGroups/neewest/providers/Microsoft.Web/sites/testingfrontdeployment",
+  "appService.deploySubpath": ""
 }

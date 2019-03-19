@@ -47,7 +47,7 @@ export default class Globals {
 
     public static get serviceUser(): IServiceUser {
         let data = this.getData();
-        if (data) return data.public.serviceUser;
+        return (data && data.public && data.public.serviceUser) ? data.public.serviceUser : null;
     }
 
     public static set serviceUser(serviceUser: IServiceUser) {

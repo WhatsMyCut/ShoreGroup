@@ -13,6 +13,7 @@ export default class ErrorBoundary extends React.Component<{}, {hasError: boolea
 
     render() {
         if (this.state.hasError) {
+            //setTimeout(() => { window.location.href = '/' }, 2000);
             return <b>Something went wrong.</b>;
         }
         return this.props.children as any;

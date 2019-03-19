@@ -5,22 +5,20 @@ import { ToastContainer } from "react-toastify";
 import Footer from "../components/shared/Footer";
 
 interface IProps {
-    children?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 type Props = IProps;
 
-const AuthorizedLayout = (props: Props) => {
-    return (
-        <div id="authorizedLayout" className="layout">
-            <TopMenu />
-            <div className="container container-content">
-                {props.children}
-            </div>
-            <ToastContainer />
-            <Footer />
-        </div>
-    );
-};
-
-export default AuthorizedLayout;
+export default class AuthorizedLayout extends React.Component<Props, {}> {
+  public render() {
+    return <div id="authorizedLayout" className="layout">
+      <TopMenu />
+      <div className="container container-content">
+        {this.props.children}
+      </div>
+      <ToastContainer />
+      <Footer />
+    </div>;
+  }
+}

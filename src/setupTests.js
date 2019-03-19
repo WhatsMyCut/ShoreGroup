@@ -7,4 +7,5 @@ const localStorageMock = {
   removeItem: jest.fn(),
   clear: jest.fn(),
 };
+
 global.localStorage = localStorageMock;

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { withRouter } from "react-router";
 import { NavLink, Redirect } from "react-router-dom";
-import Globals from "@Globals";
-import AccountService from "@Services/AccountService";
+import Globals from "../../Globals";
+import AccountService from "../../api/AccountService";
 import { Dropdown, Collapse } from "bootstrap3-native";
 import bind from 'bind-decorator';
 
@@ -16,9 +16,9 @@ class TopMenu extends React.Component<{}, { logoutAction: boolean }> {
     @bind
     async onClickSignOut(e: React.MouseEvent<HTMLAnchorElement>) {
         e.preventDefault();
-
-        await AccountService.logout();
+        AccountService.logout();
         this.setState({ logoutAction: true });
+        setTimeout(() => { window.location.href = '/login' }, 100);
     }
 
     private elDropdown: HTMLAnchorElement;
@@ -33,9 +33,9 @@ class TopMenu extends React.Component<{}, { logoutAction: boolean }> {
     }
 
     render() {
-        if (this.state.logoutAction)
+        if (this.state.logoutAction) {
             return <Redirect to="/login" />;
-
+        }
         return <div className="navbar navbar-default">
             <div className="container-fluid">
                 <div className="navbar-header">
