@@ -45,7 +45,7 @@
     "build": "react-scripts build",
     "lint": "./node_modules/.bin/eslint ./src/",
     "test": "react-scripts test",
-    "test:coverage": "cross-env CI=true react-scripts test --coverage | coveralls",
+    "test:coverage": "cross-env CI=true react-scripts test",
     "eject": "react-scripts eject"
   },
   "husky": {
