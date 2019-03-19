@@ -105,7 +105,7 @@ pushd "%DEPLOYMENT_SOURCE%"
 call :ExecuteCmd npm install
 IF !ERRORLEVEL! NEQ 0 goto error
 call :ExecuteCmd npm build
-IF !ERRORLEVEL! NEQ 0 goto error
+IF !ERRORLnpmEVEL! NEQ 0 goto error
 popd
 
 
