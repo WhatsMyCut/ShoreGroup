@@ -91,18 +91,23 @@ goto :EOF
 echo Verifing Node
 call :SelectNodeVersion
 
-:: 2. Install Yarn
-echo Verifying Yarn Install.
-call :ExecuteCmd !NPM_CMD! install yarn -g
- 
 :: 3. Install Yarn packages
-echo Installing Yarn Packages.
+echo Installing NPM Packages.
 IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
   pushd "%DEPLOYMENT_TARGET%"
-  call :ExecuteCmd yarn install --production
+  call :ExecuteCmd npm install
   IF !ERRORLEVEL! NEQ 0 goto error
   popd
 )
+
+echo Installing Build Packages.
+pushd "%DEPLOYMENT_SOURCE%"
+call :ExecuteCmd npm install
+IF !ERRORLEVEL! NEQ 0 goto error
+call :ExecuteCmd npm build
+IF !ERRORLEVEL! NEQ 0 goto error
+popd
+
 
 :: 4: KuduSync
 IF /I "%IN_PLACE_DEPLOYMENT%" NEQ "1" (
