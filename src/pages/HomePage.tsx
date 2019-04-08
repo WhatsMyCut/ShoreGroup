@@ -3,7 +3,6 @@ import Avatar from '@atlaskit/avatar';
 import Drawer from '@atlaskit/drawer';
 import CreateDrawer from '../components/drawers/CreateDrawer';
 import SearchDrawer from '../components/drawers/SearchDrawer';
-import FabricLayout from '../components/FrabricLayout';
 import { Helmet } from 'react-helmet';
 import {
   DropdownItem,
@@ -106,11 +105,11 @@ const ItemComponent = ({ dropdownItems: DropdownItems, ...itemProps }) => {
 };
 
 const TestState = () => {
-  const [dd, setDd] = React.useState('ff');
+  const [dd, setDd] = React.useState('');
   if (dd === 'ff') {
-    setTimeout(() => setDd('dddd'), 1000);
+    setTimeout(() => setDd(''), 1000);
   }
-  return <div>Hello, {dd}</div>;
+  return <div>{dd}</div>;
 };
 
 const ExampleDropdown = () => (
@@ -363,7 +362,7 @@ export default () => {
             <Fragment>
               <MobileHeaderDemo />
               <div style={{ padding: 20 }}>
-                <FabricLayout />
+                <TestState />
               </div>
             </Fragment>
           ) : (
@@ -373,7 +372,7 @@ export default () => {
               productNavigation={() => null}
             >
               <div style={{ padding: 20 }}>
-                <FabricLayout />
+                <TestState />
               </div>
             </LayoutManager>
           )}
