@@ -22,9 +22,6 @@
     "lib": [
       "es6",
       "dom"
-    ],
-    "types": [
-      "redux"
     ]
   },
   "include": [

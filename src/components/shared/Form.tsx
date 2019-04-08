@@ -1,13 +1,20 @@
-import * as React from "react";
-import { NSerializeJson } from "nserializejson";
-import { emptyForm } from "../../Utils";
+import * as React from 'react';
+import { NSerializeJson } from 'nserializejson';
+import { emptyForm } from '../../Utils';
 import bind from 'bind-decorator';
+import AppComponent from './AppComponent';
 
-export interface IProps extends React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> {
+export interface IProps
+  extends React.DetailedHTMLProps<
+    React.FormHTMLAttributes<HTMLFormElement>,
+    HTMLFormElement
+  > {
   children: any;
 }
 
-export class Form extends React.Component<IProps, {}> {
+export class Form extends AppComponent<IProps, {}> {
+  props: IProps;
+
   constructor(props) {
     super(props);
   }
@@ -17,7 +24,7 @@ export class Form extends React.Component<IProps, {}> {
 
   @bind
   public isValid(): boolean {
-    return true;// this.validator.isValid();
+    return true; // this.validator.isValid();
   }
 
   @bind
@@ -27,7 +34,7 @@ export class Form extends React.Component<IProps, {}> {
 
   @bind
   public getData<T>(): T {
-    return NSerializeJson.serializeForm(this.elForm) as any as T;
+    return (NSerializeJson.serializeForm(this.elForm) as any) as T;
   }
 
   componentDidMount() {
@@ -35,6 +42,10 @@ export class Form extends React.Component<IProps, {}> {
   }
 
   render() {
-    return <form {...this.props} ref={x => this.elForm = x}>{this.props.children}</form>;
+    return (
+      <form {...this.props} ref={x => (this.elForm = x)}>
+        {this.props.children}
+      </form>
+    );
   }
 }

@@ -1,4 +1,11 @@
-﻿.footer {
+﻿@import './loader.scss';
+[data-test-id='ContextualNavigation'] {
+  width: 275px !important;
+}
+[data-test-id='Navigation'] + div {
+  padding-left: 275px !important;
+}
+.footer {
   width: 100%;
   height: 80px;
   padding: 10px;

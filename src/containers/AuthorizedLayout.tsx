@@ -1,8 +1,8 @@
-﻿import TopMenu from "../components/shared/TopMenu";
-import * as React from "react";
-import "../styles/authorizedLayout.scss";
-import { ToastContainer } from "react-toastify";
-import Footer from "../components/shared/Footer";
+﻿import TopMenu from '../components/shared/TopMenu';
+import * as React from 'react';
+import '../styles/authorizedLayout.scss';
+import { ToastContainer } from 'react-toastify';
+import Footer from '../components/shared/Footer';
 
 interface IProps {
   children?: React.ReactNode;
@@ -11,14 +11,16 @@ interface IProps {
 type Props = IProps;
 
 export default class AuthorizedLayout extends React.Component<Props, {}> {
+  props: Props;
+
   public render() {
-    return <div id="authorizedLayout" className="layout">
-      <TopMenu />
-      <div className="container container-content">
-        {this.props.children}
+    return (
+      <div id="authorizedLayout" className="layout">
+        <TopMenu />
+        <div className="container container-content">{this.props.children}</div>
+        <ToastContainer />
+        <Footer />
       </div>
-      <ToastContainer />
-      <Footer />
-    </div>;
+    );
   }
 }

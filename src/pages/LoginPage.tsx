@@ -1,19 +1,21 @@
-﻿import { ILoginModel } from "../models/ILoginModel";
-import Loader from "../components/shared/Loader";
-import { ApplicationState } from "../store/index";
-import * as LoginStore from "../store/LoginStore";
-import "../styles/main.scss";;
-import * as React from "react";
-import { Helmet } from "react-helmet";
-import { connect } from "react-redux";
+﻿import { ILoginModel } from '../models/ILoginModel';
+import Loader from '../components/shared/Loader';
+import { ApplicationState } from '../store/index';
+import * as LoginStore from '../store/LoginStore';
+import '../styles/main.scss';
+import * as React from 'react';
+import { Helmet } from 'react-helmet';
+import { connect } from 'react-redux';
 import bind from 'bind-decorator';
-import { Redirect, RouteComponentProps, withRouter } from "react-router-dom";
-import { Form } from "../components/shared/Form";
+import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
+import { Form } from '../components/shared/Form';
+import AppComponent from '../components/shared/AppComponent';
 
-type Props = RouteComponentProps<{}> & typeof LoginStore.actionCreators & LoginStore.IState;
+type Props = RouteComponentProps<{}> &
+  typeof LoginStore.actionCreators &
+  LoginStore.IState;
 
-class LoginPage extends React.Component<Props, {}> {
-
+class LoginPage extends AppComponent<Props, {}> {
   constructor(props: Props) {
     super(props);
   }
@@ -38,39 +40,64 @@ class LoginPage extends React.Component<Props, {}> {
   }
 
   render() {
-
     if (this.props.indicators.loginSuccess) {
       return <Redirect to="/" />;
     }
 
-    return <div id="loginPage">
-      <Helmet>
-        <title>Login - CompliChain</title>
-      </Helmet>
-      <Loader ref={x => this.elLoader = x} show={this.props.indicators.operationLoading} />
-      <div id="loginContainer">
-        <p className="text-center">Type any login and password to enter.</p>
-        <Form ref={x => this.elForm = x}>
-          <div className="form-group">
-            <label htmlFor="inputLogin">Login</label>
-            <input type="text" name="login" data-value-type="string" className="form-control" id="inputLogin" data-val-required="true" data-msg-required="Login is required." />
-          </div>
-          <div className="form-group">
-            <label htmlFor="inputLogin">Password</label>
-            <input type="password" name="password" data-value-type="string" className="form-control" id="inputPassword" data-val-required="true" data-msg-required="Password is required." />
-          </div>
-          <div className="form-inline">
-            <button className="btn btn-success" onClick={this.onClickSubmitBtn}>Sign in</button>
-          </div>
-        </Form>
+    return (
+      <div id="loginPage">
+        <Helmet>
+          <title>Login - CompliChain</title>
+        </Helmet>
+        <Loader
+          ref={x => (this.elLoader = x)}
+          show={this.props.indicators.operationLoading}
+        />
+        <div id="loginContainer">
+          <p className="text-center">Type any login and password to enter.</p>
+          <Form ref={x => (this.elForm = x)}>
+            <div className="form-group">
+              <label htmlFor="inputLogin">Login</label>
+              <input
+                type="text"
+                name="login"
+                data-value-type="string"
+                className="form-control"
+                id="inputLogin"
+                data-val-required="true"
+                data-msg-required="Login is required."
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="inputLogin">Password</label>
+              <input
+                type="password"
+                name="password"
+                data-value-type="string"
+                className="form-control"
+                id="inputPassword"
+                data-val-required="true"
+                data-msg-required="Password is required."
+              />
+            </div>
+            <div className="form-inline">
+              <button
+                className="btn btn-success"
+                onClick={this.onClickSubmitBtn}
+              >
+                Sign in
+              </button>
+            </div>
+          </Form>
+        </div>
       </div>
-    </div>;
+    );
   }
 }
 
 var component = connect(
   (state: ApplicationState) => state.login, // Selects which state properties are merged into the component's props
-  LoginStore.actionCreators // Selects which action creators are merged into the component's props
+  LoginStore.actionCreators, // Selects which action creators are merged into the component's props
 )(LoginPage as any);
 
-export default (withRouter(component as any) as any as typeof LoginPage)
+export default (withRouter(component as any) as any) as typeof LoginPage;
