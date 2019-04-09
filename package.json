@@ -3,19 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@atlaskit/avatar": "^15.0.1",
-    "@atlaskit/button": "^11.0.2",
-    "@atlaskit/css-reset": "^3.0.6",
-    "@atlaskit/drawer": "^3.0.1",
-    "@atlaskit/dropdown-menu": "^7.0.2",
-    "@atlaskit/flag": "^10.0.1",
-    "@atlaskit/icon": "^16.0.5",
-    "@atlaskit/inline-edit": "^8.0.1",
-    "@atlaskit/mobile-header": "^2.1.0",
-    "@atlaskit/modal-dialog": "^8.0.3",
-    "@atlaskit/navigation-next": "^5.0.1",
-    "@atlaskit/page": "^9.0.1",
-    "@atlaskit/theme": "^8.0.1",
     "@babel/polyfill": "7.2.5",
     "awesome-debounce-promise": "1.0.0",
     "axios": "^0.18.0",
@@ -31,16 +18,14 @@
     "nserializejson": "1.0.2",
     "nval": "1.1.5",
     "nval-tippy": "1.0.34",
-    "office-ui-fabric-react": "^6.164.7",
+    "office-ui-fabric-react": "^6.164.8",
     "react": "^16.8.5",
     "react-app-polyfill": "0.2.2",
     "react-dom": "^16.8.5",
     "react-helmet": "^5.2.0",
-    "react-paginating": "^1.1.0",
     "react-redux": "^6.0.1",
-    "react-router": "4.3.1",
     "react-router-dom": "4.3.1",
-    "react-router-redux": "^4.0.8",
+    "react-spring": "^8.0.19",
     "react-toastify": "4.5.2",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
@@ -78,18 +63,10 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "**/*.{ts,tsx,js,jsx}",
+      "src/**/*.{js}",
       "!<rootDir>/node_modules/",
       "!<rootDir>/build/"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "branches": 80,
-        "functions": 80,
-        "lines": 80,
-        "statements": -10
-      }
-    }
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -125,7 +102,7 @@
     "prettier": "1.16.4",
     "prop-types": "15.7.2",
     "react-scripts": "^2.1.8",
-    "react-styleguidist": "^9.0.4",
+    "react-styleguidist": "^9.0.6",
     "react-testing-library": "6.0.0",
     "typescript": "3.3.3333"
   }
