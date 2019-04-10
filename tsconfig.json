@@ -11,7 +11,7 @@
     "moduleResolution": "node",
     "target": "es5",
     "jsx": "preserve",
-    "sourceMap": true,
+    "sourceMap": false,
     "experimentalDecorators": true,
     "skipDefaultLibCheck": true,
     "strict": false,
