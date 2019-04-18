@@ -1,7 +1,5 @@
 import * as React from 'react';
 
-export const App = (props) => {
-  return <div>
-    {props.children}
-  </div>
+export const App = props => {
+  return <div>{props.children}</div>;
 };
