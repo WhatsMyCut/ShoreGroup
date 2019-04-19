@@ -1,14 +1,14 @@
-import { ITaskModel } from "../../models/ITaskModel";
-import * as React from "react";
+import { ITaskModel } from '../../models/ITaskModel';
+import React, { Component } from 'react';
 import bind from 'bind-decorator';
-import { Form } from "../shared/Form";
+import { Form } from '../shared/Form';
 import { Formik } from 'formik';
 
 export interface IProps {
   data: ITaskModel;
 }
 
-export default class TaskEditor extends React.Component<IProps, {}> {
+export default class TaskEditor extends Component<IProps, {}> {
   constructor(props) {
     super(props);
   }
@@ -22,34 +22,38 @@ export default class TaskEditor extends React.Component<IProps, {}> {
     }
   }
 
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render() {
-
-    return <Formik
-      enableReinitialize={true}
-      initialValues={{
-        name: this.props.data.name || '',
-        description: this.props.data.description || ''
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-      }}
-    >
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-        isSubmitting,
-        /* and other goodies */
-      }) => (
-          <Form className="form" ref={x => this.elForm = x}>
-            <input type="hidden" name="taskID" defaultValue={(this.props.data.taskID || 0).toString()} />
+    return (
+      <Formik
+        enableReinitialize={true}
+        initialValues={{
+          name: this.props.data.name || '',
+          description: this.props.data.description || '',
+        }}
+        onSubmit={(values, { setSubmitting }) => {}}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          /* and other goodies */
+        }) => (
+          <Form className="form" ref={x => (this.elForm = x)}>
+            <input
+              type="hidden"
+              name="taskID"
+              defaultValue={(this.props.data.taskID || 0).toString()}
+            />
             <div className="form-group">
-              <label className="control-label required" htmlFor="task__name">Task Name</label>
+              <label className="control-label required" htmlFor="task__name">
+                Task Name
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -64,7 +68,12 @@ export default class TaskEditor extends React.Component<IProps, {}> {
               />
             </div>
             <div className="form-group">
-              <label className="control-label required" htmlFor="task__description">Description</label>
+              <label
+                className="control-label required"
+                htmlFor="task__description"
+              >
+                Description
+              </label>
               <input
                 type="text"
                 className="form-control"
@@ -77,7 +86,9 @@ export default class TaskEditor extends React.Component<IProps, {}> {
                 onBlur={handleBlur}
               />
             </div>
-          </Form>)}
-    </Formik>;
+          </Form>
+        )}
+      </Formik>
+    );
   }
 }

@@ -1,13 +1,13 @@
-﻿import { ILoginModel } from '../models/ILoginModel';
-import Loader from '../components/shared/Loader';
-import { ApplicationState } from '../store/index';
-import * as LoginStore from '../store/LoginStore';
-import '../styles/main.scss';
-import * as React from 'react';
+﻿import React from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import bind from 'bind-decorator';
 import { Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
+import { ILoginModel } from '../models/ILoginModel';
+import Loader from '../components/shared/Loader';
+import { ApplicationState } from '../store/index';
+import * as LoginStore from '../store/LoginStore';
+import '../styles/main.scss';
 import { Form } from '../components/shared/Form';
 import AppComponent from '../components/shared/AppComponent';
 

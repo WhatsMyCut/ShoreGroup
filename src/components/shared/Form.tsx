@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { NSerializeJson } from 'nserializejson';
 import { emptyForm } from '../../Utils';
 import bind from 'bind-decorator';

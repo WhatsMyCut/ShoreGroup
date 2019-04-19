@@ -1,9 +1,9 @@
-﻿import { ILoginModel } from "../models/ILoginModel";
-import { IServiceUser } from "../models/IServiceUser";
-import { clone } from "../Utils";
-import { Action, Reducer } from "redux";
-import AccountService from "../api/AccountService";
-import { AppThunkAction } from "./index";
+﻿import { ILoginModel } from '../models/ILoginModel';
+import { IServiceUser } from '../models/IServiceUser';
+import { clone } from '../Utils';
+import { Action, Reducer } from 'redux';
+import AccountService from '../api/AccountService';
+import { AppThunkAction } from './index';
 
 export interface IState {
   indicators: {
@@ -20,10 +20,10 @@ export enum Actions {
    * It must be called in method 'componentDidMount'
    * of a component.
    */
-  Init = "LOGIN_INIT",
-  Request = "LOGIN_REQUEST",
-  Success = "LOGIN_SUCCESS",
-  Failure = "LOGIN_FAILURE"
+  Init = 'LOGIN_INIT',
+  Request = 'LOGIN_REQUEST',
+  Success = 'LOGIN_SUCCESS',
+  Failure = 'LOGIN_FAILURE',
 }
 
 interface IInit {
@@ -50,8 +50,10 @@ export const actionCreators = {
     dispatch({ type: Actions.Init });
     return;
   },
-  loginRequest: (model: ILoginModel): AppThunkAction<KnownAction> => async (dispatch, getState) => {
-
+  loginRequest: (model: ILoginModel): AppThunkAction<KnownAction> => async (
+    dispatch,
+    getState,
+  ) => {
     dispatch({ type: Actions.Request });
 
     var result = await AccountService.login(model);
@@ -62,22 +64,28 @@ export const actionCreators = {
 
     dispatch({ type: Actions.Success, payload: result.value });
     return;
-  }
-}
+  },
+};
 
 const initialState: IState = {
   indicators: {
     operationLoading: false,
-    loginSuccess: false
-  }
+    loginSuccess: false,
+  },
 };
 
-export const reducer: Reducer<IState> = (currentState: IState, incomingAction: Action) => {
+export const reducer: Reducer<IState> = (
+  currentState: IState,
+  incomingAction: Action,
+) => {
   const action = incomingAction as KnownAction;
 
   var cloneIndicators = () => clone(currentState.indicators);
   (window as any).initialReduxState.login = currentState;
-  (window as any).localStorage.setItem('initialReduxState', JSON.stringify((window as any).initialReduxState));
+  (window as any).localStorage.setItem(
+    'initialReduxState',
+    JSON.stringify((window as any).initialReduxState),
+  );
   switch (action.type) {
     case Actions.Init:
       return initialState;
@@ -100,4 +108,6 @@ export const reducer: Reducer<IState> = (currentState: IState, incomingAction: A
   }
 
   return currentState || initialState;
-}
+};
+
+export default Object.assign({}, this);

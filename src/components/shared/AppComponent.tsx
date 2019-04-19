@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+﻿import React, { Component } from 'react';
 
 /**
  * This component contains helpful method which
@@ -7,7 +7,7 @@
 export default abstract class AppComponent<
   TProps = {},
   TState = {}
-> extends React.Component<TProps, TState> {
+> extends Component<TProps, TState> {
   props: TProps;
   /**
    * Place it into the "key" attribute of an element.

@@ -6,7 +6,7 @@
 
 // TODO: Organize imports better
 import '../styles/main.scss';
-import * as React from 'react';
+import React, { MouseEvent, ChangeEvent } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ITaskModel } from '../models/ITaskModel';
 import * as TaskStore from '../store/TaskStore';
@@ -84,13 +84,13 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  onClickShowAddModal(e: React.MouseEvent<HTMLButtonElement>) {
+  onClickShowAddModal(e: MouseEvent<HTMLButtonElement>) {
     this.elModalAdd.show();
   }
 
   @bind
   onClickShowEditModal(
-    e: React.MouseEvent<HTMLButtonElement>,
+    e: MouseEvent<HTMLButtonElement>,
     modelForEdit: ITaskModel,
   ) {
     this.setState({ modelForEdit });
@@ -99,7 +99,7 @@ class JobsPage extends AppComponent<Props, IState> {
 
   @bind
   onClickShowDeleteModal(
-    e: React.MouseEvent<HTMLButtonElement>,
+    e: MouseEvent<HTMLButtonElement>,
     modelForEdit: ITaskModel,
   ) {
     this.setState({ modelForEdit });
@@ -107,7 +107,7 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  async onClickTaskEditorAdd__saveBtn(e: React.MouseEvent<HTMLButtonElement>) {
+  async onClickTaskEditorAdd__saveBtn(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
     if (!this.tasksEditorAdd.elForm.isValid()) {
@@ -126,7 +126,7 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  async onClickTaskEditorEdit__saveBtn(e: React.MouseEvent<HTMLButtonElement>) {
+  async onClickTaskEditorEdit__saveBtn(e: MouseEvent<HTMLButtonElement>) {
     if (!this.tasksEditorEdit.elForm.isValid()) {
       // Form is not valid.
       return;
@@ -142,9 +142,7 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  onClickTaskEditorDelete__saveBtn(
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): void {
+  onClickTaskEditorDelete__saveBtn(e: MouseEvent<HTMLButtonElement>): void {
     this.props.deleteRequest(this.state.modelForEdit.taskID);
     this.elModalDelete.hide();
   }
@@ -185,7 +183,7 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  onChangeSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
+  onChangeSearchInput(e: ChangeEvent<HTMLInputElement>) {
     var val = e.currentTarget.value;
     this.debouncedSearch(val);
     this.pagingBar.setFirstPage();

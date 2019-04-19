@@ -1,5 +1,5 @@
-import Pagination, { PaginationProps } from "react-paginating";
-import * as React from "react";
+import React, { Component } from 'react';
+import Pagination, { PaginationProps } from 'react-paginating';
 import bind from 'bind-decorator';
 
 export interface IProps {
@@ -9,12 +9,11 @@ export interface IProps {
   onChangePage: (pageNum: number) => void;
 }
 
-/* Below code of the 'Pagination' component was taken 
-from the https://github.com/ChoTotOSS/react-paginating 
+/* Below code of the 'Pagination' component was taken
+from the https://github.com/ChoTotOSS/react-paginating
 and remaked for the Bootstrap style. */
 
-export class PagingBar extends React.Component<IProps, {}> {
-
+export class PagingBar extends Component<IProps, {}> {
   constructor(props) {
     super(props);
   }
@@ -33,32 +32,33 @@ export class PagingBar extends React.Component<IProps, {}> {
   }
 
   render() {
-    return <Pagination
-      total={this.props.totalResults}
-      limit={this.props.limitPerPage}
-      currentPage={this.props.currentPage}
-    >
-      {({
-        pages,
-        currentPage,
-        hasNextPage,
-        hasPreviousPage,
-        previousPage,
-        nextPage,
-        totalPages,
-        getPageItemProps
-      }) => (
+    return (
+      <Pagination
+        total={this.props.totalResults}
+        limit={this.props.limitPerPage}
+        currentPage={this.props.currentPage}
+      >
+        {({
+          pages,
+          currentPage,
+          hasNextPage,
+          hasPreviousPage,
+          previousPage,
+          nextPage,
+          totalPages,
+          getPageItemProps,
+        }) => (
           <ul className="pagination">
             <li>
               <span
                 {...getPageItemProps({
                   pageValue: 1,
-                  onPageChange: this.props.onChangePage
+                  onPageChange: this.props.onChangePage,
                 })}
-                ref={x => this.elFirstPageBtn = x}
+                ref={x => (this.elFirstPageBtn = x)}
               >
                 first
-                </span>
+              </span>
             </li>
 
             {hasPreviousPage && (
@@ -66,7 +66,7 @@ export class PagingBar extends React.Component<IProps, {}> {
                 <span
                   {...getPageItemProps({
                     pageValue: previousPage,
-                    onPageChange: this.props.onChangePage
+                    onPageChange: this.props.onChangePage,
                   })}
                 >
                   {'<'}
@@ -80,7 +80,7 @@ export class PagingBar extends React.Component<IProps, {}> {
                   <span
                     {...getPageItemProps({
                       pageValue: page,
-                      onPageChange: this.props.onChangePage
+                      onPageChange: this.props.onChangePage,
                     })}
                   >
                     {page}
@@ -94,7 +94,7 @@ export class PagingBar extends React.Component<IProps, {}> {
                 <span
                   {...getPageItemProps({
                     pageValue: nextPage,
-                    onPageChange: this.props.onChangePage
+                    onPageChange: this.props.onChangePage,
                   })}
                 >
                   {'>'}
@@ -106,15 +106,16 @@ export class PagingBar extends React.Component<IProps, {}> {
               <span
                 {...getPageItemProps({
                   pageValue: totalPages,
-                  onPageChange: this.props.onChangePage
+                  onPageChange: this.props.onChangePage,
                 })}
-                ref={x => this.elLastPageBtn = x}
+                ref={x => (this.elLastPageBtn = x)}
               >
                 last
-                                    </span>
+              </span>
             </li>
           </ul>
         )}
-    </Pagination>
+      </Pagination>
+    );
   }
 }

@@ -1,5 +1,5 @@
 ﻿import '../styles/guestLayout.scss';
-import * as React from 'react';
+import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
@@ -9,7 +9,7 @@ interface IProps {
 
 type Props = IProps & RouteComponentProps<any>;
 
-export default class GuestLayout extends React.Component<Props, {}> {
+export default class GuestLayout extends Component<Props, {}> {
   props: Props;
 
   public render() {

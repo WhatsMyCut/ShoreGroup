@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 import { RouteComponentProps } from 'react-router';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
@@ -12,7 +12,7 @@ const Divider = styled.hr`
   border: none;
   background: #111;
 `;
-export default class HomePage extends React.Component<Props, {}> {
+export default class HomePage extends Component<Props, {}> {
   constructor(props) {
     super(props);
   }

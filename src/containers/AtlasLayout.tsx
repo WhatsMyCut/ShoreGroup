@@ -1,4 +1,4 @@
-﻿import * as React from 'react';
+﻿import React, { Component } from 'react';
 
 interface IProps {
   children?: React.ReactNode;
@@ -6,7 +6,7 @@ interface IProps {
 
 type Props = IProps;
 
-export default class AtlasLayout extends React.Component<Props, {}> {
+export default class AtlasLayout extends Component<Props, {}> {
   props: Props;
 
   public render() {

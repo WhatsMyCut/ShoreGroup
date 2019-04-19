@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { ComponentClass } from 'react';
 import AuthorizedLayout from './containers/AuthorizedLayout';
 import GuestLayout from './containers/GuestLayout';
 import AtlasLayout from './containers/AtlasLayout';
@@ -14,13 +14,13 @@ export const routes = (
       layout={GuestLayout}
       exact
       path="/login"
-      component={LoginPage as React.ComponentClass<any, any>}
+      component={LoginPage as ComponentClass<any, any>}
     />
     <AppRoute
       layout={AuthorizedLayout}
       exact
       path="/"
-      component={JobsPage as React.ComponentClass<any, any>}
+      component={JobsPage as ComponentClass<any, any>}
     />
     <AppRoute layout={AtlasLayout} exact path="/info" component={HomePage} />
   </Switch>

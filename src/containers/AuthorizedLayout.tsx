@@ -1,6 +1,6 @@
-﻿import TopMenu from '../components/shared/TopMenu';
-import * as React from 'react';
+﻿import React, { Component } from 'react';
 import '../styles/authorizedLayout.scss';
+import TopMenu from '../components/shared/TopMenu';
 import { ToastContainer } from 'react-toastify';
 import Footer from '../components/shared/Footer';
 
@@ -10,7 +10,7 @@ interface IProps {
 
 type Props = IProps;
 
-export default class AuthorizedLayout extends React.Component<Props, {}> {
+export default class AuthorizedLayout extends Component<Props, {}> {
   props: Props;
 
   public render() {
