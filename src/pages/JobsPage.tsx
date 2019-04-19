@@ -8,8 +8,8 @@
 import '../styles/main.scss';
 import React, { MouseEvent, ChangeEvent } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ITaskModel } from '../models/ITaskModel';
-import * as TaskStore from '../store/TaskStore';
+import { IJobModel } from '../models/IJobModel';
+import * as JobStore from '../store/JobStore';
 import { ApplicationState, reducers } from '../store/index';
 import { connect } from 'react-redux';
 import AppComponent from '../components/shared/AppComponent';
@@ -22,15 +22,15 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { getPromiseFromAction } from '../Utils';
 
 type Props = RouteComponentProps<{}> &
-  typeof TaskStore.actionCreators &
-  TaskStore.IState;
+  typeof JobStore.actionCreators &
+  JobStore.IState;
 
 interface IState {
   searchTerm: string;
   pageNum: number;
   limitPerPage: number;
   rowOffset: number;
-  modelForEdit: ITaskModel;
+  modelForEdit: IJobModel;
 }
 
 class JobsPage extends AppComponent<Props, IState> {
@@ -43,10 +43,11 @@ class JobsPage extends AppComponent<Props, IState> {
   private tasksEditorAdd: TaskEditor;
   private tasksEditorEdit: TaskEditor;
 
-  private debouncedSearch: (term: string) => void;
+  private fetch: (id: string) => void;
 
   constructor(props: Props) {
     super(props);
+    console.log('here5', props, this.props);
 
     this.state = {
       searchTerm: '',
@@ -56,13 +57,13 @@ class JobsPage extends AppComponent<Props, IState> {
       modelForEdit: {},
     };
 
-    this.debouncedSearch = AwesomeDebouncePromise((term: string) => {
-      props.searchRequest(term);
+    this.fetch = AwesomeDebouncePromise((id: string) => {
+      props.fetchRequest(id);
     }, 500);
   }
 
   componentWillMount() {
-    this.props.searchRequest();
+    this.props.fetchRequest();
   }
 
   componentWillUnmount() {
@@ -91,7 +92,7 @@ class JobsPage extends AppComponent<Props, IState> {
   @bind
   onClickShowEditModal(
     e: MouseEvent<HTMLButtonElement>,
-    modelForEdit: ITaskModel,
+    modelForEdit: IJobModel,
   ) {
     this.setState({ modelForEdit });
     this.elModalEdit.show();
@@ -100,7 +101,7 @@ class JobsPage extends AppComponent<Props, IState> {
   @bind
   onClickShowDeleteModal(
     e: MouseEvent<HTMLButtonElement>,
-    modelForEdit: ITaskModel,
+    modelForEdit: IJobModel,
   ) {
     this.setState({ modelForEdit });
     this.elModalDelete.show();
@@ -143,27 +144,27 @@ class JobsPage extends AppComponent<Props, IState> {
 
   @bind
   onClickTaskEditorDelete__saveBtn(e: MouseEvent<HTMLButtonElement>): void {
-    this.props.deleteRequest(this.state.modelForEdit.taskID);
+    this.props.deleteRequest(this.state.modelForEdit.id);
     this.elModalDelete.hide();
   }
 
   @bind
-  renderRow(task: ITaskModel) {
+  renderRow(job: IJobModel) {
     return (
-      <tr key={task.taskID}>
-        <td>{task.name}</td>
-        <td>{task.description}</td>
+      <tr key={job.id}>
+        <td>{job.name}</td>
+        <td>{job.id}</td>
         <td className="btn-actions">
           <button
             className="btn btn-info"
-            onClick={x => this.onClickShowEditModal(x, task)}
+            onClick={x => this.onClickShowEditModal(x, job)}
           >
             Edit
           </button>
           &nbsp;
           <button
             className="btn btn-danger"
-            onClick={x => this.onClickShowDeleteModal(x, task)}
+            onClick={x => this.onClickShowDeleteModal(x, job)}
           >
             Delete
           </button>
@@ -173,7 +174,7 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  renderRows(data: ITaskModel[]) {
+  renderRows(data: IJobModel[]) {
     return data
       .slice(
         this.state.rowOffset,
@@ -185,14 +186,15 @@ class JobsPage extends AppComponent<Props, IState> {
   @bind
   onChangeSearchInput(e: ChangeEvent<HTMLInputElement>) {
     var val = e.currentTarget.value;
-    this.debouncedSearch(val);
+    this.fetch(val);
     this.pagingBar.setFirstPage();
   }
 
   render() {
+    console.log('HERE2', this.props, this.state);
     return (
       <div>
-        <Loader show={this.props.indicators.operationLoading} />
+        {/* <Loader show={this.props.indicators.operationLoading || true} /> */}
 
         <div className="panel panel-default">
           <div className="panel-body row">
@@ -224,7 +226,7 @@ class JobsPage extends AppComponent<Props, IState> {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>{this.renderRows(this.props.tasks)}</tbody>
+          <tbody>{this.renderRows(this.props.jobs)}</tbody>
         </table>
 
         {/* Add modal */}
@@ -313,7 +315,7 @@ class JobsPage extends AppComponent<Props, IState> {
               </button>
             </div>
           }
-          title={`Delete Job: #${this.state.modelForEdit.taskID} ${
+          title={`Delete Job: #${this.state.modelForEdit.id} ${
             this.state.modelForEdit.name
           }`}
         >
@@ -322,7 +324,7 @@ class JobsPage extends AppComponent<Props, IState> {
 
         <PagingBar
           ref={x => (this.pagingBar = x)}
-          totalResults={this.props.tasks.length}
+          totalResults={this.props.jobs.length}
           limitPerPage={this.state.limitPerPage}
           currentPage={this.state.pageNum}
           onChangePage={this.onChangePage}
@@ -333,8 +335,8 @@ class JobsPage extends AppComponent<Props, IState> {
 }
 
 var component = connect(
-  (state: ApplicationState) => state.tasks,
-  TaskStore.actionCreators,
+  (state: ApplicationState) => state.jobs,
+  JobStore.actionCreators,
 )(JobsPage as any);
 
 export default (withRouter(component as any) as any) as typeof JobsPage;

@@ -1,9 +1,11 @@
-import * as LoginStore from "./LoginStore";
-import * as TaskStore from "./TaskStore";
+import * as LoginStore from './LoginStore';
+import * as TaskStore from './TaskStore';
+import * as JobStore from './JobStore';
 // The top-level state object
 export interface ApplicationState {
   login: LoginStore.IState;
   tasks: TaskStore.IState;
+  jobs: JobStore.IState;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -11,7 +13,7 @@ export interface ApplicationState {
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
   login: LoginStore.reducer,
-  tasks: TaskStore.reducer
+  tasks: TaskStore.reducer,
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are
@@ -21,5 +23,8 @@ export interface AppThunkAction<TAction> {
 }
 
 export interface AppThunkActionAsync<TAction, TResult> {
-  (dispatch: (action: TAction) => void, getState: () => ApplicationState): Promise<TResult>
+  (
+    dispatch: (action: TAction) => void,
+    getState: () => ApplicationState,
+  ): Promise<TResult>;
 }
