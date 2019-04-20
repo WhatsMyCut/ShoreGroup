@@ -60,7 +60,7 @@ interface IDeleteRequest {
 
 interface IDeleteResponse {
   type: Actions.DeleteResponse;
-  id: number;
+  id: string;
 }
 
 type KnownAction =
@@ -81,8 +81,9 @@ export const actionCreators = {
   ) => {
     // Wait for server prerendering.
     dispatch({ type: Actions.FetchRequest });
-    var result = await JobService.fetch(id);
-    console.log(result);
+    var fetched = await JobService.fetch(id);
+    const result = fetched;
+    console.log('jobservice: ', result);
     if (result && result.length) {
       dispatch({ type: Actions.FetchResponse, payload: result });
     } else {
@@ -91,7 +92,7 @@ export const actionCreators = {
   },
   addRequest: (
     model: IJobModel,
-  ): AppThunkActionAsync<KnownAction, number> => async (dispatch, getState) => {
+  ): AppThunkActionAsync<KnownAction, string> => async (dispatch, getState) => {
     dispatch({ type: Actions.AddRequest });
     var result = await JobService.add(model);
 
@@ -120,7 +121,7 @@ export const actionCreators = {
 
     return result;
   },
-  deleteRequest: (id: number): AppThunkAction<KnownAction> => async (
+  deleteRequest: (id: string): AppThunkAction<KnownAction> => async (
     dispatch,
     getState,
   ) => {
@@ -134,7 +135,7 @@ export const actionCreators = {
   },
 };
 
-const initialState: IState = {
+const initialJobState: IState = {
   jobs: [],
   indicators: {
     operationLoading: false,
@@ -156,7 +157,7 @@ export const reducer: Reducer<IState> = (
     'initialReduxState',
     JSON.stringify((window as any).initialReduxState),
   );
-  console.log('here4', action);
+  //console.log('here4', action);
   switch (action.type) {
     case Actions.FailureResponse:
       var indicators = cloneIndicators();
@@ -169,7 +170,9 @@ export const reducer: Reducer<IState> = (
     case Actions.FetchResponse:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
-      return { ...currentState, indicators, jobs: action.payload };
+      var newState = { ...currentState, indicators, jobs: action.payload };
+      console.log('HERE7', newState);
+      return newState;
     case Actions.UpdateRequest:
       var indicators = cloneIndicators();
       indicators.operationLoading = true;
@@ -205,5 +208,5 @@ export const reducer: Reducer<IState> = (
       const exhaustiveCheck: never = action;
   }
 
-  return currentState || initialState;
+  return currentState || initialJobState;
 };

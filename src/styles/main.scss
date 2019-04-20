@@ -33,6 +33,14 @@
   text-align: center;
 }
 
+.nobr {
+  white-space: nowrap;
+}
+
+.right {
+  text-align: right;
+}
+
 ul.pagination {
   & > li > span {
     cursor: pointer;

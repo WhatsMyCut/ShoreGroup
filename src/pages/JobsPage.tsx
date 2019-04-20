@@ -20,6 +20,7 @@ import bind from 'bind-decorator';
 import { ModalComponent } from '../components/shared/ModalComponent';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { getPromiseFromAction } from '../Utils';
+import Moment from 'moment';
 
 type Props = RouteComponentProps<{}> &
   typeof JobStore.actionCreators &
@@ -31,6 +32,7 @@ interface IState {
   limitPerPage: number;
   rowOffset: number;
   modelForEdit: IJobModel;
+  jobs?: IJobModel[];
 }
 
 class JobsPage extends AppComponent<Props, IState> {
@@ -47,7 +49,6 @@ class JobsPage extends AppComponent<Props, IState> {
 
   constructor(props: Props) {
     super(props);
-    console.log('here5', props, this.props);
 
     this.state = {
       searchTerm: '',
@@ -150,10 +151,15 @@ class JobsPage extends AppComponent<Props, IState> {
 
   @bind
   renderRow(job: IJobModel) {
+    let createdDate = Moment(job['CreatedOn']).format('MMMM Do YYYY');
+    let jobType = job['Type'] ? job['Type']['Name'] : 'n/a';
     return (
-      <tr key={job.id}>
-        <td>{job.name}</td>
-        <td>{job.id}</td>
+      <tr key={job['Id']}>
+        <td>{job['Name']}</td>
+        <td>{job['Description']}</td>
+        <td className="nobr">{jobType}</td>
+        <td className="nobr">{job['StatusReason']['Label']}</td>
+        <td className="nobr right">{createdDate}</td>
         <td className="btn-actions">
           <button
             className="btn btn-info"
@@ -175,6 +181,7 @@ class JobsPage extends AppComponent<Props, IState> {
 
   @bind
   renderRows(data: IJobModel[]) {
+    if (Object.keys(data).length === 0) return false;
     return data
       .slice(
         this.state.rowOffset,
@@ -191,10 +198,10 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   render() {
-    console.log('HERE2', this.props, this.state);
+    if (!this.props.jobs) return false;
     return (
       <div>
-        {/* <Loader show={this.props.indicators.operationLoading || true} /> */}
+        <Loader show={this.props.indicators.operationLoading} />
 
         <div className="panel panel-default">
           <div className="panel-body row">
@@ -223,6 +230,9 @@ class JobsPage extends AppComponent<Props, IState> {
             <tr>
               <th>Job Name</th>
               <th>Description</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Created Date</th>
               <th>Actions</th>
             </tr>
           </thead>

@@ -27,9 +27,7 @@ export default class JobService extends ServiceBase {
       url: `${window['endPoint']}/api/job` + id,
       method: 'GET',
     });
-    console.log('HERE', result.value);
-
-    return result.value;
+    return result.value['Result'];
   }
 
   /**
@@ -53,7 +51,7 @@ export default class JobService extends ServiceBase {
    *
    * @param id int
    */
-  public static async delete(id: number): Promise<boolean> {
+  public static async delete(id: string): Promise<boolean> {
     var result = await this.requestJson<IJobModel>({
       url: `${window['endPoint']}/api/job/${id}`,
       method: 'DELETE',
@@ -69,7 +67,7 @@ export default class JobService extends ServiceBase {
    *
    * @param model IJobModel
    */
-  public static async add(model: IJobModel): Promise<number> {
+  public static async add(model: IJobModel): Promise<string> {
     var result = await this.requestJson<IJobModel>({
       url: `${window['endPoint']}/api/job`,
       method: 'POST',
@@ -77,7 +75,7 @@ export default class JobService extends ServiceBase {
     });
 
     if (!result || !result.value || !result.value.id) {
-      return 0;
+      return '';
     }
 
     return result.value.id;

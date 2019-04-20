@@ -13,6 +13,7 @@ export interface ApplicationState {
 // acts on the corresponding ApplicationState property type.
 export const reducers = {
   login: LoginStore.reducer,
+  jobs: JobStore.reducer,
   tasks: TaskStore.reducer,
 };
 
