@@ -21,6 +21,11 @@ import { ModalComponent } from '../components/shared/ModalComponent';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { getPromiseFromAction } from '../Utils';
 import Moment from 'moment';
+import {
+  Button,
+  PrimaryButton,
+  ButtonType,
+} from 'office-ui-fabric-react/lib/Button';
 
 type Props = RouteComponentProps<{}> &
   typeof JobStore.actionCreators &
@@ -160,20 +165,23 @@ class JobsPage extends AppComponent<Props, IState> {
         <td className="nobr">{jobType}</td>
         <td className="nobr">{job['StatusReason']['Label']}</td>
         <td className="nobr right">{createdDate}</td>
-        <td className="btn-actions">
-          <button
-            className="btn btn-info"
-            onClick={x => this.onClickShowEditModal(x, job)}
+        <td className="btn-actions nobr">
+          <PrimaryButton
+            buttonType={ButtonType.primary}
+            primary={true}
+            // onClick={evt => this.onClickShowEditModal(evt, job)}
           >
             Edit
-          </button>
+          </PrimaryButton>
           &nbsp;
-          <button
-            className="btn btn-danger"
-            onClick={x => this.onClickShowDeleteModal(x, job)}
+          <Button
+            buttonType={ButtonType.default}
+            primary={false}
+            className={'btn-red'}
+            // onClick={ => this.onClickShowDeleteModal(x, job)}
           >
             Delete
-          </button>
+          </Button>
         </td>
       </tr>
     );
@@ -206,12 +214,12 @@ class JobsPage extends AppComponent<Props, IState> {
         <div className="panel panel-default">
           <div className="panel-body row">
             <div className="col-sm-1">
-              <button
-                className="btn btn-success"
+              <Button
+                buttonType={ButtonType.primary}
                 onClick={this.onClickShowAddModal}
               >
                 Add
-              </button>
+              </Button>
             </div>
             <div className="col-sm-11">
               <input
@@ -231,9 +239,9 @@ class JobsPage extends AppComponent<Props, IState> {
               <th>Job Name</th>
               <th>Description</th>
               <th>Type</th>
-              <th>Status</th>
-              <th>Created Date</th>
-              <th>Actions</th>
+              <th className={'text-center'}>Status</th>
+              <th className={'text-center'}>Created Date</th>
+              <th className={'text-center'}>Actions</th>
             </tr>
           </thead>
           <tbody>{this.renderRows(this.props.jobs)}</tbody>

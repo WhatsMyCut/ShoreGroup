@@ -41,6 +41,12 @@
   text-align: right;
 }
 
+.btn-red {
+  background-color: red !important;
+  color: white !important;
+  padding: 0;
+}
+
 ul.pagination {
   & > li > span {
     cursor: pointer;
