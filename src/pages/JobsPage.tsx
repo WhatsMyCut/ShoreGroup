@@ -6,10 +6,10 @@
 
 // TODO: Organize imports better
 import '../styles/main.scss';
-import * as React from 'react';
+import React, { MouseEvent, ChangeEvent } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ITaskModel } from '../models/ITaskModel';
-import * as TaskStore from '../store/TaskStore';
+import { IJobModel } from '../models/IJobModel';
+import * as JobStore from '../store/JobStore';
 import { ApplicationState, reducers } from '../store/index';
 import { connect } from 'react-redux';
 import AppComponent from '../components/shared/AppComponent';
@@ -20,17 +20,24 @@ import bind from 'bind-decorator';
 import { ModalComponent } from '../components/shared/ModalComponent';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { getPromiseFromAction } from '../Utils';
+import Moment from 'moment';
+import {
+  Button,
+  PrimaryButton,
+  ButtonType,
+} from 'office-ui-fabric-react/lib/Button';
 
 type Props = RouteComponentProps<{}> &
-  typeof TaskStore.actionCreators &
-  TaskStore.IState;
+  typeof JobStore.actionCreators &
+  JobStore.IState;
 
 interface IState {
   searchTerm: string;
   pageNum: number;
   limitPerPage: number;
   rowOffset: number;
-  modelForEdit: ITaskModel;
+  modelForEdit: IJobModel;
+  jobs?: IJobModel[];
 }
 
 class JobsPage extends AppComponent<Props, IState> {
@@ -43,7 +50,7 @@ class JobsPage extends AppComponent<Props, IState> {
   private tasksEditorAdd: TaskEditor;
   private tasksEditorEdit: TaskEditor;
 
-  private debouncedSearch: (term: string) => void;
+  private fetch: (id: string) => void;
 
   constructor(props: Props) {
     super(props);
@@ -56,13 +63,13 @@ class JobsPage extends AppComponent<Props, IState> {
       modelForEdit: {},
     };
 
-    this.debouncedSearch = AwesomeDebouncePromise((term: string) => {
-      props.searchRequest(term);
+    this.fetch = AwesomeDebouncePromise((id: string) => {
+      props.fetchRequest(id);
     }, 500);
   }
 
   componentWillMount() {
-    this.props.searchRequest();
+    this.props.fetchRequest();
   }
 
   componentWillUnmount() {
@@ -84,14 +91,14 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  onClickShowAddModal(e: React.MouseEvent<HTMLButtonElement>) {
+  onClickShowAddModal(e: MouseEvent<HTMLButtonElement>) {
     this.elModalAdd.show();
   }
 
   @bind
   onClickShowEditModal(
-    e: React.MouseEvent<HTMLButtonElement>,
-    modelForEdit: ITaskModel,
+    e: MouseEvent<HTMLButtonElement>,
+    modelForEdit: IJobModel,
   ) {
     this.setState({ modelForEdit });
     this.elModalEdit.show();
@@ -99,15 +106,15 @@ class JobsPage extends AppComponent<Props, IState> {
 
   @bind
   onClickShowDeleteModal(
-    e: React.MouseEvent<HTMLButtonElement>,
-    modelForEdit: ITaskModel,
+    e: MouseEvent<HTMLButtonElement>,
+    modelForEdit: IJobModel,
   ) {
     this.setState({ modelForEdit });
     this.elModalDelete.show();
   }
 
   @bind
-  async onClickTaskEditorAdd__saveBtn(e: React.MouseEvent<HTMLButtonElement>) {
+  async onClickTaskEditorAdd__saveBtn(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
     if (!this.tasksEditorAdd.elForm.isValid()) {
@@ -126,7 +133,7 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  async onClickTaskEditorEdit__saveBtn(e: React.MouseEvent<HTMLButtonElement>) {
+  async onClickTaskEditorEdit__saveBtn(e: MouseEvent<HTMLButtonElement>) {
     if (!this.tasksEditorEdit.elForm.isValid()) {
       // Form is not valid.
       return;
@@ -142,40 +149,47 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  onClickTaskEditorDelete__saveBtn(
-    e: React.MouseEvent<HTMLButtonElement>,
-  ): void {
-    this.props.deleteRequest(this.state.modelForEdit.taskID);
+  onClickTaskEditorDelete__saveBtn(e: MouseEvent<HTMLButtonElement>): void {
+    this.props.deleteRequest(this.state.modelForEdit.id);
     this.elModalDelete.hide();
   }
 
   @bind
-  renderRow(task: ITaskModel) {
+  renderRow(job: IJobModel) {
+    let createdDate = Moment(job['CreatedOn']).format('MMMM Do YYYY');
+    let jobType = job['Type'] ? job['Type']['Name'] : 'n/a';
     return (
-      <tr key={task.taskID}>
-        <td>{task.name}</td>
-        <td>{task.description}</td>
-        <td className="btn-actions">
-          <button
-            className="btn btn-info"
-            onClick={x => this.onClickShowEditModal(x, task)}
+      <tr key={job['Id']}>
+        <td>{job['Name']}</td>
+        <td>{job['Description']}</td>
+        <td className="nobr">{jobType}</td>
+        <td className="nobr">{job['StatusReason']['Label']}</td>
+        <td className="nobr right">{createdDate}</td>
+        <td className="btn-actions nobr">
+          <PrimaryButton
+            buttonType={ButtonType.primary}
+            primary={true}
+            // onClick={evt => this.onClickShowEditModal(evt, job)}
           >
             Edit
-          </button>
+          </PrimaryButton>
           &nbsp;
-          <button
-            className="btn btn-danger"
-            onClick={x => this.onClickShowDeleteModal(x, task)}
+          <Button
+            buttonType={ButtonType.default}
+            primary={false}
+            className={'btn-red'}
+            // onClick={ => this.onClickShowDeleteModal(x, job)}
           >
             Delete
-          </button>
+          </Button>
         </td>
       </tr>
     );
   }
 
   @bind
-  renderRows(data: ITaskModel[]) {
+  renderRows(data: IJobModel[]) {
+    if (Object.keys(data).length === 0) return false;
     return data
       .slice(
         this.state.rowOffset,
@@ -185,13 +199,14 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  onChangeSearchInput(e: React.ChangeEvent<HTMLInputElement>) {
+  onChangeSearchInput(e: ChangeEvent<HTMLInputElement>) {
     var val = e.currentTarget.value;
-    this.debouncedSearch(val);
+    this.fetch(val);
     this.pagingBar.setFirstPage();
   }
 
   render() {
+    if (!this.props.jobs) return false;
     return (
       <div>
         <Loader show={this.props.indicators.operationLoading} />
@@ -199,12 +214,12 @@ class JobsPage extends AppComponent<Props, IState> {
         <div className="panel panel-default">
           <div className="panel-body row">
             <div className="col-sm-1">
-              <button
-                className="btn btn-success"
+              <Button
+                buttonType={ButtonType.primary}
                 onClick={this.onClickShowAddModal}
               >
                 Add
-              </button>
+              </Button>
             </div>
             <div className="col-sm-11">
               <input
@@ -223,10 +238,13 @@ class JobsPage extends AppComponent<Props, IState> {
             <tr>
               <th>Job Name</th>
               <th>Description</th>
-              <th>Actions</th>
+              <th>Type</th>
+              <th className={'text-center'}>Status</th>
+              <th className={'text-center'}>Created Date</th>
+              <th className={'text-center'}>Actions</th>
             </tr>
           </thead>
-          <tbody>{this.renderRows(this.props.tasks)}</tbody>
+          <tbody>{this.renderRows(this.props.jobs)}</tbody>
         </table>
 
         {/* Add modal */}
@@ -315,7 +333,7 @@ class JobsPage extends AppComponent<Props, IState> {
               </button>
             </div>
           }
-          title={`Delete Job: #${this.state.modelForEdit.taskID} ${
+          title={`Delete Job: #${this.state.modelForEdit.id} ${
             this.state.modelForEdit.name
           }`}
         >
@@ -324,7 +342,7 @@ class JobsPage extends AppComponent<Props, IState> {
 
         <PagingBar
           ref={x => (this.pagingBar = x)}
-          totalResults={this.props.tasks.length}
+          totalResults={this.props.jobs.length}
           limitPerPage={this.state.limitPerPage}
           currentPage={this.state.pageNum}
           onChangePage={this.onChangePage}
@@ -335,8 +353,8 @@ class JobsPage extends AppComponent<Props, IState> {
 }
 
 var component = connect(
-  (state: ApplicationState) => state.tasks,
-  TaskStore.actionCreators,
+  (state: ApplicationState) => state.jobs,
+  JobStore.actionCreators,
 )(JobsPage as any);
 
 export default (withRouter(component as any) as any) as typeof JobsPage;

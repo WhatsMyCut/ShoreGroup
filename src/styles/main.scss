@@ -33,6 +33,20 @@
   text-align: center;
 }
 
+.nobr {
+  white-space: nowrap;
+}
+
+.right {
+  text-align: right;
+}
+
+.btn-red {
+  background-color: darkred !important;
+  color: white !important;
+  padding: 0;
+}
+
 ul.pagination {
   & > li > span {
     cursor: pointer;

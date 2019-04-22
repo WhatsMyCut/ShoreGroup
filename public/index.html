@@ -22,13 +22,14 @@
     <script>
       (function(_win){
         _win.publicSession=JSON.parse(_win.localStorage.getItem("publicSession")||JSON.stringify({serviceUser:null})),
-        _win.initialReduxState=JSON.parse(_win.localStorage.getItem("initialReduxState")||JSON.stringify({
+        _win.initialReduxState=JSON.parse(_win.localStorage.getItem("initialReduxState")|| JSON.stringify({
           login:{indicators:{operationLoading:!1,loginSuccess:!1}},
           tasks:{tasks:[],indicators:{operationLoading:!1}},
-          router:{location:{pathname:"/",search:"",hash:"",key:"gdsfg"},action:"POP"}
+          jobs:{jobs:[],indicators:{operationLoading:!1}},
+          router:{location:{pathname:"/",search:"",hash:"",key:""},action:"POP"}
         })),
         _win.completedTasks=JSON.parse(_win.localStorage.getItem("completedTasks")||JSON.stringify([])),
-        _win.endPoint="https://api-complichain.azurewebsites.net";
+        _win.endPoint="https://complichainapiserver-3-dev-as.azurewebsites.net";
       })(window);
       </script>
   </body>

@@ -1,9 +1,11 @@
-import * as React from "react";
+import React from 'react';
 
 const Footer = () => {
-  return <footer className="footer text-center">
-    <p>Copyright (c) 2019 CompliChain by Sepire</p>
-  </footer>;
+  return (
+    <footer className="footer text-center">
+      <p>Copyright (c) 2019 CompliChain by Sepire</p>
+    </footer>
+  );
 };
 
 export default Footer;

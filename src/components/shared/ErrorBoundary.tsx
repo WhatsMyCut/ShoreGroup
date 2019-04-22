@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React, { Component } from 'react';
 
-export default class ErrorBoundary extends React.Component<
+export default class ErrorBoundary extends Component<
   {},
   { hasError: boolean }
 > {
