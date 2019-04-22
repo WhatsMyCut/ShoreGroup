@@ -19,7 +19,7 @@
     "nserializejson": "1.0.2",
     "nval": "1.1.5",
     "nval-tippy": "1.0.34",
-    "office-ui-fabric-react": "^6.164.7",
+    "office-ui-fabric-react": "^6.167.2",
     "react": "^16.8.6",
     "react-app-polyfill": "0.2.2",
     "react-dom": "^16.8.6",
