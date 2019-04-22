@@ -7,21 +7,24 @@ import { AppRoute } from './components/shared/AppRoute';
 import { Switch } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import JobsPage from './pages/JobsPage';
+import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 
 export const routes = (
-  <Switch>
-    <AppRoute
-      layout={GuestLayout}
-      exact
-      path="/login"
-      component={LoginPage as ComponentClass<any, any>}
-    />
-    <AppRoute
-      layout={AuthorizedLayout}
-      exact
-      path="/"
-      component={JobsPage as ComponentClass<any, any>}
-    />
-    <AppRoute layout={AtlasLayout} exact path="/info" component={HomePage} />
-  </Switch>
+  <Fabric>
+    <Switch>
+      <AppRoute
+        layout={GuestLayout}
+        exact
+        path="/login"
+        component={LoginPage as ComponentClass<any, any>}
+      />
+      <AppRoute
+        layout={AuthorizedLayout}
+        exact
+        path="/"
+        component={JobsPage as ComponentClass<any, any>}
+      />
+      <AppRoute layout={AtlasLayout} exact path="/info" component={HomePage} />
+    </Switch>
+  </Fabric>
 );
