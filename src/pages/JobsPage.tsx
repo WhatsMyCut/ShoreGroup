@@ -10,7 +10,10 @@ import React, { MouseEvent, ChangeEvent } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import bind from 'bind-decorator';
-import { initializeIcons } from '@uifabric/icons';
+import {
+  DirectionalHint,
+  ContextualMenuItemType,
+} from 'office-ui-fabric-react/lib/ContextualMenu';
 import { IJobModel } from '../models/IJobModel';
 import * as JobStore from '../store/JobStore';
 import { ApplicationState, reducers } from '../store/index';
@@ -23,7 +26,7 @@ import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { getPromiseFromAction } from '../Utils';
 import Moment from 'moment';
 import {
-  PrimaryButton,
+  DefaultButton,
   IconButton,
   // Older api
   Button,
@@ -162,7 +165,20 @@ class JobsPage extends AppComponent<Props, IState> {
   @bind
   renderRow(job: IJobModel) {
     let createdDate = Moment(job['CreatedOn']).format('MMMM Do YYYY');
+    let dueDate = Moment(job['DueDate']).format('MMMM Do YYYY');
     let jobType = job['Type'] ? job['Type']['Name'] : 'n/a';
+    let statusLabel = job['StatusReason']['Label'];
+    let statusClassName = '';
+    switch (statusLabel) {
+      case 'New':
+        statusClassName = 'green';
+        break;
+      case 'Late':
+        statusClassName = 'red';
+        break;
+      default:
+        break;
+    }
     let jobId = job['Id'];
     return (
       <tr key={jobId}>
@@ -176,8 +192,9 @@ class JobsPage extends AppComponent<Props, IState> {
         </td>
         <td>{job['Description']}</td>
         <td className="nobr">{jobType}</td>
-        <td className="nobr">{job['StatusReason']['Label']}</td>
         <td className="nobr right">{createdDate}</td>
+        <td className="nobr right">{dueDate}</td>
+        <td className={'nobr ' + statusClassName}>{statusLabel}</td>
         <td className="btn-actions nobr right">
           <JobActions />
         </td>
@@ -203,6 +220,18 @@ class JobsPage extends AppComponent<Props, IState> {
     this.pagingBar.setFirstPage();
   }
 
+  @bind
+  onClickShowJobTypeFilter(e: MouseEvent<HTMLButtonElement>) {
+    var val = e.currentTarget.value;
+    this.filterByJobType(val);
+  }
+
+  @bind
+  filterByJobType(type: string) {
+    console.log('filterByJobType', type);
+    return true;
+  }
+
   render() {
     if (!this.props.jobs) return false;
     return (
@@ -219,7 +248,7 @@ class JobsPage extends AppComponent<Props, IState> {
                 Add
               </Button>
             </div>
-            <div className="col-sm-11">
+            <div className="col-sm-8">
               <input
                 type="text"
                 className="form-control"
@@ -227,6 +256,41 @@ class JobsPage extends AppComponent<Props, IState> {
                 onChange={this.onChangeSearchInput}
                 placeholder={'Search jobs...'}
               />
+            </div>
+            <div>
+              <DefaultButton
+                persistMenu={true}
+                onClick={this.onClickShowJobTypeFilter}
+                primary
+                menuProps={{
+                  items: [
+                    {
+                      key: 'editJob',
+                      text: 'Edit Job',
+                      iconProps: { iconName: 'ColumnLeftTwoThirdsEdit' },
+                    },
+                  ],
+                }}
+              >
+                Job Type
+              </DefaultButton>
+              &nbsp;
+              <DefaultButton
+                persistMenu={true}
+                onClick={this.onClickShowJobTypeFilter}
+                primary
+                menuProps={{
+                  items: [
+                    {
+                      key: 'editJob',
+                      text: 'Edit Job',
+                      iconProps: { iconName: 'ColumnLeftTwoThirdsEdit' },
+                    },
+                  ],
+                }}
+              >
+                Status
+              </DefaultButton>
             </div>
           </div>
         </div>
@@ -237,9 +301,10 @@ class JobsPage extends AppComponent<Props, IState> {
               <th>Job Name</th>
               <th>Description</th>
               <th>Type</th>
-              <th className={'text-center'}>Status</th>
               <th className={'text-center'}>Created Date</th>
-              <th className={'text-center'}>Actions</th>
+              <th className={'text-center'}>Due Date</th>
+              <th className={'text-center'}>Status</th>
+              <th className={'right'}>&nbsp;</th>
             </tr>
           </thead>
           <tbody>{this.renderRows(this.props.jobs)}</tbody>

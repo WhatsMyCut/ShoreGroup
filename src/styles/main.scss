@@ -24,8 +24,17 @@
   height: 20px;
 }
 
+.logo svg {
+  color: #000;
+}
+
+.green {
+  color: green;
+}
+
 .btn-actions {
-  width: 150px;
+  width: auto;
+  padding-top: 3px !important;
 }
 
 .layout {

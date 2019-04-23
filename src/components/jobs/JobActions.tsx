@@ -1,12 +1,5 @@
 import React, { Component } from 'react';
-import {
-  PrimaryButton,
-  IconButton,
-  // Older api
-  Button,
-  ButtonType,
-} from 'office-ui-fabric-react/lib/Button';
-import * as loadThemeByName from '../../components/fabric/styling/loadThemeByName';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IJobModel } from '../../models/IJobModel';
 
 export interface IProps {
@@ -20,26 +13,44 @@ export default class JobActions extends Component<IProps, {}> {
   }
 
   render() {
+    let disabled = false;
+    let checked = false;
+
     return (
       <div>
-        <PrimaryButton
-          buttonType={ButtonType.primary}
-          primary={true}
-          // onClick={evt => this.onClickShowEditModal(evt, job)}
-        >
-          Edit
-        </PrimaryButton>
-        &nbsp;
         <IconButton
-          disabled={this.props.disabled}
-          checked={this.props.checked}
-          iconProps={{ iconName: 'Delete', color: 'red' }}
-          styles={{
-            root: { color: '#f00', background: 'transparent' },
-            rootHovered: { color: 'darkred', background: 'transparent' },
+          data-automation-id="test"
+          disabled={disabled}
+          checked={checked}
+          iconProps={{ iconName: 'Settings' }}
+          text="Job Actions"
+          // onClick={alertClicked}
+          split={true}
+          aria-roledescription={'split button'}
+          // styles={customSplitButtonStyles}
+          menuProps={{
+            items: [
+              {
+                key: 'editJob',
+                text: 'Edit Job',
+                iconProps: { iconName: 'ColumnLeftTwoThirdsEdit' },
+              },
+              {
+                key: 'pauseJob',
+                text: 'Pause Job',
+                iconProps: {
+                  iconName: 'CirclePause',
+                  style: { color: '#f4c242' },
+                },
+                onClick: () => console.log('here'),
+              },
+              {
+                key: 'cancelJob',
+                text: 'Cancel Job',
+                iconProps: { iconName: 'Cancel', style: { color: 'red' } },
+              },
+            ],
           }}
-          title="Delete Job"
-          ariaLabel="Delete Job"
         />
       </div>
     );

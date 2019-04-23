@@ -180,4 +180,4 @@ function loadThemeByName(
 
 // --- exports ------------------------------------------------------
 
-export { loadThemeByName };
+export default loadThemeByName;
