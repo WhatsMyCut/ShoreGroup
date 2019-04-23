@@ -8,24 +8,29 @@
 import '../styles/main.scss';
 import React, { MouseEvent, ChangeEvent } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import bind from 'bind-decorator';
+import { initializeIcons } from '@uifabric/icons';
 import { IJobModel } from '../models/IJobModel';
 import * as JobStore from '../store/JobStore';
 import { ApplicationState, reducers } from '../store/index';
-import { connect } from 'react-redux';
 import AppComponent from '../components/shared/AppComponent';
 import { PagingBar } from '../components/shared/PagingBar';
-import TaskEditor from '../components/tasks/TaskEditor';
+import JobEditor from '../components/jobs/JobEditor';
 import Loader from '../components/shared/Loader';
-import bind from 'bind-decorator';
 import { ModalComponent } from '../components/shared/ModalComponent';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { getPromiseFromAction } from '../Utils';
 import Moment from 'moment';
 import {
-  Button,
   PrimaryButton,
+  IconButton,
+  // Older api
+  Button,
   ButtonType,
 } from 'office-ui-fabric-react/lib/Button';
+import { Link } from 'office-ui-fabric-react/lib/Link';
+import JobActions from '../components/jobs/JobActions';
 
 type Props = RouteComponentProps<{}> &
   typeof JobStore.actionCreators &
@@ -47,8 +52,8 @@ class JobsPage extends AppComponent<Props, IState> {
   private elModalEdit: ModalComponent;
   private elModalDelete: ModalComponent;
 
-  private tasksEditorAdd: TaskEditor;
-  private tasksEditorEdit: TaskEditor;
+  private jobEditorAdd: JobEditor;
+  private jobEditorEdit: JobEditor;
 
   private fetch: (id: string) => void;
 
@@ -114,16 +119,16 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  async onClickTaskEditorAdd__saveBtn(e: MouseEvent<HTMLButtonElement>) {
+  async onClickJobEditorAdd__saveBtn(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault();
 
-    if (!this.tasksEditorAdd.elForm.isValid()) {
+    if (!this.jobEditorAdd.elForm.isValid()) {
       // Form is not valid.
       return;
     }
 
     var result = await getPromiseFromAction(
-      this.props.addRequest(this.tasksEditorAdd.elForm.getData()),
+      this.props.addRequest(this.jobEditorAdd.elForm.getData()),
     );
 
     if (result) {
@@ -133,13 +138,13 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  async onClickTaskEditorEdit__saveBtn(e: MouseEvent<HTMLButtonElement>) {
-    if (!this.tasksEditorEdit.elForm.isValid()) {
+  async onClickJobEditorEdit__saveBtn(e: MouseEvent<HTMLButtonElement>) {
+    if (!this.jobEditorEdit.elForm.isValid()) {
       // Form is not valid.
       return;
     }
 
-    var data = this.tasksEditorEdit.elForm.getData();
+    var data = this.jobEditorEdit.elForm.getData();
 
     var result = await getPromiseFromAction(this.props.updateRequest(data));
 
@@ -149,7 +154,7 @@ class JobsPage extends AppComponent<Props, IState> {
   }
 
   @bind
-  onClickTaskEditorDelete__saveBtn(e: MouseEvent<HTMLButtonElement>): void {
+  onClickJobEditorDelete__saveBtn(e: MouseEvent<HTMLButtonElement>): void {
     this.props.deleteRequest(this.state.modelForEdit.id);
     this.elModalDelete.hide();
   }
@@ -158,30 +163,23 @@ class JobsPage extends AppComponent<Props, IState> {
   renderRow(job: IJobModel) {
     let createdDate = Moment(job['CreatedOn']).format('MMMM Do YYYY');
     let jobType = job['Type'] ? job['Type']['Name'] : 'n/a';
+    let jobId = job['Id'];
     return (
-      <tr key={job['Id']}>
-        <td>{job['Name']}</td>
+      <tr key={jobId}>
+        <td>
+          <Link
+            data-automation-id="test"
+            onClick={() => this.onClickShowEditModal(jobId, jobId)}
+          >
+            {job['Name']}
+          </Link>
+        </td>
         <td>{job['Description']}</td>
         <td className="nobr">{jobType}</td>
         <td className="nobr">{job['StatusReason']['Label']}</td>
         <td className="nobr right">{createdDate}</td>
-        <td className="btn-actions nobr">
-          <PrimaryButton
-            buttonType={ButtonType.primary}
-            primary={true}
-            // onClick={evt => this.onClickShowEditModal(evt, job)}
-          >
-            Edit
-          </PrimaryButton>
-          &nbsp;
-          <Button
-            buttonType={ButtonType.default}
-            primary={false}
-            className={'btn-red'}
-            // onClick={ => this.onClickShowDeleteModal(x, job)}
-          >
-            Delete
-          </Button>
+        <td className="btn-actions nobr right">
+          <JobActions />
         </td>
       </tr>
     );
@@ -208,7 +206,7 @@ class JobsPage extends AppComponent<Props, IState> {
   render() {
     if (!this.props.jobs) return false;
     return (
-      <div>
+      <div className="jobs-page">
         <Loader show={this.props.indicators.operationLoading} />
 
         <div className="panel panel-default">
@@ -262,7 +260,7 @@ class JobsPage extends AppComponent<Props, IState> {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={this.onClickTaskEditorAdd__saveBtn}
+                onClick={this.onClickJobEditorAdd__saveBtn}
               >
                 Save
               </button>
@@ -270,12 +268,12 @@ class JobsPage extends AppComponent<Props, IState> {
           }
           title="Create a Job"
           onHide={() => {
-            if (this.tasksEditorAdd) {
-              this.tasksEditorAdd.emptyForm();
+            if (this.jobEditorAdd) {
+              this.jobEditorAdd.emptyForm();
             }
           }}
         >
-          <TaskEditor ref={x => (this.tasksEditorAdd = x)} data={{}} />
+          <JobEditor ref={x => (this.jobEditorAdd = x)} data={{}} />
         </ModalComponent>
 
         {/* Edit modal */}
@@ -293,7 +291,7 @@ class JobsPage extends AppComponent<Props, IState> {
               <button
                 type="button"
                 className="btn btn-primary"
-                onClick={this.onClickTaskEditorEdit__saveBtn}
+                onClick={this.onClickJobEditorEdit__saveBtn}
               >
                 Save
               </button>
@@ -301,13 +299,13 @@ class JobsPage extends AppComponent<Props, IState> {
           }
           title={`Edit Job: ${this.state.modelForEdit.name}`}
           onHide={() => {
-            if (this.tasksEditorEdit) {
+            if (this.jobEditorEdit) {
               this.setState({ modelForEdit: {} });
             }
           }}
         >
-          <TaskEditor
-            ref={x => (this.tasksEditorEdit = x)}
+          <JobEditor
+            ref={x => (this.jobEditorEdit = x)}
             data={this.state.modelForEdit}
           />
         </ModalComponent>
@@ -326,8 +324,8 @@ class JobsPage extends AppComponent<Props, IState> {
               </button>
               <button
                 type="button"
-                className="btn btn-danger"
-                onClick={this.onClickTaskEditorDelete__saveBtn}
+                className={'btn btn-danger'}
+                onClick={this.onClickJobEditorDelete__saveBtn}
               >
                 Delete
               </button>
