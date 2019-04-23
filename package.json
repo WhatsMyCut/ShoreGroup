@@ -21,6 +21,7 @@
     "nval-tippy": "1.0.34",
     "office-ui-fabric-react": "^6.167.2",
     "react": "^16.8.6",
+    "react-adal": "^0.4.22",
     "react-app-polyfill": "0.2.2",
     "react-dom": "^16.8.6",
     "react-paginating": "^1.1.0",

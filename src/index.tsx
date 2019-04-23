@@ -14,6 +14,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Globals from './Globals';
 import { IPublicSession } from './models/IPublicSession';
 import { IPrivateSession } from './models/IPrivateSession';
+import { runWithAdal } from 'react-adal';
+import { authContext } from './adalConfig';
 
 Globals.reset();
 Globals.init({
@@ -45,4 +47,10 @@ function renderApp() {
   );
 }
 
-renderApp();
+const DO_NOT_LOGIN = false;
+
+runWithAdal(authContext, () => {
+
+    renderApp();
+
+}, DO_NOT_LOGIN);
