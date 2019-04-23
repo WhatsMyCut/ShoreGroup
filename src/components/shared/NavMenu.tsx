@@ -17,6 +17,7 @@ import { Dropdown, Collapse } from 'bootstrap3-native';
 import bind from 'bind-decorator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { mergeStyles } from '@uifabric/styling';
+import { Z_FIXED } from 'zlib';
 
 const noOp = () => undefined;
 
@@ -67,9 +68,10 @@ class NavMenu extends Component<
               icon: 'Logo',
               name: 'Home',
               onClick: noOp,
+              iconProps: { style: { color: '#000' } },
             },
             {
-              key: 'add-job',
+              key: 'addJob',
               icon: 'PlusCircle',
               name: 'Add Job',
               onClick: noOp,
@@ -104,6 +106,7 @@ class NavMenu extends Component<
               icon: 'AngleDoubleRight',
               name: !this.state.isExpanded ? 'Expand' : 'Collapse',
               onClick: noOp,
+              style: { position: 'fixed', bottom: 0 },
             },
           ]}
           overflowItems={[]}
@@ -136,7 +139,7 @@ class NavMenu extends Component<
   ): JSX.Element => {
     return (
       <CommandBarButton
-        styles={{ root: { padding: '10px' }, menuIcon: { fontSize: '22px' } }}
+        styles={{ root: { padding: '10px' }, menuIcon: { fontSize: '36px' } }}
         menuIconProps={{ iconName: 'More' }}
         menuProps={{ items: overflowItems! }}
       />

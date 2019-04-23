@@ -31,11 +31,11 @@ export default class AuthorizedLayout extends Component<Props, {}> {
     initializeIcons();
     registerIcons({
       icons: {
-        PlusCircle: <FontAwesomeIcon icon={faPlusCircle} />,
-        Briefcase: <FontAwesomeIcon icon={faBriefcase} />,
-        ParachuteBox: <FontAwesomeIcon icon={faParachuteBox} />,
-        ClipboardList: <FontAwesomeIcon icon={faClipboardList} />,
-        ProfileCog: <FontAwesomeIcon icon={faUserCog} />,
+        PlusCircle: <Icon iconName="AddTo" />,
+        Briefcase: <Icon iconName="BusinessCenterLogo" />,
+        ParachuteBox: <Icon iconName="Product" />,
+        ClipboardList: <Icon iconName="CheckList" />,
+        ProfileCog: <Icon iconName="PlayerSettings" />,
         AngleDoubleRight: <FontAwesomeIcon icon={faAngleDoubleRight} />,
         Logo: <Icon className="logo" />,
       },

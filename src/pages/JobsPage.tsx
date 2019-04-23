@@ -248,7 +248,7 @@ class JobsPage extends AppComponent<Props, IState> {
                 Add
               </Button>
             </div>
-            <div className="col-sm-9">
+            <div className="col-sm-8">
               <input
                 type="text"
                 className="form-control"
@@ -257,7 +257,7 @@ class JobsPage extends AppComponent<Props, IState> {
                 placeholder={'Search jobs...'}
               />
             </div>
-            <div className="col-sm-2">
+            <div>
               <DefaultButton
                 persistMenu={true}
                 onClick={this.onClickShowJobTypeFilter}
@@ -273,6 +273,23 @@ class JobsPage extends AppComponent<Props, IState> {
                 }}
               >
                 Job Type
+              </DefaultButton>
+              &nbsp;
+              <DefaultButton
+                persistMenu={true}
+                onClick={this.onClickShowJobTypeFilter}
+                primary
+                menuProps={{
+                  items: [
+                    {
+                      key: 'editJob',
+                      text: 'Edit Job',
+                      iconProps: { iconName: 'ColumnLeftTwoThirdsEdit' },
+                    },
+                  ],
+                }}
+              >
+                Status
               </DefaultButton>
             </div>
           </div>

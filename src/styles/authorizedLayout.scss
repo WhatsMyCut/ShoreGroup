@@ -6,7 +6,7 @@
 .sidebar {
   flex: 0 1 60px;
   border-right: 1px solid #ccc;
-  background-color: darkgrey;
+  background-image: linear-gradient(#9a9a9a, #000);
 }
 .sidebar:last-child {
   flex-flow: flex-end;
@@ -17,4 +17,32 @@
 }
 .panelContent {
   padding: 0 20px;
+}
+
+.sidebar .ms-Button.ms-Button--commandBar {
+  background-color: transparent;
+  width: 50px;
+}
+
+.sidebar .logo {
+  padding-bottom: 5px;
+}
+
+.sidebar .ms-Button.ms-Button--commandBar .ms-Button-icon {
+  color: white;
+  font-size: 2rem;
+}
+
+.sidebar .ms-OverflowSet {
+  height: 100%;
+}
+
+.sidebar .ms-OverflowSet .ms-OverflowSet-item:last-child {
+  position: fixed;
+  bottom: 5px;
+}
+
+.sidebar .ms-OverflowSet .ms-OverflowSet-item:nth-last-child(2) {
+  position: fixed;
+  bottom: 50px;
 }
