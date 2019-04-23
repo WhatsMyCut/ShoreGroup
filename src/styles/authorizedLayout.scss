@@ -6,8 +6,15 @@
 .sidebar {
   flex: 0 1 60px;
   border-right: 1px solid #ccc;
+  background-color: darkgrey;
+}
+.sidebar:last-child {
+  flex-flow: flex-end;
 }
 .mainContent {
   flex: 1 1 auto;
   border-right: 1px solid #ccc;
+}
+.panelContent {
+  padding: 0 20px;
 }
