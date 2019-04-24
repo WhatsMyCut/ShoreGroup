@@ -1,4 +1,4 @@
-import '../../styles/jobDetailPage.scss';
+import '../../styles/jobs.scss';
 import React, { Component, MouseEvent } from 'react';
 import {
   DetailsList,
@@ -12,6 +12,7 @@ import { IJobModel } from '../../models/IJobModel';
 import { NavLink } from 'react-router-dom';
 import { Checkbox } from 'office-ui-fabric-react';
 import JobActions from '../../components/jobs/JobActions';
+import Moment from 'moment';
 
 export interface IProps {
   items: IJobModel[];
@@ -44,20 +45,27 @@ export default class JobList extends Component<
           'Column operations for File type, Press to sort on File type',
         iconName: 'Checkbox',
         isIconOnly: true,
-        fieldName: 'name',
+        fieldName: 'id',
         minWidth: 16,
         maxWidth: 16,
         //onColumnClick: this._onColumnClick,
         onRender: (item: IJobModel) => {
-          return <Checkbox />;
+          return (
+            <span>
+              <Checkbox
+                id={item['Id']}
+                styles={{ checkbox: { fontSize: 14 } }}
+              />
+            </span>
+          );
         },
       },
       {
         key: 'column2',
         name: 'Job Name',
         fieldName: 'name',
-        minWidth: 210,
-        maxWidth: 350,
+        minWidth: 100,
+        maxWidth: 100,
         isRowHeader: true,
         isResizable: true,
         isSorted: true,
@@ -69,8 +77,8 @@ export default class JobList extends Component<
         isPadded: true,
         onRender: (item: IJobModel) => {
           return (
-            <NavLink to={`/jobs/${item.id}`} data-automation-id="test">
-              {item.name}
+            <NavLink to={`/jobs/${item['Id']}`} data-automation-id="test">
+              {item['Name']}
             </NavLink>
           );
         },
@@ -80,11 +88,14 @@ export default class JobList extends Component<
         name: 'Description',
         fieldName: 'description',
         minWidth: 70,
-        maxWidth: 90,
+        maxWidth: 390,
         isResizable: true,
         onColumnClick: this._onColumnClick,
         data: 'string',
         isPadded: true,
+        onRender: (item: IJobModel) => {
+          return <span>{item['Description'] || 'n/a'}</span>;
+        },
       },
       {
         key: 'column4',
@@ -96,7 +107,8 @@ export default class JobList extends Component<
         onColumnClick: this._onColumnClick,
         data: 'string',
         onRender: (item: IJobModel) => {
-          return <span>{item.jobType.name}</span>;
+          const jobType = item['Type'] ? item['Type']['Name'] : 'n/a';
+          return <span>{jobType}</span>;
         },
         isPadded: true,
       },
@@ -110,12 +122,13 @@ export default class JobList extends Component<
         onColumnClick: this._onColumnClick,
         data: 'date',
         onRender: (item: IJobModel) => {
-          return <span>{item.createdOn}</span>;
+          const createdDate = Moment(item.createdOn).format('l');
+          return <span>{createdDate}</span>;
         },
         isPadded: true,
       },
       {
-        key: 'column4',
+        key: 'column6',
         name: 'Due Date',
         fieldName: 'dueDate',
         minWidth: 70,
@@ -125,19 +138,45 @@ export default class JobList extends Component<
         data: 'date',
         onColumnClick: this._onColumnClick,
         onRender: (item: IJobModel) => {
-          return <span>{item.dueDate}</span>;
+          const dueDate = Moment(item.dueDate).format('l');
+          return <span>{dueDate}</span>;
         },
         isPadded: true,
       },
       {
-        key: 'column5',
-        name: 'Actions',
+        key: 'column7',
+        name: 'Status',
+        fieldName: 'statusReason.label',
         minWidth: 70,
         maxWidth: 90,
         isResizable: true,
         isCollapsible: true,
         data: 'number',
         onColumnClick: this._onColumnClick,
+        onRender: (item: IJobModel) => {
+          const statusLabel = item['StatusReason']['Label'];
+          let statusClassName = '';
+          switch (statusLabel) {
+            case 'New':
+              statusClassName = 'statusNew';
+              break;
+            case 'Late':
+              statusClassName = 'statusLate';
+              break;
+            default:
+              break;
+          }
+          return <span className={statusClassName}>{statusLabel}</span>;
+        },
+      },
+      {
+        key: 'column8',
+        name: '',
+        minWidth: 30,
+        maxWidth: 30,
+        isResizable: true,
+        isCollapsible: true,
+        onColumnClick: noOp(),
         onRender: (item: IJobModel) => {
           return <JobActions job={item} />;
         },
@@ -153,7 +192,7 @@ export default class JobList extends Component<
     });
 
     this.state = {
-      items: this.props.items,
+      items: props.items,
       columns: columns,
       selectionDetails: this._getSelectionDetails(),
       isModalSelection: false,
@@ -169,17 +208,16 @@ export default class JobList extends Component<
     const {
       columns,
       isCompactMode,
-      items,
       selectionDetails,
       isModalSelection,
     } = this.state;
-
+    const items = this.props.items;
     return (
       <div>
         <MarqueeSelection selection={this._selection}>
           <DetailsList
             items={items}
-            compact={isCompactMode}
+            compact={true}
             columns={columns}
             selectionMode={
               isModalSelection ? SelectionMode.multiple : SelectionMode.none
@@ -285,6 +323,7 @@ export default class JobList extends Component<
     });
   };
 }
+const noOp = () => undefined;
 
 function _copyAndSort<T>(
   items: T[],
