@@ -4,36 +4,26 @@
  * @author Matthew Dunham <matthew.d@shoregrp.com>
  */
 
-// TODO: Organize imports better
 import '../styles/main.scss';
 import React, { MouseEvent, ChangeEvent } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import bind from 'bind-decorator';
-import {
-  DirectionalHint,
-  ContextualMenuItemType,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
+import Moment from 'moment';
+
+import { ApplicationState, reducers } from '../store/index';
 import { IJobModel } from '../models/IJobModel';
 import * as JobStore from '../store/JobStore';
-import { ApplicationState, reducers } from '../store/index';
 import AppComponent from '../components/shared/AppComponent';
 import { PagingBar } from '../components/shared/PagingBar';
 import JobEditor from '../components/jobs/JobEditor';
 import Loader from '../components/shared/Loader';
 import { ModalComponent } from '../components/shared/ModalComponent';
-import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import { getPromiseFromAction } from '../Utils';
-import Moment from 'moment';
-import {
-  DefaultButton,
-  IconButton,
-  // Older api
-  Button,
-  ButtonType,
-} from 'office-ui-fabric-react/lib/Button';
 import { Link } from 'office-ui-fabric-react/lib/Link';
 import JobActions from '../components/jobs/JobActions';
+import JobListFilter from '../components/jobs/JobListFilter';
 
 type Props = RouteComponentProps<{}> &
   typeof JobStore.actionCreators &
@@ -146,11 +136,8 @@ class JobsPage extends AppComponent<Props, IState> {
       // Form is not valid.
       return;
     }
-
     var data = this.jobEditorEdit.elForm.getData();
-
     var result = await getPromiseFromAction(this.props.updateRequest(data));
-
     if (result) {
       this.elModalEdit.hide();
     }
@@ -160,6 +147,48 @@ class JobsPage extends AppComponent<Props, IState> {
   onClickJobEditorDelete__saveBtn(e: MouseEvent<HTMLButtonElement>): void {
     this.props.deleteRequest(this.state.modelForEdit.id);
     this.elModalDelete.hide();
+  }
+
+  @bind
+  onChangeSearchInput(e: ChangeEvent<HTMLInputElement>) {
+    var val = e.currentTarget.value;
+    this.fetch(val);
+    this.pagingBar.setFirstPage();
+  }
+
+  @bind
+  onClickShowJobTypeFilter(e: MouseEvent<HTMLButtonElement>) {
+    var val = e.currentTarget.value;
+    this.filterByJobType(val);
+  }
+
+  @bind
+  onClickShowJobStatusFilter(e: MouseEvent<HTMLButtonElement>) {
+    var val = e.currentTarget.value;
+    this.filterByJobStatus(val);
+  }
+
+  @bind
+  filterByJobType(type: string) {
+    console.log('filterByJobType', type);
+    return true;
+  }
+
+  @bind
+  filterByJobStatus(type: string) {
+    console.log('filterByJobStatus', type);
+    return true;
+  }
+
+  @bind
+  renderRows(data: IJobModel[]) {
+    if (Object.keys(data).length === 0) return false;
+    return data
+      .slice(
+        this.state.rowOffset,
+        this.state.rowOffset + this.state.limitPerPage,
+      )
+      .map(x => this.renderRow(x));
   }
 
   @bind
@@ -202,98 +231,19 @@ class JobsPage extends AppComponent<Props, IState> {
     );
   }
 
-  @bind
-  renderRows(data: IJobModel[]) {
-    if (Object.keys(data).length === 0) return false;
-    return data
-      .slice(
-        this.state.rowOffset,
-        this.state.rowOffset + this.state.limitPerPage,
-      )
-      .map(x => this.renderRow(x));
-  }
-
-  @bind
-  onChangeSearchInput(e: ChangeEvent<HTMLInputElement>) {
-    var val = e.currentTarget.value;
-    this.fetch(val);
-    this.pagingBar.setFirstPage();
-  }
-
-  @bind
-  onClickShowJobTypeFilter(e: MouseEvent<HTMLButtonElement>) {
-    var val = e.currentTarget.value;
-    this.filterByJobType(val);
-  }
-
-  @bind
-  filterByJobType(type: string) {
-    console.log('filterByJobType', type);
-    return true;
-  }
-
   render() {
     if (!this.props.jobs) return false;
+    const jobscount = this.props.jobs.length || 0;
     return (
       <div className="jobs-page">
         <Loader show={this.props.indicators.operationLoading} />
 
-        <div className="panel panel-default">
-          <div className="panel-body row">
-            <div className="col-sm-1">
-              <Button
-                buttonType={ButtonType.primary}
-                onClick={this.onClickShowAddModal}
-              >
-                Add
-              </Button>
-            </div>
-            <div className="col-sm-8">
-              <input
-                type="text"
-                className="form-control"
-                defaultValue={''}
-                onChange={this.onChangeSearchInput}
-                placeholder={'Search jobs...'}
-              />
-            </div>
-            <div>
-              <DefaultButton
-                persistMenu={true}
-                onClick={this.onClickShowJobTypeFilter}
-                primary
-                menuProps={{
-                  items: [
-                    {
-                      key: 'editJob',
-                      text: 'Edit Job',
-                      iconProps: { iconName: 'ColumnLeftTwoThirdsEdit' },
-                    },
-                  ],
-                }}
-              >
-                Job Type
-              </DefaultButton>
-              &nbsp;
-              <DefaultButton
-                persistMenu={true}
-                onClick={this.onClickShowJobTypeFilter}
-                primary
-                menuProps={{
-                  items: [
-                    {
-                      key: 'editJob',
-                      text: 'Edit Job',
-                      iconProps: { iconName: 'ColumnLeftTwoThirdsEdit' },
-                    },
-                  ],
-                }}
-              >
-                Status
-              </DefaultButton>
-            </div>
-          </div>
-        </div>
+        <JobListFilter
+          onClickShowAddModal={this.onClickShowAddModal}
+          onChangeSearchInput={this.onChangeSearchInput}
+          onClickShowJobTypeFilter={this.onClickShowJobTypeFilter}
+          onClickShowJobStatusFilter={this.onClickShowJobStatusFilter}
+        />
 
         <table className="table">
           <thead>
@@ -405,7 +355,7 @@ class JobsPage extends AppComponent<Props, IState> {
 
         <PagingBar
           ref={x => (this.pagingBar = x)}
-          totalResults={this.props.jobs.length}
+          totalResults={jobscount}
           limitPerPage={this.state.limitPerPage}
           currentPage={this.state.pageNum}
           onChangePage={this.onChangePage}
