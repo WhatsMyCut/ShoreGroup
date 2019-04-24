@@ -1,4 +1,4 @@
-import '../../styles/jobDetailPage.scss';
+import '../../styles/jobs.scss';
 import React, { MouseEvent, Component } from 'react';
 import { IJobModel } from '../../models/IJobModel';
 import {

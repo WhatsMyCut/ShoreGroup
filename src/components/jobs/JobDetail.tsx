@@ -1,10 +1,12 @@
-import '../../styles/jobDetailPage.scss';
+import '../../styles/jobs.scss';
 import React, { Component, MouseEvent } from 'react';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
+import { IJobModel } from '../../models/IJobModel';
 
 export interface IProps {
   disabled?: boolean;
   checked?: boolean;
+  job: IJobModel;
 }
 
 export default class JobDetail extends Component<IProps, {}> {
@@ -63,7 +65,7 @@ export default class JobDetail extends Component<IProps, {}> {
             'Use left and right arrow keys to navigate between commands'
           }
         />
-        <div className="job-detail-panel">
+        <div className="jobDetailPanel">
           <div className="general active">
             <p>general</p>
           </div>

@@ -5,7 +5,7 @@
  */
 
 import '../styles/main.scss';
-import '../styles/jobDetailPage.scss';
+import '../styles/jobs.scss';
 import React, { MouseEvent, ChangeEvent } from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -17,9 +17,10 @@ import { ApplicationState, reducers } from '../store/index';
 import { IJobModel } from '../models/IJobModel';
 import * as JobStore from '../store/JobStore';
 import AppComponent from '../components/shared/AppComponent';
-import { PagingBar } from '../components/shared/PagingBar';
+import AppBreadcrumb from '../components/shared/AppBreadcrumb';
 import Loader from '../components/shared/Loader';
 import { ModalComponent } from '../components/shared/ModalComponent';
+import { PagingBar } from '../components/shared/PagingBar';
 import JobActions from '../components/jobs/JobActions';
 import JobListFilter from '../components/jobs/JobListFilter';
 import JobList from '../components/jobs/JobList';
@@ -134,62 +135,12 @@ class JobsPage extends AppComponent<Props, IState> {
     console.log('selectAll', e);
   }
 
-  @bind
-  renderRows(data: IJobModel[]) {
-    if (Object.keys(data).length === 0) return false;
-    return data
-      .slice(
-        this.state.rowOffset,
-        this.state.rowOffset + this.state.limitPerPage,
-      )
-      .map(x => this.renderRow(x));
-  }
-
-  @bind
-  renderRow(job: IJobModel) {
-    let createdDate = Moment(job['CreatedOn']).format('MMMM Do YYYY');
-    let dueDate = Moment(job['DueDate']).format('MMMM Do YYYY');
-    let jobType = job['Type'] ? job['Type']['Name'] : 'n/a';
-    let statusLabel = job['StatusReason']['Label'];
-    let statusClassName = '';
-    switch (statusLabel) {
-      case 'New':
-        statusClassName = 'statusNew';
-        break;
-      case 'Late':
-        statusClassName = 'statusLate';
-        break;
-      default:
-        break;
-    }
-    let jobId = job['Id'];
-    return (
-      <tr key={jobId}>
-        <td>
-          <Checkbox checkmarkIconProps={{}} />
-        </td>
-        <td>
-          <NavLink to={`/jobs/${jobId}`} data-automation-id="test">
-            {job['Name']}
-          </NavLink>
-        </td>
-        <td>{job['Description']}</td>
-        <td className="nobr">{jobType}</td>
-        <td className="nobr right">{createdDate}</td>
-        <td className="nobr right">{dueDate}</td>
-        <td className={'nobr ' + statusClassName}>{statusLabel}</td>
-        <td className="btnActions nobr right">
-          <JobActions job={job} />
-        </td>
-      </tr>
-    );
-  }
-
   render() {
     if (!this.props.jobs) return false;
     const jobscount = this.props.jobs.length || 0;
     return (
       <div className="jobs-page">
+        <AppBreadcrumb show={true} />
         <Loader show={this.props.indicators.operationLoading} />
 
         <JobListFilter
@@ -200,23 +151,6 @@ class JobsPage extends AppComponent<Props, IState> {
         />
         <div className="job-list">
           <JobList items={this.props.jobs} />
-          <table className="table">
-            <thead>
-              <tr>
-                <th>
-                  <Checkbox onClick={this.selectAll} />
-                </th>
-                <th>Job Name</th>
-                <th>Description</th>
-                <th>Type</th>
-                <th className={'text-center'}>Created Date</th>
-                <th className={'text-center'}>Due Date</th>
-                <th className={'text-center'}>Status</th>
-                <th className={'right'}>&nbsp;</th>
-              </tr>
-            </thead>
-            <tbody>{this.renderRows(this.props.jobs)}</tbody>
-          </table>
         </div>
         {/* Delete modal */}
         <ModalComponent
@@ -248,7 +182,7 @@ class JobsPage extends AppComponent<Props, IState> {
 
         <PagingBar
           ref={x => (this.pagingBar = x)}
-          totalResults={jobscount}
+          totalPages={jobscount}
           limitPerPage={this.state.limitPerPage}
           currentPage={this.state.pageNum}
           onChangePage={this.onChangePage}
