@@ -50,7 +50,6 @@ class JobDetailPage extends AppComponent<Props, IState> {
     return (
       <div className="job-detail">
         <Loader show={this.props.indicators.operationLoading} />
-        Job Details Page
         <JobHeader
           statusLabel={this.props.job.statusReason}
           owner={this.props.job.name}
