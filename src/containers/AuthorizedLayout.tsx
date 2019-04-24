@@ -22,12 +22,6 @@ export default class AuthorizedLayout extends Component<Props, {}> {
     initializeIcons();
     registerIcons({
       icons: {
-        PlusCircle: <Icon iconName="AddTo" />,
-        Briefcase: <Icon iconName="BusinessCenterLogo" />,
-        ParachuteBox: <Icon iconName="Product" />,
-        ClipboardList: <Icon iconName="CheckList" />,
-        ProfileCog: <Icon iconName="PlayerSettings" />,
-        AngleDoubleRight: <Icon iconName="DoubleChevronRight" />,
         Logo: <Icon className="logo" />,
       },
     });
