@@ -49,8 +49,10 @@ function renderApp() {
 
 const DO_NOT_LOGIN = false;
 
-runWithAdal(authContext, () => {
-
+runWithAdal(
+  authContext,
+  () => {
     renderApp();
-
-}, DO_NOT_LOGIN);
+  },
+  DO_NOT_LOGIN,
+);
