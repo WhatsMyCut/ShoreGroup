@@ -1,19 +1,9 @@
 import React, { Component, MouseEvent } from 'react';
 import { withRouter } from 'react-router';
-import { NavLink, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Nav, INavLink } from 'office-ui-fabric-react/lib/Nav';
-import { CommandBarButton } from 'office-ui-fabric-react/lib/Button';
-import {
-  TooltipHost,
-  DirectionalHint,
-} from 'office-ui-fabric-react/lib/Tooltip';
-import {
-  IOverflowSetItemProps,
-  OverflowSet,
-} from 'office-ui-fabric-react/lib/OverflowSet';
-import Globals from '../../Globals';
+import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import AccountService from '../../api/AccountService';
-import { Dropdown, Collapse } from 'bootstrap3-native';
 import bind from 'bind-decorator';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { mergeStyles } from '@uifabric/styling';
@@ -21,10 +11,12 @@ import { Z_FIXED } from 'zlib';
 
 const noOp = () => undefined;
 
-class NavMenu extends Component<
-  {},
-  { isAuthorized: boolean; isExpanded: boolean }
-> {
+interface IState {
+  isAuthorized: boolean;
+  isExpanded: boolean;
+}
+
+class NavMenu extends Component<any, IState> {
   constructor(props) {
     super(props);
     this.state = {
@@ -53,98 +45,62 @@ class NavMenu extends Component<
 
   componentDidUpdate() {}
 
+  toggleExpanded() {
+    console.log('toggleExpanded');
+    this.setState({ isExpanded: !this.state.isExpanded });
+  }
+
   render() {
     if (!this.state.isAuthorized) {
       return <Redirect to="/login" />;
     }
-
+    const ILogoStyles = { color: '#000', height: 30, width: 30 };
+    const expandIcon = this.state.isExpanded
+      ? 'DoubleChevronLeft'
+      : 'DoubleChevronRight';
+    let ISidebarClassName = 'sidebar';
+    ISidebarClassName += this.state.isExpanded ? 'expanded' : '';
     return (
-      <div className="sidebar">
-        <OverflowSet
-          vertical
-          items={[
-            {
-              key: 'home',
-              icon: 'Logo',
-              name: 'Home',
-              onClick: noOp,
-              iconProps: { style: { color: '#000' } },
-            },
-            {
-              key: 'addJob',
-              icon: 'PlusCircle',
-              name: 'Add Job',
-              onClick: noOp,
-            },
-            {
-              key: 'jobs',
-              icon: 'Briefcase',
-              name: 'Jobs',
-              ariaLabel: 'Jobs. Use left and right arrow keys to navigate',
-              onClick: noOp,
-            },
-            {
-              key: 'orders',
-              icon: 'ParachuteBox',
-              name: 'Orders',
-              onClick: noOp,
-            },
-            {
-              key: 'tasks',
-              icon: 'ClipboardList',
-              name: 'Tasks',
-              onClick: noOp,
-            },
-            {
-              key: 'profile',
-              icon: 'ProfileCog',
-              name: 'Profile',
-              onClick: noOp,
-            },
-            {
-              key: 'expand-collapse',
-              icon: 'AngleDoubleRight',
-              name: !this.state.isExpanded ? 'Expand' : 'Collapse',
-              onClick: noOp,
-              style: { position: 'fixed', bottom: 0 },
-            },
-          ]}
-          overflowItems={[]}
-          onRenderOverflowButton={this._onRenderOverflowButton}
-          onRenderItem={this._onRenderItem}
+      <div className={ISidebarClassName}>
+        <IconButton
+          type={'command'}
+          href="/"
+          iconProps={{ iconName: 'Logo', style: ILogoStyles }}
+          style={{ height: 60 }}
+          ariaLabel="Sephire. Use left and right arrow keys to navigate"
+        />
+        <IconButton
+          href="/jobs/add"
+          iconProps={{ iconName: 'AddTo' }}
+          ariaLabel="Add New Job"
+        />
+        <IconButton
+          href="/jobs"
+          iconProps={{ iconName: 'BusinessCenterLogo' }}
+          ariaLabel="Job List"
+        />
+        <IconButton
+          href="/orders"
+          iconProps={{ iconName: 'Product' }}
+          ariaLabel="Job List"
+        />
+        <IconButton
+          href="/tasks"
+          iconProps={{ iconName: 'ClipboardList' }}
+          ariaLabel="Task List"
+        />
+        <IconButton
+          iconProps={{ iconName: 'PlayerSettings' }}
+          ariaLabel="My Actions"
+        />
+        <IconButton
+          iconProps={{ iconName: expandIcon, style: { fontSize: 14 } }}
+          ariaLabel={this.state.isExpanded ? 'Collapse' : 'Expand'}
+          onClick={() => this.toggleExpanded}
         />
       </div>
     );
   }
-  private _onRenderItem = (item: IOverflowSetItemProps): JSX.Element => {
-    return (
-      <TooltipHost
-        content={item.name}
-        calloutProps={{
-          directionalHint: DirectionalHint.rightCenter,
-          beakWidth: 12,
-        }}
-      >
-        <CommandBarButton
-          styles={{ root: { padding: '10px' } }}
-          iconProps={{ iconName: item.icon }}
-          onClick={item.onClick}
-        />
-      </TooltipHost>
-    );
-  };
-
-  private _onRenderOverflowButton = (
-    overflowItems: any[] | undefined,
-  ): JSX.Element => {
-    return (
-      <CommandBarButton
-        styles={{ root: { padding: '10px' }, menuIcon: { fontSize: '36px' } }}
-        menuIconProps={{ iconName: 'More' }}
-        menuProps={{ items: overflowItems! }}
-      />
-    );
-  };
 }
 
 export default withRouter(NavMenu as any);

@@ -6,16 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import Footer from '../components/shared/Footer';
 import { initializeIcons } from '@uifabric/icons';
 import { mergeStyles, registerIcons } from '@uifabric/styling';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import {
-  faPlusCircle,
-  faBriefcase,
-  faParachuteBox,
-  faClipboardList,
-  faUserCog,
-  faAngleDoubleRight,
-} from '@fortawesome/free-solid-svg-icons';
 
 interface IProps {
   children?: ReactNode;
@@ -31,12 +22,6 @@ export default class AuthorizedLayout extends Component<Props, {}> {
     initializeIcons();
     registerIcons({
       icons: {
-        PlusCircle: <Icon iconName="AddTo" />,
-        Briefcase: <Icon iconName="BusinessCenterLogo" />,
-        ParachuteBox: <Icon iconName="Product" />,
-        ClipboardList: <Icon iconName="CheckList" />,
-        ProfileCog: <Icon iconName="PlayerSettings" />,
-        AngleDoubleRight: <FontAwesomeIcon icon={faAngleDoubleRight} />,
         Logo: <Icon className="logo" />,
       },
     });

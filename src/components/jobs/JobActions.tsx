@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import { IJobModel } from '../../models/IJobModel';
 
@@ -12,6 +12,10 @@ export default class JobActions extends Component<IProps, {}> {
     super(props);
   }
 
+  alertClicked(e: MouseEvent) {
+    console.log('alertClicked', e);
+  }
+
   render() {
     let disabled = false;
     let checked = false;
@@ -19,15 +23,18 @@ export default class JobActions extends Component<IProps, {}> {
     return (
       <div>
         <IconButton
-          data-automation-id="test"
-          disabled={disabled}
-          checked={checked}
-          iconProps={{ iconName: 'Settings' }}
-          text="Job Actions"
-          // onClick={alertClicked}
-          split={true}
-          aria-roledescription={'split button'}
-          // styles={customSplitButtonStyles}
+          menuIconProps={{ iconName: 'MoreVertical' }}
+          role="button"
+          aria-haspopup={true}
+          aria-label="Show actions"
+          styles={{
+            root: {
+              float: 'right',
+              height: 'inherit',
+              paddingTop: 8,
+              fontSize: 28,
+            },
+          }}
           menuProps={{
             items: [
               {

@@ -64,7 +64,7 @@ class TopMenu extends Component<{}, { logoutAction: boolean }> {
           >
             <ul className="nav navbar-nav">
               <li>
-                <NavLink exact to={'/'} activeClassName="active">
+                <NavLink to={'/jobs'} activeClassName="active">
                   Jobs
                 </NavLink>
               </li>

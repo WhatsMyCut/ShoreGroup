@@ -6,6 +6,7 @@ import { IJobModel } from '../models/IJobModel';
 
 export interface IState {
   jobs: IJobModel[];
+  job?: IJobModel;
   indicators: {
     operationLoading: boolean;
   };
@@ -15,6 +16,7 @@ export enum Actions {
   FailureResponse = 'JOB_FAILURE_RESPONSE',
   FetchRequest = 'JOB_FETCH_REQUEST',
   FetchResponse = 'JOB_FETCH_RESPONSE',
+  FetchByIdResponse = 'JOB_FETCH_BY_ID_RESPONSE',
   AddRequest = 'JOB_ADD_REQUEST',
   AddResponse = 'JOB_ADD_RESPONSE',
   UpdateRequest = 'JOB_UPDATE_REQUEST',
@@ -34,6 +36,11 @@ interface IFetchRequest {
 interface IFetchResponse {
   type: Actions.FetchResponse;
   payload: IJobModel[];
+}
+
+interface IFetchByIdResponse {
+  type: Actions.FetchByIdResponse;
+  payload: IJobModel;
 }
 
 interface IAddRequest {
@@ -67,6 +74,7 @@ type KnownAction =
   | IFailureResponse
   | IFetchRequest
   | IFetchResponse
+  | IFetchByIdResponse
   | IAddRequest
   | IAddResponse
   | IUpdateRequest
@@ -83,7 +91,7 @@ export const actionCreators = {
     dispatch({ type: Actions.FetchRequest });
     var fetched = await JobService.fetch(id);
     const result = fetched;
-    console.log('jobservice: ', result);
+    console.log('jobservice: ', id, result);
     if (result && result.length) {
       dispatch({ type: Actions.FetchResponse, payload: result });
     } else {
@@ -137,6 +145,7 @@ export const actionCreators = {
 
 const initialJobState: IState = {
   jobs: [],
+  job: {},
   indicators: {
     operationLoading: false,
   },
@@ -170,8 +179,12 @@ export const reducer: Reducer<IState> = (
     case Actions.FetchResponse:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
-      var newState = { ...currentState, indicators, jobs: action.payload };
-      console.log('HERE7', newState);
+      return { ...currentState, indicators, jobs: action.payload };
+    case Actions.FetchByIdResponse:
+      var indicators = cloneIndicators();
+      indicators.operationLoading = false;
+      var newState = { ...currentState, indicators, job: action.payload[0] };
+      console.log('HERE8', newState);
       return newState;
     case Actions.UpdateRequest:
       var indicators = cloneIndicators();

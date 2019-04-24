@@ -6,6 +6,7 @@ export interface ApplicationState {
   login: LoginStore.IState;
   tasks: TaskStore.IState;
   jobs: JobStore.IState;
+  job: JobStore.IState;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -14,6 +15,7 @@ export interface ApplicationState {
 export const reducers = {
   login: LoginStore.reducer,
   jobs: JobStore.reducer,
+  job: JobStore.reducer,
   tasks: TaskStore.reducer,
 };
 
