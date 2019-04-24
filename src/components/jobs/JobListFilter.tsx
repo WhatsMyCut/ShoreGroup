@@ -10,7 +10,7 @@ import {
 } from 'office-ui-fabric-react/lib/Button';
 
 export interface IProps {
-  onClickShowAddModal?;
+  onClickAddJob?;
   onChangeSearchInput?;
   onClickShowJobTypeFilter?;
   onClickShowJobStatusFilter?;
@@ -26,7 +26,7 @@ export default class JobListFilter extends Component<IProps, {}> {
       <div className="panel panel-default">
         <div className="panel-body row">
           <div className="col-sm-1">
-            <DefaultButton primary onClick={this.props.onClickShowAddModal}>
+            <DefaultButton primary href="/jobs/add">
               Add
             </DefaultButton>
           </div>

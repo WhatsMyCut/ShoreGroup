@@ -9,7 +9,8 @@
   width: 100%;
   padding: 10px;
   border-top: 1px solid #e7e7e7;
-
+  position: absolute;
+  bottom: 0;
   p {
     margin: 0;
     padding: 0;
@@ -38,6 +39,11 @@
 
 .layout {
   height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .text-center {
