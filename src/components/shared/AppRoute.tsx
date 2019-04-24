@@ -12,13 +12,13 @@ export const AppRoute = ({
   path: Path,
   ...rest
 }: IProps) => {
-  var isLoginPath = Path === '/login';
-  if (!Globals.isAuthenticated && !isLoginPath) {
-    return <Redirect to="/login" />;
-  }
-  if (Globals.isAuthenticated && isLoginPath) {
-    return <Redirect to="/" />;
-  }
+  // var isLoginPath = Path === '/login';
+  // if (!Globals.isAuthenticated && !isLoginPath) {
+  //   return <Redirect to="/login" />;
+  // }
+  // if (Globals.isAuthenticated && isLoginPath) {
+  //   return <Redirect to="/" />;
+  // }
 
   return (
     <Route
