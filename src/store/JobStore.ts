@@ -91,9 +91,13 @@ export const actionCreators = {
     dispatch({ type: Actions.FetchRequest });
     var fetched = await JobService.fetch(id);
     const result = fetched;
-    console.log('jobservice: ', id, result);
-    if (result && result.length) {
-      dispatch({ type: Actions.FetchResponse, payload: result });
+    if (result && !result.length) {
+      const retArr = result['Result'];
+      if (id) {
+        dispatch({ type: Actions.FetchByIdResponse, payload: retArr });
+      } else {
+        dispatch({ type: Actions.FetchResponse, payload: retArr });
+      }
     } else {
       dispatch({ type: Actions.FailureResponse });
     }
@@ -105,7 +109,7 @@ export const actionCreators = {
     var result = await JobService.add(model);
 
     if (result) {
-      model.id = result;
+      model.Id = result;
       dispatch({ type: Actions.AddResponse, payload: model });
     } else {
       dispatch({ type: Actions.FailureResponse });
@@ -183,8 +187,7 @@ export const reducer: Reducer<IState> = (
     case Actions.FetchByIdResponse:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
-      var newState = { ...currentState, indicators, job: action.payload[0] };
-      console.log('HERE8', newState);
+      var newState = { ...currentState, indicators, job: action.payload };
       return newState;
     case Actions.UpdateRequest:
       var indicators = cloneIndicators();
@@ -194,8 +197,8 @@ export const reducer: Reducer<IState> = (
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
       var data = clone(currentState.jobs);
-      var itemToUpdate = data.filter(x => x.id === action.payload.id)[0];
-      itemToUpdate.name = action.payload.name;
+      var itemToUpdate = data.filter(x => x.Id === action.payload.Id)[0];
+      itemToUpdate.Name = action.payload.Name;
       return { ...currentState, indicators, jobs: data };
     case Actions.AddRequest:
       var indicators = cloneIndicators();
@@ -214,7 +217,7 @@ export const reducer: Reducer<IState> = (
     case Actions.DeleteResponse:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
-      var data = clone(currentState.jobs).filter(x => x.id !== action.id);
+      var data = clone(currentState.jobs).filter(x => x.Id !== action.id);
       return { ...currentState, indicators, jobs: data };
     default:
       // The following line guarantees that every action in the KnownAction union has been covered by a case above

@@ -27,7 +27,7 @@ export default class JobService extends ServiceBase {
       url: `${window['endPoint']}/api/job` + id,
       method: 'GET',
     });
-    return result.value['Result'];
+    return result.value;
   }
 
   /**
@@ -74,10 +74,10 @@ export default class JobService extends ServiceBase {
       data: model,
     });
 
-    if (!result || !result.value || !result.value.id) {
+    if (!result || !result.value || !result.value.Id) {
       return '';
     }
 
-    return result.value.id;
+    return result.value.Id;
   }
 }
