@@ -54,7 +54,6 @@ export default class JobDetail extends Component<IProps, {}> {
 
     return (
       <div>
-        <h2>Job Detail</h2>
         <CommandBar
           items={this.getItems()}
           //overflowItems={this.getOverlflowItems()}
