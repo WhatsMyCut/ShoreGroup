@@ -23,15 +23,18 @@ export default class JobActions extends Component<IProps, {}> {
     return (
       <div>
         <IconButton
-          data-automation-id="test"
-          disabled={disabled}
-          checked={checked}
-          iconProps={{ iconName: 'Settings' }}
-          text="Job Actions"
-          onClick={() => this.alertClicked}
-          split
-          aria-roledescription={'split button'}
-          // styles={customSplitButtonStyles}
+          menuIconProps={{ iconName: 'MoreVertical' }}
+          role="button"
+          aria-haspopup={true}
+          aria-label="Show actions"
+          styles={{
+            root: {
+              float: 'right',
+              height: 'inherit',
+              paddingTop: 8,
+              fontSize: 28,
+            },
+          }}
           menuProps={{
             items: [
               {
