@@ -73,14 +73,22 @@
   flex: 1 1 33%;
 }
 
-.job-detail-panel .ms-CommandBar {
+.jobDetailPanel .ms-CommandBar {
   border: 1px solid #ccc;
   padding: 0;
 }
-.job-detail-panel {
-  display: flex;
-  flex: 1 1 100%;
+
+.jobDetailPanel {
   border: 1px solid #ccc;
   min-height: 200px;
   background-color: #f9f9f9;
+}
+
+.jobDetailPanel div {
+  flex: 1 0 100%;
+  display: flex;
+  visibility: hidden;
+}
+.jobDetailPanel div.active {
+  visibility: visible;
 }
