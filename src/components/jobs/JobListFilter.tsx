@@ -1,3 +1,4 @@
+import '../../styles/jobDetailPage.scss';
 import React, { MouseEvent, Component } from 'react';
 import { IJobModel } from '../../models/IJobModel';
 import {
@@ -8,6 +9,7 @@ import {
   ButtonType,
   IButtonProps,
 } from 'office-ui-fabric-react/lib/Button';
+import { SearchBox } from 'office-ui-fabric-react/lib/components/SearchBox';
 
 export interface IProps {
   onClickAddJob?;
@@ -23,20 +25,20 @@ export default class JobListFilter extends Component<IProps, {}> {
 
   render() {
     return (
-      <div className="panel panel-default">
-        <div className="panel-body row">
-          <div className="col-sm-1">
-            <DefaultButton primary href="/jobs/add">
-              Add
-            </DefaultButton>
-          </div>
-          <div className="col-sm-8">
-            <input
-              type="text"
-              className="form-control"
-              defaultValue={''}
+      <div className="">
+        <div>
+          <DefaultButton primary href="/jobs/add">
+            Add
+          </DefaultButton>
+        </div>
+        <div className="panelBody row">
+          <div className="col-sm-9">
+            <SearchBox
+              placeholder="Filter by keyword"
+              onFocus={() => console.log('onFocus called')}
+              onBlur={() => console.log('onBlur called')}
+              iconProps={{ iconName: 'Filter' }}
               onChange={this.props.onChangeSearchInput}
-              placeholder={'Search jobs...'}
             />
           </div>
           <div>
@@ -54,7 +56,7 @@ export default class JobListFilter extends Component<IProps, {}> {
                 ],
               }}
             >
-              Job Type
+              Types
             </DefaultButton>
             &nbsp;
             <DefaultButton

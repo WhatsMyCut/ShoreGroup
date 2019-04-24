@@ -5,6 +5,7 @@ import { IJobModel } from '../../models/IJobModel';
 export interface IProps {
   disabled?: boolean;
   checked?: boolean;
+  job: IJobModel;
 }
 
 export default class JobActions extends Component<IProps, {}> {
@@ -23,7 +24,10 @@ export default class JobActions extends Component<IProps, {}> {
     return (
       <div>
         <IconButton
-          menuIconProps={{ iconName: 'MoreVertical' }}
+          menuIconProps={{
+            iconName: 'MoreVertical',
+            style: { fontWeight: 'bolder' },
+          }}
           role="button"
           aria-haspopup={true}
           aria-label="Show actions"

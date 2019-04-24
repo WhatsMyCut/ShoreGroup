@@ -64,9 +64,9 @@ export default class JobHeader extends Component<IProps, {}> {
   };
   render() {
     return (
-      <div className="job-header">
-        <div className="job-header-cells">
-          <div className="job-header-info">
+      <div className="jobHeader">
+        <div className="jobHeaderCells">
+          <div className="jobHeader-info">
             <h3>Job</h3>
             <Shimmer
               customElementsGroup={this._getCustomElements(
@@ -79,11 +79,11 @@ export default class JobHeader extends Component<IProps, {}> {
               }}
             />
           </div>
-          <div className="job-header-status">
+          <div className="jobHeader-status">
             <h3>Status</h3>
             <h4>{this.props.statusLabel}</h4>
           </div>
-          <div className="job-header-owner">
+          <div className="jobHeader-owner">
             <h3>Owner</h3>
             <h4>{this.props.checked}</h4>
           </div>

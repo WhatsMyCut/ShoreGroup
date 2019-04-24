@@ -5,6 +5,7 @@
  */
 
 import '../styles/main.scss';
+import '../styles/jobDetailPage.scss';
 import React, { MouseEvent, ChangeEvent } from 'react';
 import { NavLink, RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -21,6 +22,7 @@ import Loader from '../components/shared/Loader';
 import { ModalComponent } from '../components/shared/ModalComponent';
 import JobActions from '../components/jobs/JobActions';
 import JobListFilter from '../components/jobs/JobListFilter';
+import JobList from '../components/jobs/JobList';
 import { Checkbox } from 'office-ui-fabric-react';
 
 type Props = RouteComponentProps<{}> &
@@ -152,10 +154,10 @@ class JobsPage extends AppComponent<Props, IState> {
     let statusClassName = '';
     switch (statusLabel) {
       case 'New':
-        statusClassName = 'green';
+        statusClassName = 'statusNew';
         break;
       case 'Late':
-        statusClassName = 'red';
+        statusClassName = 'statusLate';
         break;
       default:
         break;
@@ -176,8 +178,8 @@ class JobsPage extends AppComponent<Props, IState> {
         <td className="nobr right">{createdDate}</td>
         <td className="nobr right">{dueDate}</td>
         <td className={'nobr ' + statusClassName}>{statusLabel}</td>
-        <td className="btn-actions nobr right">
-          <JobActions />
+        <td className="btnActions nobr right">
+          <JobActions job={job} />
         </td>
       </tr>
     );
@@ -196,25 +198,26 @@ class JobsPage extends AppComponent<Props, IState> {
           onClickShowJobTypeFilter={this.onClickShowJobTypeFilter}
           onClickShowJobStatusFilter={this.onClickShowJobStatusFilter}
         />
-
-        <table className="table">
-          <thead>
-            <tr>
-              <th>
-                <Checkbox onClick={this.selectAll} />
-              </th>
-              <th>Job Name</th>
-              <th>Description</th>
-              <th>Type</th>
-              <th className={'text-center'}>Created Date</th>
-              <th className={'text-center'}>Due Date</th>
-              <th className={'text-center'}>Status</th>
-              <th className={'right'}>&nbsp;</th>
-            </tr>
-          </thead>
-          <tbody>{this.renderRows(this.props.jobs)}</tbody>
-        </table>
-
+        <div className="job-list">
+          <JobList items={this.props.jobs} />
+          <table className="table">
+            <thead>
+              <tr>
+                <th>
+                  <Checkbox onClick={this.selectAll} />
+                </th>
+                <th>Job Name</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th className={'text-center'}>Created Date</th>
+                <th className={'text-center'}>Due Date</th>
+                <th className={'text-center'}>Status</th>
+                <th className={'right'}>&nbsp;</th>
+              </tr>
+            </thead>
+            <tbody>{this.renderRows(this.props.jobs)}</tbody>
+          </table>
+        </div>
         {/* Delete modal */}
         <ModalComponent
           ref={x => (this.elModalDelete = x)}
