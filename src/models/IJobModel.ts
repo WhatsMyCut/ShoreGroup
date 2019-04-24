@@ -19,6 +19,6 @@ export interface IJobModel {
   description?: string;
   dueDate?: string;
   modifiedOn?: string;
-  jobType?: IJobType;
+  type?: IJobType;
   statusReason?: IJobStatusReason;
 }
