@@ -18,6 +18,8 @@ import { IJobModel } from '../models/IJobModel';
 import JobHeader from '../components/jobs/JobHeader';
 import JobDetail from '../components/jobs/JobDetail';
 import * as JobStore from '../store/JobStore';
+import AppBreadcrumb from '../components/shared/AppBreadcrumb';
+
 type Props = RouteComponentProps<{}> &
   typeof JobStore.actionCreators &
   JobStore.IState;
@@ -25,20 +27,22 @@ type Props = RouteComponentProps<{}> &
 interface IState {
   jobId: string;
   job: IJobModel;
+  currentTab: string;
 }
 
 class JobDetailPage extends AppComponent<Props, IState> {
   private fetch: (id: string) => void;
 
-  constructor(props: Props) {
+  constructor(props: Props, state: IState) {
     super(props);
     this.fetch = AwesomeDebouncePromise((id: string) => {
       props.fetchRequest(id);
     }, 500);
+    this.state = state;
   }
 
   componentDidMount() {
-    console.log('here9', this.state, this.props);
+    console.log('here9', this.state.job, this.props);
   }
 
   componentWillMount() {
@@ -49,12 +53,13 @@ class JobDetailPage extends AppComponent<Props, IState> {
   render() {
     return (
       <div className="job-detail">
+        <AppBreadcrumb show={true} />
         <Loader show={this.props.indicators.operationLoading} />
-        <JobHeader
-          statusLabel={this.props.job.statusReason}
-          owner={this.props.job.name}
-        />
-        <JobDetail />
+        <JobHeader job={this.props.job} />
+        <div className="jobDetailContainer">
+          <JobDetail job={this.props.job} />
+          <h1>comments</h1>
+        </div>
       </div>
     );
   }
