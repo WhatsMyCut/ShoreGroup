@@ -1,0 +1,27 @@
+.job-header {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 100%;
+  width: 100%;
+}
+
+.job-header .job-header-cells {
+  flex: 1 1 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.job-header-cells > div {
+  flex: 1 1 33%;
+}
+
+.job-detail-panel .ms-CommandBar {
+  border: 1px solid #ccc;
+}
+.job-detail-panel {
+  display: flex;
+  flex: 1 1 100%;
+  border: 1px solid #ccc;
+  min-height: 200px;
+  background-color: #f9f9f9;
+}
