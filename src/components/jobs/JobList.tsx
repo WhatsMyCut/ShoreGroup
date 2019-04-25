@@ -8,7 +8,7 @@ import {
   IColumn,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { IJobModel } from '../../models/IJobModel';
+import { IJobModel, formatStatusLabel } from '../../models/IJobModel';
 import { NavLink } from 'react-router-dom';
 import { Checkbox } from 'office-ui-fabric-react';
 import JobActions from '../../components/jobs/JobActions';
@@ -149,19 +149,10 @@ export default class JobList extends Component<
         data: 'number',
         onColumnClick: this._onColumnClick,
         onRender: (item: IJobModel) => {
-          const statusLabel = item.StatusReason.Label;
-          let statusClassName = '';
-          switch (statusLabel) {
-            case 'New':
-              statusClassName = 'status-new';
-              break;
-            case 'Late':
-              statusClassName = 'status-late';
-              break;
-            default:
-              break;
-          }
-          return <span className={statusClassName}>{statusLabel}</span>;
+          const statusClassName = formatStatusLabel(item.StatusReason.Label);
+          return (
+            <span className={statusClassName}>{item.StatusReason.Label}</span>
+          );
         },
       },
       {

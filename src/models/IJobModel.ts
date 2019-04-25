@@ -22,3 +22,18 @@ export interface IJobModel {
   Type?: IJobType;
   StatusReason?: IJobStatusReason;
 }
+
+export const formatStatusLabel = (status: string) => {
+  let statusClassName = '';
+  switch (status) {
+    case 'New':
+      statusClassName = 'status-new';
+      break;
+    case 'Late':
+      statusClassName = 'status-late';
+      break;
+    default:
+      break;
+  }
+  return statusClassName;
+};

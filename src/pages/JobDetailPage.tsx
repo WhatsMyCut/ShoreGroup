@@ -20,7 +20,11 @@ import JobDetail from '../components/jobs/JobDetail';
 import * as JobStore from '../store/JobStore';
 import AppBreadcrumb from '../components/shared/AppBreadcrumb';
 
-type Props = RouteComponentProps<{}> &
+interface IProps {
+  location?: string;
+}
+
+type Props = RouteComponentProps<IProps> &
   typeof JobStore.actionCreators &
   JobStore.IState;
 
@@ -32,18 +36,29 @@ interface IState {
 
 class JobDetailPage extends AppComponent<Props, IState> {
   private fetch: (id: string) => void;
-
+  private currentTab: string;
   constructor(props: Props, state: IState) {
     super(props);
     this.fetch = AwesomeDebouncePromise((id: string) => {
       props.fetchRequest(id);
     }, 500);
     this.state = state;
+    const hash = window.location.hash;
+    this.currentTab = 'general';
+    switch (hash) {
+      case 'attachments':
+        this.currentTab = 'attachments';
+        break;
+      case 'tasks':
+        this.currentTab = 'tasks';
+        break;
+      default:
+        this.currentTab = 'general';
+        break;
+    }
   }
 
-  componentDidMount() {
-    console.log('here9', this.state.job, this.props);
-  }
+  componentDidMount() {}
 
   componentWillMount() {
     const jobId = this.props.location.pathname.replace('/jobs', '');
@@ -51,12 +66,13 @@ class JobDetailPage extends AppComponent<Props, IState> {
   }
 
   render() {
+    const { job, indicators } = this.props;
     return (
       <div className="job-detail">
-        <AppBreadcrumb show={true} />
-        <Loader show={this.props.indicators.operationLoading} />
-        <JobHeader job={this.props.job} />
-        <JobDetail job={this.props.job} />
+        <AppBreadcrumb show={true} job={job} />
+        <Loader show={indicators.operationLoading} />
+        <JobHeader job={job} />
+        <JobDetail job={job} currentTab={this.currentTab} />
       </div>
     );
   }
