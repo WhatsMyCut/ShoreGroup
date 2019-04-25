@@ -76,15 +76,15 @@ export default class JobHeader extends Component<IProps, {}> {
       <div className="job-header">
         <div className="job-header-cells">
           <div className="job-header-info">
-            <h4>Job</h4>
+            <h5>Job</h5>
             <h4>{job.Name}</h4>
           </div>
           <div className="job-header-status">
-            <h4>Status</h4>
+            <h5>Status</h5>
             <h4 className={statusClassName}>{label}</h4>
           </div>
           <div className="job-header-owner">
-            <h4>Owner</h4>
+            <h5>Owner</h5>
             <h4>[PLACEHOLDER]</h4>
           </div>
         </div>

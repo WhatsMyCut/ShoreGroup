@@ -2,6 +2,7 @@ import '../../styles/jobs.scss';
 import React, { Component, MouseEvent } from 'react';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IJobModel } from '../../models/IJobModel';
+import { IAttachment } from '../../models/IAttachment';
 
 export interface IProps {
   disabled?: boolean;
@@ -46,8 +47,6 @@ export default class JobDetail extends Component<IProps, IState> {
   // Data for CommandBar
   private getItems = () => {
     const hash = this.state.currentTab;
-    console.log('here2', hash);
-
     return [
       {
         key: 'newItem',
@@ -81,6 +80,40 @@ export default class JobDetail extends Component<IProps, IState> {
     ];
   };
 
+  private _renderRow(x: IAttachment) {
+    const {
+      Id,
+      CreatedOn,
+      ModifiedOn,
+      Url,
+      AzureBlobId,
+      Name,
+      Type,
+      PrintReady,
+      PageCount,
+      SimplexOrDuplex,
+      Orientation,
+      Color,
+      FlatSize,
+      FinishSize,
+      Stock,
+      PlusCoverStock,
+      Binding,
+      Finishing,
+      StatusReason,
+      VariablePageLength,
+    } = x;
+    return <div>Name</div>;
+  }
+
+  private _renderAttachments() {
+    const docs = (this.props.job.Attachments as IAttachment[]) || [];
+    console.log('renderAttachments', docs);
+    let retVal = '';
+    docs.forEach(x => (retVal += this._renderRow(x)));
+    return retVal;
+  }
+
   render() {
     let disabled = false;
     let checked = false;
@@ -89,6 +122,7 @@ export default class JobDetail extends Component<IProps, IState> {
     let attachmentsActive =
       this.state.currentTab === 'attachments' ? 'active' : '';
     let tasksActive = this.state.currentTab === 'tasks' ? 'active' : '';
+    const attachments = this._renderAttachments();
     return (
       <div className="job-detail-container">
         <CommandBar
@@ -105,7 +139,7 @@ export default class JobDetail extends Component<IProps, IState> {
             <p>general</p>
           </div>
           <div className={'attachments ' + attachmentsActive}>
-            <p>attachments</p>
+            <p>{attachments}</p>
           </div>
           <div className={'tasks ' + tasksActive}>
             <p>tasks</p>
