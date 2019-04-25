@@ -56,10 +56,7 @@ class JobDetailPage extends AppComponent<Props, IState> {
         <AppBreadcrumb show={true} />
         <Loader show={this.props.indicators.operationLoading} />
         <JobHeader job={this.props.job} />
-        <div className="jobDetailContainer">
-          <JobDetail job={this.props.job} />
-          <h1>comments</h1>
-        </div>
+        <JobDetail job={this.props.job} />
       </div>
     );
   }
