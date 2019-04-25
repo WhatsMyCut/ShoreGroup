@@ -31,8 +31,8 @@ export default class JobListFilter extends Component<IProps, {}> {
             Add
           </DefaultButton>
         </div>
-        <div className="panelBody row">
-          <div className="col-sm-9">
+        <div className="panel-body">
+          <div className="">
             <SearchBox
               placeholder="Filter by keyword"
               onFocus={() => console.log('onFocus called')}
