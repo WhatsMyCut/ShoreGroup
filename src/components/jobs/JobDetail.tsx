@@ -115,35 +115,50 @@ export default class JobDetail extends Component<IProps, IState> {
   }
 
   render() {
+    const { job } = this.props;
+    const { currentTab } = this.state;
     let disabled = false;
     let checked = false;
-    let generalActive =
-      this.state.currentTab === 'general' || '' ? 'active' : '';
-    let attachmentsActive =
-      this.state.currentTab === 'attachments' ? 'active' : '';
-    let tasksActive = this.state.currentTab === 'tasks' ? 'active' : '';
+    let generalActive = currentTab === 'general' || '' ? 'active' : '';
+    let attachmentsActive = currentTab === 'attachments' ? 'active' : '';
+    let tasksActive = currentTab === 'tasks' ? 'active' : '';
     const attachments = this._renderAttachments();
+    let jobName = job ? job.Name : '–';
+    let jobType = job && job.Type ? job.Type.Name : '–';
     return (
       <div className="job-detail-container">
-        <CommandBar
-          items={this.getItems()}
-          //overflowItems={this.getOverlflowItems()}
-          overflowButtonProps={{ ariaLabel: 'More commands' }}
-          //farItems={this.getFarItems()}
-          ariaLabel={
-            'Use left and right arrow keys to navigate between commands'
-          }
-        />
-        <div className="job-detail-panel">
-          <div className={'general ' + generalActive}>
-            <p>general</p>
+        <div className="job-detail-main">
+          <CommandBar
+            items={this.getItems()}
+            //overflowItems={this.getOverlflowItems()}
+            overflowButtonProps={{ ariaLabel: 'More commands' }}
+            //farItems={this.getFarItems()}
+            ariaLabel={
+              'Use left and right arrow keys to navigate between commands'
+            }
+          />
+          <div className="job-detail-panel">
+            <div className={'general ' + generalActive}>
+              <div>
+                <div>Job Name</div>
+                <div>{jobName}</div>
+              </div>
+              <div>
+                <h5>Job Type</h5>
+                <p>{jobType}</p>
+              </div>
+            </div>
+            <div className={'attachments ' + attachmentsActive}>
+              <p>{attachments}</p>
+            </div>
+            <div className={'tasks ' + tasksActive}>
+              <p>tasks</p>
+            </div>
           </div>
-          <div className={'attachments ' + attachmentsActive}>
-            <p>{attachments}</p>
-          </div>
-          <div className={'tasks ' + tasksActive}>
-            <p>tasks</p>
-          </div>
+        </div>
+        <div className={'job-detail-comments'}>
+          <h5>Comments</h5>
+          <p>[PLACEHOLDER]</p>
         </div>
       </div>
     );
