@@ -1,4 +1,4 @@
-.panelBody {
+.panel-body {
   background-color: #eee;
   padding: 20px;
 }
@@ -87,6 +87,7 @@
   flex: 1 0 100%;
   display: flex;
   visibility: hidden;
+  flex-direction: row;
 }
 .job-detail-panel div.active {
   visibility: visible;
@@ -95,5 +96,13 @@
 .job-detail-container {
   display: flex;
   flex: 1 1 100%;
-  flex-direction: row;
+  flex-direction: column;
+}
+
+.job-detail-container .ms-CommandBar {
+  padding: 0px;
+}
+
+.job-id {
+  color: #ccc;
 }
