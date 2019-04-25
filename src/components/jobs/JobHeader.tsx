@@ -11,7 +11,11 @@ import {
   ITheme,
   createTheme,
 } from 'office-ui-fabric-react/lib/Styling';
-import { IJobModel, IJobStatusReason, IJobType } from '../../models/IJobModel';
+import {
+  IJobModel,
+  IJobStatusReason,
+  formatStatusLabel,
+} from '../../models/IJobModel';
 
 export interface IProps {
   disabled?: boolean;
@@ -65,6 +69,7 @@ export default class JobHeader extends Component<IProps, {}> {
     const job = this.props.job as IJobModel;
     const status = job['StatusReason'] as IJobStatusReason;
     const label = status ? status.Label : '–';
+    const statusClassName = formatStatusLabel(label);
     console.log('JobHeader', status, this.state, this.props);
 
     return (
@@ -72,11 +77,11 @@ export default class JobHeader extends Component<IProps, {}> {
         <div className="job-header-cells">
           <div className="job-header-info">
             <h4>Job</h4>
-            {job['Name']}
+            {job.Name} <span className="job-id">{job.Id}</span>
           </div>
           <div className="job-header-status">
             <h4>Status</h4>
-            <h4>{label}</h4>
+            <h4 className={statusClassName}>{label}</h4>
           </div>
           <div className="job-header-owner">
             <h4>Owner</h4>
