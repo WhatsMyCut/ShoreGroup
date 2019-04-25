@@ -138,6 +138,13 @@ class JobsPage extends AppComponent<Props, IState> {
   render() {
     if (!this.props.jobs) return false;
     const jobscount = this.props.jobs.length || 0;
+    const pageCount = jobscount / this.state.limitPerPage;
+    let pageItems = this.props.jobs.length
+      ? this.props.jobs.slice(
+          this.state.rowOffset,
+          this.state.rowOffset + this.state.limitPerPage,
+        )
+      : [];
     return (
       <div className="jobs-page">
         <AppBreadcrumb show={true} />
@@ -152,11 +159,11 @@ class JobsPage extends AppComponent<Props, IState> {
           onClickShowJobStatusFilter={this.onClickShowJobStatusFilter}
         />
         <div className="job-list">
-          <JobList items={this.props.jobs} />
+          <JobList items={pageItems} />
           <div className="job-paginator">
             <PagingBar
               ref={x => (this.pagingBar = x)}
-              totalPages={jobscount}
+              totalPages={pageCount}
               limitPerPage={this.state.limitPerPage}
               currentPage={this.state.pageNum}
               onChangePage={this.onChangePage}
