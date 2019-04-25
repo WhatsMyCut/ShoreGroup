@@ -1,4 +1,5 @@
-import Result from './Result';
+import { IAttachment } from './IAttachment';
+import { ITaskModel } from './ITaskModel';
 
 export interface IJobType {
   Name?: string;
@@ -21,6 +22,8 @@ export interface IJobModel {
   ModifiedOn?: string;
   Type?: IJobType;
   StatusReason?: IJobStatusReason;
+  Attachments?: IAttachment[];
+  Tasks?: ITaskModel[];
 }
 
 export const formatStatusLabel = (status: string) => {
