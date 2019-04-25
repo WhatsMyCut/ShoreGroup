@@ -11,13 +11,12 @@ import {
   ITheme,
   createTheme,
 } from 'office-ui-fabric-react/lib/Styling';
-import { IJobStatusReason } from '../../models/IJobModel';
+import { IJobModel, IJobStatusReason, IJobType } from '../../models/IJobModel';
 
 export interface IProps {
   disabled?: boolean;
   checked?: boolean;
-  statusLabel?: IJobStatusReason;
-  owner?: string;
+  job?: IJobModel;
 }
 const customThemeForShimmer: ITheme = createTheme({
   palette: {
@@ -30,7 +29,7 @@ const customThemeForShimmer: ITheme = createTheme({
   },
 });
 export default class JobHeader extends Component<IProps, {}> {
-  constructor(props) {
+  constructor(props: IProps) {
     super(props);
   }
 
@@ -63,29 +62,25 @@ export default class JobHeader extends Component<IProps, {}> {
     );
   };
   render() {
+    const job = this.props.job as IJobModel;
+    const status = job['StatusReason'] as IJobStatusReason;
+    const label = status ? status.Label : '–';
+    console.log('JobHeader', status, this.state, this.props);
+
     return (
-      <div className="jobHeader">
-        <div className="jobHeaderCells">
-          <div className="jobHeader-info">
-            <h3>Job</h3>
-            <Shimmer
-              customElementsGroup={this._getCustomElements(
-                customThemeForShimmer.palette.white,
-              )}
-              width={300}
-              shimmerColors={{
-                shimmer: customThemeForShimmer.palette.themeTertiary,
-                shimmerWave: customThemeForShimmer.palette.themeSecondary,
-              }}
-            />
+      <div className="job-header">
+        <div className="job-header-cells">
+          <div className="job-header-info">
+            <h4>Job</h4>
+            {job['Name']}
           </div>
-          <div className="jobHeader-status">
-            <h3>Status</h3>
-            <h4>{this.props.statusLabel}</h4>
+          <div className="job-header-status">
+            <h4>Status</h4>
+            <h4>{label}</h4>
           </div>
-          <div className="jobHeader-owner">
-            <h3>Owner</h3>
-            <h4>{this.props.checked}</h4>
+          <div className="job-header-owner">
+            <h4>Owner</h4>
+            <h4>[PLACEHOLDER]</h4>
           </div>
         </div>
       </div>

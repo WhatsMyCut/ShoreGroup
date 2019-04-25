@@ -122,7 +122,7 @@ export default class JobList extends Component<
         onColumnClick: this._onColumnClick,
         data: 'date',
         onRender: (item: IJobModel) => {
-          const createdDate = Moment(item.createdOn).format('l');
+          const createdDate = Moment(item.CreatedOn).format('l');
           return <span>{createdDate}</span>;
         },
         isPadded: true,
@@ -138,7 +138,7 @@ export default class JobList extends Component<
         data: 'date',
         onColumnClick: this._onColumnClick,
         onRender: (item: IJobModel) => {
-          const dueDate = Moment(item.dueDate).format('l');
+          const dueDate = Moment(item.DueDate).format('l');
           return <span>{dueDate}</span>;
         },
         isPadded: true,
@@ -269,7 +269,7 @@ export default class JobList extends Component<
   ): void => {
     this.setState({
       items: text
-        ? this._allItems.filter(i => i.name.toLowerCase().indexOf(text) > -1)
+        ? this._allItems.filter(i => i.Name.toLowerCase().indexOf(text) > -1)
         : this._allItems,
     });
   };
@@ -287,7 +287,7 @@ export default class JobList extends Component<
       case 1:
         return (
           '1 item selected: ' +
-          (this._selection.getSelection()[0] as IJobModel).name
+          (this._selection.getSelection()[0] as IJobModel).Name
         );
       default:
         return `${selectionCount} items selected`;

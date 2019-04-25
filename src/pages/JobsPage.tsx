@@ -94,7 +94,7 @@ class JobsPage extends AppComponent<Props, IState> {
 
   @bind
   onClickJobEditorDelete__saveBtn(e: MouseEvent<HTMLButtonElement>): void {
-    this.props.deleteRequest(this.state.modelForEdit.id);
+    this.props.deleteRequest(this.state.modelForEdit.Id);
     this.elModalDelete.hide();
   }
 
@@ -173,8 +173,8 @@ class JobsPage extends AppComponent<Props, IState> {
               </button>
             </div>
           }
-          title={`Delete Job: #${this.state.modelForEdit.id} ${
-            this.state.modelForEdit.name
+          title={`Delete Job: #${this.state.modelForEdit.Id} ${
+            this.state.modelForEdit.Name
           }`}
         >
           <p>Do you really want to delete this job?</p>
