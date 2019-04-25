@@ -43,7 +43,7 @@ export default class AppBreadcrumb extends AppComponent<IProps, {}> {
       css = { display: this.props.show ? 'block' : 'none' };
     }
     return (
-      <div className="Breadcrumb-bg" style={css}>
+      <div className="app-breadcrumb" style={css}>
         <Breadcrumb
           items={[
             {

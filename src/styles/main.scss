@@ -5,11 +5,15 @@
 [data-test-id='Navigation'] + div {
   padding-left: 275px !important;
 }
+.app-breadcrumb {
+  margin-bottom: 20px;
+}
 .footer {
   width: 100%;
   padding: 10px;
   border-top: 1px solid #e7e7e7;
-  position: absolute;
+  background-color: #fff;
+  position: fixed;
   bottom: 0;
   p {
     margin: 0;
