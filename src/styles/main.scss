@@ -5,11 +5,34 @@
 [data-test-id='Navigation'] + div {
   padding-left: 275px !important;
 }
+.app-breadcrumb {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.app-breadcrumb .app-breadcrumb-items {
+  flex: 1 1 auto;
+}
+.app-breadcrumb .app-breadcrumb-jobid {
+  flex: 1 1 20%;
+}
+
+.app-breadcrumb .right {
+  position: absolute;
+  right: 30px;
+}
+.smalltext {
+  font-size: 12px;
+  color: #999;
+}
 .footer {
   width: 100%;
   padding: 10px;
   border-top: 1px solid #e7e7e7;
-  position: absolute;
+  background-color: #fff;
+  position: fixed;
   bottom: 0;
   p {
     margin: 0;
@@ -26,15 +49,6 @@
 
 .logo svg {
   color: #000;
-}
-
-.green {
-  color: green;
-}
-
-.btn-actions {
-  width: auto;
-  padding-top: 3px !important;
 }
 
 .layout {
@@ -56,12 +70,6 @@
 
 .right {
   text-align: right;
-}
-
-.btn-red {
-  background-color: darkred !important;
-  color: white !important;
-  padding: 0;
 }
 
 ul.pagination {

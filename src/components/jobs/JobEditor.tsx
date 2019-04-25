@@ -29,8 +29,8 @@ export default class JobEditor extends Component<IProps, {}> {
       <Formik
         enableReinitialize={true}
         initialValues={{
-          name: this.props.data.name || '',
-          description: this.props.data.description || '',
+          name: this.props.data.Name || '',
+          description: this.props.data.Description || '',
         }}
         onSubmit={(values, { setSubmitting }) => {}}
       >
@@ -48,7 +48,7 @@ export default class JobEditor extends Component<IProps, {}> {
             <input
               type="hidden"
               name="jobID"
-              defaultValue={(this.props.data.id || 0).toString()}
+              defaultValue={(this.props.data.Id || 0).toString()}
             />
             <div className="form-group">
               <label className="control-label required" htmlFor="task__name">

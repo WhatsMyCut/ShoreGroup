@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import Pagination, { PaginationProps } from 'react-paginating';
+import Pagination, { PaginationProps } from 'office-ui-fabric-react-pagination';
 import bind from 'bind-decorator';
 
 export interface IProps {
-  totalResults: number;
-  limitPerPage: number;
+  totalPages: number;
+  limitPerPage?: number;
   currentPage: number;
   onChangePage: (pageNum: number) => void;
 }
@@ -34,88 +34,11 @@ export class PagingBar extends Component<IProps, {}> {
   render() {
     return (
       <Pagination
-        total={this.props.totalResults}
-        limit={this.props.limitPerPage}
+        totalPages={this.props.totalPages + 1}
+        //limit={this.props.limitPerPage}
+        onChange={this.props.onChangePage}
         currentPage={this.props.currentPage}
-      >
-        {({
-          pages,
-          currentPage,
-          hasNextPage,
-          hasPreviousPage,
-          previousPage,
-          nextPage,
-          totalPages,
-          getPageItemProps,
-        }) => (
-          <ul className="pagination">
-            <li>
-              <span
-                {...getPageItemProps({
-                  pageValue: 1,
-                  onPageChange: this.props.onChangePage,
-                })}
-                ref={x => (this.elFirstPageBtn = x)}
-              >
-                first
-              </span>
-            </li>
-
-            {hasPreviousPage && (
-              <li>
-                <span
-                  {...getPageItemProps({
-                    pageValue: previousPage,
-                    onPageChange: this.props.onChangePage,
-                  })}
-                >
-                  {'<'}
-                </span>
-              </li>
-            )}
-
-            {pages.map(page => {
-              return (
-                <li key={page} className={page === currentPage ? 'active' : ''}>
-                  <span
-                    {...getPageItemProps({
-                      pageValue: page,
-                      onPageChange: this.props.onChangePage,
-                    })}
-                  >
-                    {page}
-                  </span>
-                </li>
-              );
-            })}
-
-            {hasNextPage && (
-              <li>
-                <span
-                  {...getPageItemProps({
-                    pageValue: nextPage,
-                    onPageChange: this.props.onChangePage,
-                  })}
-                >
-                  {'>'}
-                </span>
-              </li>
-            )}
-
-            <li>
-              <span
-                {...getPageItemProps({
-                  pageValue: totalPages,
-                  onPageChange: this.props.onChangePage,
-                })}
-                ref={x => (this.elLastPageBtn = x)}
-              >
-                last
-              </span>
-            </li>
-          </ul>
-        )}
-      </Pagination>
+      />
     );
   }
 }

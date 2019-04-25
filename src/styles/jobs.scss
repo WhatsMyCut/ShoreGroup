@@ -1,0 +1,108 @@
+.panel-body {
+  background-color: #eee;
+  padding: 20px;
+}
+
+.status-new {
+  color: green;
+}
+
+.status-late {
+  color: darkred;
+}
+
+.btn-actions {
+  width: auto;
+}
+
+.job-header {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 100%;
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.fileIconHeaderIcon {
+  padding: 0;
+  font-size: 16px;
+}
+
+.fileIconCell {
+  text-align: 'center';
+}
+
+.fileIconCell:before {
+  content: '.';
+  display: 'inline-block';
+  vertical-align: 'middle';
+  height: '100%';
+  width: '0px';
+  visibility: 'hidden';
+}
+
+.fileIconImg {
+  vertical-align: 'middle';
+  max-height: 16px;
+  max-width: 16px;
+}
+
+.controlWrapper {
+  display: 'flex';
+  flex-wrap: 'wrap';
+}
+
+.exampleToggle {
+  display: 'inline-block';
+  margin-bottom: 10px;
+  margin-right: 30px;
+}
+
+.selectionDetails {
+  margin-bottom: 20px;
+}
+
+.job-header .job-header-cells {
+  flex: 1 1 100%;
+  display: flex;
+  justify-content: space-around;
+}
+
+.job-header-cells > div.ms-Stack {
+  flex: 1 1 33%;
+}
+
+.job-detail-panel .ms-CommandBar {
+  border: 1px solid #ccc;
+  padding: 0;
+}
+
+.job-detail-panel {
+  border: 1px solid #ccc;
+  min-height: 200px;
+  background-color: #f9f9f9;
+}
+
+.job-detail-panel div {
+  flex: 1 0 100%;
+  display: flex;
+  visibility: hidden;
+  flex-direction: row;
+}
+.job-detail-panel div.active {
+  visibility: visible;
+}
+
+.job-detail-container {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: column;
+}
+
+.job-detail-container .ms-CommandBar {
+  padding: 0px;
+}
+
+.job-id {
+  color: #ccc;
+}

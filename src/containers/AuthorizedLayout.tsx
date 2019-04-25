@@ -33,7 +33,7 @@ export default class AuthorizedLayout extends Component<Props, {}> {
         <NavMenu />
         <div className="mainContent">
           <TopMenu />
-          <div className="panelContent">{this.props.children}</div>
+          <div className="panel-content">{this.props.children}</div>
           <Footer />
         </div>
         <ToastContainer />

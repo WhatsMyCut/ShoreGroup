@@ -1,24 +1,39 @@
 import Result from './Result';
 
 export interface IJobType {
-  name?: string;
-  value?: number;
+  Name?: string;
+  Value?: number;
 }
 
 export interface IJobStatusReason {
-  label?: string;
-  stateCode?: number;
-  value?: number;
+  Label?: string;
+  StateCode?: number;
+  Value?: number;
 }
 
 export interface IJobModel {
-  id?: string;
-  name?: string;
-  createdOn?: string;
-  dataFileQuantity?: string;
-  description?: string;
-  dueDate?: string;
-  modifiedOn?: string;
-  jobType?: IJobType;
-  statusReason?: IJobStatusReason;
+  Id?: string;
+  Name?: string;
+  CreatedOn?: string;
+  DataFileQuantity?: string;
+  Description?: string;
+  DueDate?: string;
+  ModifiedOn?: string;
+  Type?: IJobType;
+  StatusReason?: IJobStatusReason;
 }
+
+export const formatStatusLabel = (status: string) => {
+  let statusClassName = '';
+  switch (status) {
+    case 'New':
+      statusClassName = 'status-new';
+      break;
+    case 'Late':
+      statusClassName = 'status-late';
+      break;
+    default:
+      break;
+  }
+  return statusClassName;
+};
