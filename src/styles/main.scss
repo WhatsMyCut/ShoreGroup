@@ -6,7 +6,26 @@
   padding-left: 275px !important;
 }
 .app-breadcrumb {
+  display: flex;
+  flex-direction: row;
   margin-bottom: 20px;
+  position: relative;
+}
+
+.app-breadcrumb .app-breadcrumb-items {
+  flex: 1 1 auto;
+}
+.app-breadcrumb .app-breadcrumb-jobid {
+  flex: 1 1 20%;
+}
+
+.app-breadcrumb .right {
+  position: absolute;
+  right: 30px;
+}
+.smalltext {
+  font-size: 12px;
+  color: #999;
 }
 .footer {
   width: 100%;
