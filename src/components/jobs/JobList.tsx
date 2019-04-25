@@ -52,10 +52,7 @@ export default class JobList extends Component<
         onRender: (item: IJobModel) => {
           return (
             <span>
-              <Checkbox
-                id={item['Id']}
-                styles={{ checkbox: { fontSize: 14 } }}
-              />
+              <Checkbox id={item.Id} styles={{ checkbox: { fontSize: 14 } }} />
             </span>
           );
         },
@@ -77,8 +74,8 @@ export default class JobList extends Component<
         isPadded: true,
         onRender: (item: IJobModel) => {
           return (
-            <NavLink to={`/jobs/${item['Id']}`} data-automation-id="test">
-              {item['Name']}
+            <NavLink to={`/jobs/${item.Id}`} data-automation-id="test">
+              {item.Name}
             </NavLink>
           );
         },
@@ -94,20 +91,20 @@ export default class JobList extends Component<
         data: 'string',
         isPadded: true,
         onRender: (item: IJobModel) => {
-          return <span>{item['Description'] || 'n/a'}</span>;
+          return <span>{item.Description || 'n/a'}</span>;
         },
       },
       {
         key: 'column4',
         name: 'Type',
-        fieldName: 'type',
+        fieldName: 'item.Type',
         minWidth: 70,
         maxWidth: 90,
         isResizable: true,
         onColumnClick: this._onColumnClick,
         data: 'string',
         onRender: (item: IJobModel) => {
-          const jobType = item['Type'] ? item['Type']['Name'] : 'n/a';
+          const jobType = item.Type ? item.Type.Name : 'n/a';
           return <span>{jobType}</span>;
         },
         isPadded: true,
@@ -122,8 +119,7 @@ export default class JobList extends Component<
         onColumnClick: this._onColumnClick,
         data: 'date',
         onRender: (item: IJobModel) => {
-          const createdDate = Moment(item.CreatedOn).format('l');
-          return <span>{createdDate}</span>;
+          return <span>{Moment(item.CreatedOn).format('l')}</span>;
         },
         isPadded: true,
       },
@@ -138,8 +134,7 @@ export default class JobList extends Component<
         data: 'date',
         onColumnClick: this._onColumnClick,
         onRender: (item: IJobModel) => {
-          const dueDate = Moment(item.DueDate).format('l');
-          return <span>{dueDate}</span>;
+          return <span>{Moment(item.DueDate).format('l')}</span>;
         },
         isPadded: true,
       },
@@ -154,14 +149,14 @@ export default class JobList extends Component<
         data: 'number',
         onColumnClick: this._onColumnClick,
         onRender: (item: IJobModel) => {
-          const statusLabel = item['StatusReason']['Label'];
+          const statusLabel = item.StatusReason.Label;
           let statusClassName = '';
           switch (statusLabel) {
             case 'New':
-              statusClassName = 'statusNew';
+              statusClassName = 'status-new';
               break;
             case 'Late':
-              statusClassName = 'statusLate';
+              statusClassName = 'status-late';
               break;
             default:
               break;
