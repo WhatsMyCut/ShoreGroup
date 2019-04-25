@@ -22,7 +22,7 @@ export default class JobActions extends Component<IProps, {}> {
     let checked = false;
 
     return (
-      <div>
+      <div className={'btn-actions'}>
         <IconButton
           menuIconProps={{
             iconName: 'MoreVertical',

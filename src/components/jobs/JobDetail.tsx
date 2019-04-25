@@ -55,7 +55,7 @@ export default class JobDetail extends Component<IProps, {}> {
     let checked = false;
 
     return (
-      <div>
+      <div className="job-detail-container">
         <CommandBar
           items={this.getItems()}
           //overflowItems={this.getOverlflowItems()}
@@ -65,7 +65,7 @@ export default class JobDetail extends Component<IProps, {}> {
             'Use left and right arrow keys to navigate between commands'
           }
         />
-        <div className="jobDetailPanel">
+        <div className="job-detail-panel">
           <div className="general active">
             <p>general</p>
           </div>

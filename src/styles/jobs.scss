@@ -3,20 +3,19 @@
   padding: 20px;
 }
 
-.statusNew {
+.status-new {
   color: green;
 }
 
-.statusLate {
+.status-late {
   color: darkred;
 }
 
-.btnActions {
+.btn-actions {
   width: auto;
-  padding-top: 3px !important;
 }
 
-.jobHeader {
+.job-header {
   display: flex;
   flex-direction: row;
   flex: 1 1 100%;
@@ -63,32 +62,38 @@
   margin-bottom: 20px;
 }
 
-.jobHeader .jobHeaderCells {
+.job-header .job-header-cells {
   flex: 1 1 100%;
   display: flex;
   justify-content: space-around;
 }
 
-.jobHeaderCells > div {
+.job-header-cells > div.ms-Stack {
   flex: 1 1 33%;
 }
 
-.jobDetailPanel .ms-CommandBar {
+.job-detail-panel .ms-CommandBar {
   border: 1px solid #ccc;
   padding: 0;
 }
 
-.jobDetailPanel {
+.job-detail-panel {
   border: 1px solid #ccc;
   min-height: 200px;
   background-color: #f9f9f9;
 }
 
-.jobDetailPanel div {
+.job-detail-panel div {
   flex: 1 0 100%;
   display: flex;
   visibility: hidden;
 }
-.jobDetailPanel div.active {
+.job-detail-panel div.active {
   visibility: visible;
+}
+
+.job-detail-container {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: row;
 }
