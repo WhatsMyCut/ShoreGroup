@@ -65,11 +65,16 @@
 .job-header .job-header-cells {
   flex: 1 1 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  padding: 0 20px;
 }
 
-.job-header-cells > div.ms-Stack {
-  flex: 1 1 33%;
+.job-header-cells > div {
+  flex: 1 1 15%;
+}
+
+.job-header-cells .job-header-info {
+  flex: 1 1 70%;
 }
 
 .job-detail-panel .ms-CommandBar {
