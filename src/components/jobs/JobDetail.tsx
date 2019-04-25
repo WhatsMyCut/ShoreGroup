@@ -24,30 +24,35 @@ export default class JobDetail extends Component<IProps, IState> {
   }
 
   componentWillMount() {
-    this.setState({ currentTab: this.props.currentTab });
+    this.getHash();
   }
 
   alertClicked(e: MouseEvent) {
     console.log('alertClicked', e);
   }
 
-  setHash(hash: string) {
+  private setHash(hash: string) {
     (window as any).location.hash = hash;
+    this.getHash();
   }
+
+  private getHash = () => {
+    let h = window.location.hash
+      ? window.location.hash.replace('#', '')
+      : 'general';
+    this.setState({ currentTab: h });
+  };
 
   // Data for CommandBar
   private getItems = () => {
-    let generalActive =
-      this.state.currentTab === 'general' || '' ? 'active' : '';
-    let attachmentsActive =
-      this.state.currentTab === 'attachments' ? 'active' : '';
-    let tasksActive = this.state.currentTab === 'tasks' ? 'active' : '';
+    const hash = this.state.currentTab;
+    console.log('here2', hash);
 
     return [
       {
         key: 'newItem',
         name: 'General',
-        className: generalActive,
+        className: hash === 'general' || '' ? 'active' : '',
         iconProps: {
           iconName: 'Add',
         },
@@ -57,7 +62,7 @@ export default class JobDetail extends Component<IProps, IState> {
       {
         key: 'attachments',
         name: 'Attachments',
-        className: attachmentsActive,
+        className: hash === 'attachments' ? 'active' : '',
         iconProps: {
           iconName: 'FilePDB',
         },
@@ -67,7 +72,7 @@ export default class JobDetail extends Component<IProps, IState> {
       {
         key: 'share',
         name: 'Tasks',
-        className: tasksActive,
+        className: hash === 'tasks' ? 'active' : '',
         iconProps: {
           iconName: 'ClipboardList',
         },
