@@ -142,7 +142,9 @@ class JobsPage extends AppComponent<Props, IState> {
       <div className="jobs-page">
         <AppBreadcrumb show={true} />
         <Loader show={this.props.indicators.operationLoading} />
-
+        <div className="list-header">
+          <h1>Jobs</h1>
+        </div>
         <JobListFilter
           onClickAddJob={this.onClickAddJob}
           onChangeSearchInput={this.onChangeSearchInput}
@@ -151,6 +153,15 @@ class JobsPage extends AppComponent<Props, IState> {
         />
         <div className="job-list">
           <JobList items={this.props.jobs} />
+          <div className="job-paginator">
+            <PagingBar
+              ref={x => (this.pagingBar = x)}
+              totalPages={jobscount}
+              limitPerPage={this.state.limitPerPage}
+              currentPage={this.state.pageNum}
+              onChangePage={this.onChangePage}
+            />
+          </div>
         </div>
         {/* Delete modal */}
         <ModalComponent
@@ -179,14 +190,6 @@ class JobsPage extends AppComponent<Props, IState> {
         >
           <p>Do you really want to delete this job?</p>
         </ModalComponent>
-
-        <PagingBar
-          ref={x => (this.pagingBar = x)}
-          totalPages={jobscount}
-          limitPerPage={this.state.limitPerPage}
-          currentPage={this.state.pageNum}
-          onChangePage={this.onChangePage}
-        />
       </div>
     );
   }

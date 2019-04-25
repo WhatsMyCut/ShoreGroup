@@ -45,11 +45,6 @@ export default class AppBreadcrumb extends AppComponent<IProps, {}> {
 
   private _getItems() {
     let items = [
-      {
-        text: 'Dashboard',
-        key: 'home',
-        onClick: this._onBreadcrumbItemClicked,
-      },
       { text: 'Jobs', key: 'f1', onClick: this._onBreadcrumbItemClicked },
     ];
 
