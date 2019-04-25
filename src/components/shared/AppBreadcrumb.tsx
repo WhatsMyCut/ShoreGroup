@@ -56,7 +56,6 @@ export default class AppBreadcrumb extends AppComponent<IProps, {}> {
     if (this.props.job) {
       const jobId = this.props.job.Id || '–';
       const jobName = this.props.job.Name || '–';
-      console.log('breadcrumb', jobId);
       items.push({ text: jobName, key: 'jobid', onClick: () => undefined });
     }
     return items;
