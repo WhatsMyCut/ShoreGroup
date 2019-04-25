@@ -39,20 +39,20 @@ export default class JobList extends Component<
       {
         key: 'column1',
         name: '',
-        className: 'fileIconCell',
-        iconClassName: 'fileIconHeaderIcon',
+        className: 'checkbox-cell',
+        iconClassName: 'file-icon-img',
         ariaLabel:
           'Column operations for File type, Press to sort on File type',
         iconName: 'Checkbox',
         isIconOnly: true,
         fieldName: 'id',
-        minWidth: 16,
-        maxWidth: 16,
+        minWidth: 30,
+        maxWidth: 30,
         //onColumnClick: this._onColumnClick,
         onRender: (item: IJobModel) => {
           return (
             <span>
-              <Checkbox id={item.Id} styles={{ checkbox: { fontSize: 14 } }} />
+              <Checkbox id={item.Id} styles={{ checkbox: { fontSize: 22 } }} />
             </span>
           );
         },
@@ -85,7 +85,7 @@ export default class JobList extends Component<
         name: 'Description',
         fieldName: 'description',
         minWidth: 70,
-        maxWidth: 390,
+        maxWidth: 700,
         isResizable: true,
         onColumnClick: this._onColumnClick,
         data: 'string',
@@ -99,7 +99,7 @@ export default class JobList extends Component<
         name: 'Type',
         fieldName: 'item.Type',
         minWidth: 70,
-        maxWidth: 90,
+        maxWidth: 70,
         isResizable: true,
         onColumnClick: this._onColumnClick,
         data: 'string',
@@ -114,7 +114,7 @@ export default class JobList extends Component<
         name: 'Created Date',
         fieldName: 'createdOn',
         minWidth: 70,
-        maxWidth: 90,
+        maxWidth: 70,
         isResizable: true,
         onColumnClick: this._onColumnClick,
         data: 'date',
@@ -128,7 +128,7 @@ export default class JobList extends Component<
         name: 'Due Date',
         fieldName: 'dueDate',
         minWidth: 70,
-        maxWidth: 90,
+        maxWidth: 70,
         isResizable: true,
         isCollapsible: true,
         data: 'date',

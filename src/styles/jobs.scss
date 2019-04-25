@@ -23,25 +23,27 @@
   margin-bottom: 25px;
 }
 
-.fileIconHeaderIcon {
+.file-icon-header-icon {
   padding: 0;
   font-size: 16px;
 }
 
-.fileIconCell {
+.checkbox-cell {
   text-align: 'center';
+  padding: 0;
+  font-size: 0.8rem;
 }
 
-.fileIconCell:before {
-  content: '.';
-  display: 'inline-block';
-  vertical-align: 'middle';
-  height: '100%';
-  width: '0px';
-  visibility: 'hidden';
-}
+// .checkbox-cell:before {
+//   content: '.';
+//   display: 'inline-block';
+//   vertical-align: 'middle';
+//   height: '100%';
+//   width: '0px';
+//   visibility: 'hidden';
+// }
 
-.fileIconImg {
+.file-icon-img {
   vertical-align: 'middle';
   max-height: 16px;
   max-width: 16px;
@@ -131,4 +133,36 @@
 
 .ms-CommandBarItem-link.active {
   border-bottom: 2px solid #0078d4;
+}
+
+.job-paginator {
+  display: flex;
+  flex: 1 1 70%;
+  margin: 10px auto 20px;
+  justify-content: center;
+}
+
+.job-paginator > .pagination {
+  margin: 0 !important;
+}
+
+.job-list-filter .panel-body {
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.job-list-filter-menu .ms-CommandBar {
+  padding: 0 5px;
+}
+
+.job-list-filter .ms-OverflowSet-item:nth-child(2) {
+  max-width: 30px;
+  padding: 0;
+  margin: 0;
+}
+
+.job-list-filter .ms-OverflowSet-item:nth-child(2):hover,
+.job-list-filter .ms-OverflowSet-item:nth-child(2):hover * {
+  background-color: #f4f4f4;
 }
