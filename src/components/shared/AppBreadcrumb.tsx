@@ -62,6 +62,15 @@ export default class AppBreadcrumb extends AppComponent<IProps, {}> {
     return items;
   }
 
+  private renderJobId() {
+    const jobId = this.props.job ? this.props.job.Id : '–';
+    return (
+      <div className="app-breadcrumb-jobid nobr right smalltext">
+        Job ID: {jobId}
+      </div>
+    );
+  }
+
   render() {
     var css = { display: 'none' };
     if (!isNode()) {
@@ -80,9 +89,7 @@ export default class AppBreadcrumb extends AppComponent<IProps, {}> {
             dividerAs={this._getCustomDivider}
           />
         </div>
-        <div className="app-breadcrumb-jobid nobr right smalltext">
-          Job ID: {this.props.job.Id}
-        </div>
+        {this.props.job ? this.renderJobId() : ''}
       </div>
     );
   }
