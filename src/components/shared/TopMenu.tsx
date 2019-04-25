@@ -83,7 +83,7 @@ class TopMenu extends Component<{}, { logoutAction: boolean }> {
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  {Globals.serviceUser.login}&nbsp;
+                  {/* {Globals.serviceUser.login}&nbsp; */}
                   <span className="caret" />
                 </a>
                 <ul className="dropdown-menu">
