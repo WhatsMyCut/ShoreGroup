@@ -18,7 +18,7 @@ export interface IProps {
   items: IJobModel[];
 }
 
-export interface IDetailsListDocumentsExampleState {
+export interface IJobsListState {
   columns: IColumn[];
   items: IJobModel[];
   selectionDetails: string;
@@ -26,10 +26,7 @@ export interface IDetailsListDocumentsExampleState {
   isCompactMode: boolean;
 }
 
-export default class JobList extends Component<
-  IProps,
-  IDetailsListDocumentsExampleState
-> {
+export default class JobList extends Component<IProps, IJobsListState> {
   private _selection: Selection;
   private _allItems: IJobModel[];
 
@@ -62,7 +59,7 @@ export default class JobList extends Component<
         name: 'Job Name',
         fieldName: 'name',
         minWidth: 100,
-        maxWidth: 100,
+        maxWidth: 180,
         isRowHeader: true,
         isResizable: true,
         isSorted: true,
@@ -198,6 +195,7 @@ export default class JobList extends Component<
       isModalSelection,
     } = this.state;
     const items = this.props.items;
+
     return (
       <div>
         <MarqueeSelection selection={this._selection}>
@@ -223,10 +221,7 @@ export default class JobList extends Component<
     );
   }
 
-  public componentDidUpdate(
-    previousProps: any,
-    previousState: IDetailsListDocumentsExampleState,
-  ) {
+  public componentDidUpdate(previousProps: any, previousState: IJobsListState) {
     if (
       previousState.isModalSelection !== this.state.isModalSelection &&
       !this.state.isModalSelection
