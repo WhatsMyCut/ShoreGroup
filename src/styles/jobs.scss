@@ -99,6 +99,11 @@
   flex: 1 0 100%;
   flex-direction: row;
   display: none;
+  padding: 10px;
+}
+
+.job-detail-panel > div.attachments {
+  padding: 0;
 }
 
 .job-detail-panel > div.active {
@@ -110,6 +115,7 @@
   flex: 1 1 100%;
   flex-direction: row;
 }
+
 .job-detail-main {
   flex: 1 0 50%;
   flex-direction: column;
@@ -129,6 +135,10 @@
   border-bottom: 1px solid #ccc;
   padding: 10px;
   margin: 0;
+}
+
+.job-detail-comments-list {
+  padding: 10px;
 }
 
 .job-detail-container .ms-CommandBar {
