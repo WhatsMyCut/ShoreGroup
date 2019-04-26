@@ -12,14 +12,27 @@ export interface IJobStatusReason {
   Value?: number;
 }
 
+export interface IJobAccount {
+  Id?: string;
+  Name?: string;
+}
+
+export interface IJobOwner {
+  Id?: string;
+  FullName?: string;
+}
+
 export interface IJobModel {
+  Account?: IJobAccount;
   Id?: string;
   Name?: string;
   CreatedOn?: string;
   DataFileQuantity?: string;
   Description?: string;
   DueDate?: string;
+  JobName?: string;
   ModifiedOn?: string;
+  Owner?: IJobOwner;
   Type?: IJobType;
   StatusReason?: IJobStatusReason;
   Attachments?: IAttachmentModel[];
