@@ -147,11 +147,11 @@ class JobsPage extends AppComponent<Props, IState> {
       : [];
     return (
       <div className="jobs-page">
-        <AppBreadcrumb show={true} />
+        <AppBreadcrumb
+          show={true}
+          styles={{ fontSize: 28, fontWeight: 'bold' }}
+        />
         <Loader show={this.props.indicators.operationLoading} />
-        <div className="list-header">
-          <h1>Jobs</h1>
-        </div>
         <JobListFilter
           onClickAddJob={this.onClickAddJob}
           onChangeSearchInput={this.onChangeSearchInput}

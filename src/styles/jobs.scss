@@ -169,18 +169,37 @@
 
 .job-paginator > .pagination {
   margin: 0 !important;
+  background-color: #f4f4f4;
+  border-radius: 5px;
+  padding: 0 5px;
 }
 
-.job-list-filter .panel-body {
-  margin: 5px;
+.job-list-filter-container {
+  display: flex;
+  flex-direction: row;
+  margin: 15px 0;
   padding: 5px 10px;
   border-radius: 5px;
+  background-color: #f4f4f4;
+}
+
+.job-list-filter-keyword {
+}
+
+.job-list-filter-input {
+  flex: 1 1 auto;
+}
+
+.job-list-filter-command-bar {
+  flex: 0 1 30%;
 }
 
 .job-list-filter-menu .ms-CommandBar {
   padding: 0 5px;
+  border-radius: 5px;
 }
 
+/* Filter List Command Bar Divider */
 .job-list-filter .ms-OverflowSet-item:nth-child(2) {
   max-width: 30px;
   padding: 0;
@@ -191,6 +210,7 @@
 .job-list-filter .ms-OverflowSet-item:nth-child(2):hover * {
   background-color: #f4f4f4;
 }
+/* /Divider */
 
 .attachments {
   flex-direction: column !important;

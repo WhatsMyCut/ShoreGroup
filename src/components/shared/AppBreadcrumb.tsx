@@ -8,11 +8,13 @@ import {
 } from 'office-ui-fabric-react/lib/Breadcrumb';
 import { TooltipHost } from 'office-ui-fabric-react/lib/components/Tooltip';
 import { IJobModel } from '../../models/IJobModel';
+import { IStyle } from '@uifabric/styling';
 
 export interface IProps {
   show: boolean;
   job?: IJobModel;
   location?: string;
+  styles?: IStyle;
 }
 
 export default class AppBreadcrumb extends AppComponent<IProps, {}> {
@@ -71,14 +73,17 @@ export default class AppBreadcrumb extends AppComponent<IProps, {}> {
       css = { display: this.props.show ? 'flex' : 'none' };
     }
     const items = this._getItems();
+    const styles = this.props.styles ? this.props.styles : {};
+    const fontVariant = styles['fontSize'] ? styles['fontSize'] : 14;
+
     return (
       <div className="app-breadcrumb" style={css}>
         <div className="app-breadcrumb-items">
           <Breadcrumb
             items={items}
             styles={{
-              itemLink: { fontSize: 14 },
-              root: { margin: 0, padding: 0, fontSize: 14 },
+              itemLink: styles,
+              root: { margin: 0, padding: 0, fontSize: fontVariant },
             }}
             dividerAs={this._getCustomDivider}
           />
