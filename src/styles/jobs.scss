@@ -73,10 +73,15 @@
 
 .job-header-cells > div {
   flex: 1 1 15%;
+  min-width: 250px;
 }
 
 .job-header-cells .job-header-info {
-  flex: 1 1 55%;
+  flex: 1 0 45%;
+}
+.job-header-cells .job-header-status {
+  flex: 1 1 15%;
+  min-width: 100px;
 }
 
 .job-detail-panel .ms-CommandBar {
@@ -106,7 +111,7 @@
   flex-direction: row;
 }
 .job-detail-main {
-  flex: 1 0 65%;
+  flex: 1 0 50%;
   flex-direction: column;
   border: 1px solid #ccc;
 }
@@ -114,7 +119,7 @@
   border-bottom: 1px solid #ccc;
 }
 .job-detail-comments {
-  flex: 1 0 auto;
+  flex: 1 0 30%;
   margin: 0 0 0 25px;
   border: 1px solid #ccc;
 }
@@ -170,6 +175,6 @@
   flex-direction: column !important;
 }
 
-.job-detail-panel div.attachments-item .ms-DocumentCardDetails {
-  flex-direction: column !important;
+.job-detail-panel .attachment-item .ms-DocumentCard {
+  max-width: 100% !important;
 }
