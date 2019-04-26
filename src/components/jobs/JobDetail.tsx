@@ -160,7 +160,7 @@ export default class JobDetail extends Component<IProps, IState> {
 
     return (
       <div className="job-detail-container">
-        <div className="job-detail-main">
+        <div className="job-detail-tabs">
           <CommandBar
             items={this.getItems()}
             //overflowItems={this.getOverlflowItems()}
@@ -170,22 +170,26 @@ export default class JobDetail extends Component<IProps, IState> {
               'Use left and right arrow keys to navigate between commands'
             }
           />
-          <div className="job-detail-panel">
-            <div className={'general ' + generalActive}>
-              {this._renderList(items)}
-            </div>
-            <div className={'attachments ' + attachmentsActive}>
-              {this._renderAttachments()}
-            </div>
-            <div className={'tasks ' + tasksActive}>
-              {this._renderList(tasks)}
+        </div>
+        <div className="job-detail-content">
+          <div className="job-detail-main">
+            <div className="job-detail-panel">
+              <div className={'general ' + generalActive}>
+                {this._renderList(items)}
+              </div>
+              <div className={'attachments ' + attachmentsActive}>
+                {this._renderAttachments()}
+              </div>
+              <div className={'tasks ' + tasksActive}>
+                {this._renderList(tasks)}
+              </div>
             </div>
           </div>
-        </div>
-        <div className={'job-detail-comments'}>
-          <h5>Comments</h5>
-          <div className="job-detail-comments-list">
-            {this._renderList(tasks)}
+          <div className={'job-detail-comments'}>
+            <h5>Comments</h5>
+            <div className="job-detail-comments-list">
+              {this._renderList(tasks)}
+            </div>
           </div>
         </div>
       </div>
