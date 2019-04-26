@@ -56,6 +56,29 @@ export default class JobList extends Component<IProps, IJobsListState> {
       },
       {
         key: 'column2',
+        name: 'Job Number',
+        fieldName: 'JobNumber',
+        minWidth: 100,
+        maxWidth: 120,
+        isRowHeader: true,
+        isResizable: true,
+        isSorted: true,
+        isSortedDescending: false,
+        sortAscendingAriaLabel: 'Sorted A to Z',
+        sortDescendingAriaLabel: 'Sorted Z to A',
+        onColumnClick: this._onColumnClick,
+        data: 'string',
+        isPadded: true,
+        onRender: (item: IJobModel) => {
+          return (
+            <NavLink to={`/jobs/${item.Id}`} data-automation-id="test">
+              J-{item.JobName}
+            </NavLink>
+          );
+        },
+      },
+      {
+        key: 'column3',
         name: 'Job Name',
         fieldName: 'name',
         minWidth: 100,
@@ -78,21 +101,35 @@ export default class JobList extends Component<IProps, IJobsListState> {
         },
       },
       {
-        key: 'column3',
-        name: 'Description',
-        fieldName: 'description',
+        key: 'column4',
+        name: 'Client Owner',
+        fieldName: 'clientOwner',
         minWidth: 70,
-        maxWidth: 700,
+        maxWidth: 150,
         isResizable: true,
         onColumnClick: this._onColumnClick,
         data: 'string',
         isPadded: true,
         onRender: (item: IJobModel) => {
-          return <span>{item.Description || 'n/a'}</span>;
+          return <span>{item.Account ? item.Account.Name : 'n/a'}</span>;
         },
       },
       {
-        key: 'column4',
+        key: 'column5',
+        name: 'Sepire Owner',
+        fieldName: 'sepireOwner',
+        minWidth: 70,
+        maxWidth: 150,
+        isResizable: true,
+        onColumnClick: this._onColumnClick,
+        data: 'string',
+        isPadded: true,
+        onRender: (item: IJobModel) => {
+          return <span>{item.Owner ? item.Owner.FullName : 'n/a'}</span>;
+        },
+      },
+      {
+        key: 'column6',
         name: 'Type',
         fieldName: 'item.Type',
         minWidth: 70,
@@ -107,7 +144,7 @@ export default class JobList extends Component<IProps, IJobsListState> {
         isPadded: true,
       },
       {
-        key: 'column5',
+        key: 'column7',
         name: 'Created Date',
         fieldName: 'createdOn',
         minWidth: 70,
@@ -121,7 +158,7 @@ export default class JobList extends Component<IProps, IJobsListState> {
         isPadded: true,
       },
       {
-        key: 'column6',
+        key: 'column8',
         name: 'Due Date',
         fieldName: 'dueDate',
         minWidth: 70,
@@ -136,7 +173,7 @@ export default class JobList extends Component<IProps, IJobsListState> {
         isPadded: true,
       },
       {
-        key: 'column7',
+        key: 'column9',
         name: 'Status',
         fieldName: 'statusReason.label',
         minWidth: 70,
@@ -153,7 +190,7 @@ export default class JobList extends Component<IProps, IJobsListState> {
         },
       },
       {
-        key: 'column8',
+        key: 'column10',
         name: '',
         minWidth: 30,
         maxWidth: 30,
