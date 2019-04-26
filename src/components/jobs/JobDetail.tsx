@@ -2,7 +2,19 @@ import '../../styles/jobs.scss';
 import React, { Component, MouseEvent } from 'react';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IJobModel } from '../../models/IJobModel';
-import { IAttachment } from '../../models/IAttachment';
+import Attachment from '../../components/attachments/Attachment';
+import {
+  getTheme,
+  IDocumentCardPreviewProps,
+  DocumentCard,
+  DocumentCardType,
+  DocumentCardDetails,
+  DocumentCardPreview,
+  DocumentCardTitle,
+  DocumentCardActivity,
+  IDocumentCardActivityPerson,
+} from 'office-ui-fabric-react';
+import { IAttachmentModel } from '../../models/IAttachmentModel';
 
 export interface IProps {
   disabled?: boolean;
@@ -17,7 +29,25 @@ export interface IState {
 export const State: IState = {
   currentTab: 'general',
 };
-
+export const theme = getTheme();
+export const previewPropsUsingIcon: IDocumentCardPreviewProps = {
+  previewImages: [
+    {
+      previewIconProps: {
+        iconName: 'OpenFile',
+        styles: { root: { fontSize: 42, color: theme.palette.white } },
+      },
+      width: 144,
+    },
+  ],
+  styles: { previewIcon: { backgroundColor: theme.palette.themePrimary } },
+};
+export const people: IDocumentCardActivityPerson[] = [
+  { name: 'Annie Lindqvist', profileImageSrc: '', initials: 'BB' },
+  { name: 'Roko Kolar', profileImageSrc: '', initials: 'RK' },
+  { name: 'Aaron Reid', profileImageSrc: '', initials: 'DD' },
+  { name: 'Christian Bergqvist', profileImageSrc: '', initials: 'CB' },
+];
 export default class JobDetail extends Component<IProps, IState> {
   constructor(props: IProps, state: IState) {
     super(props);
@@ -80,7 +110,15 @@ export default class JobDetail extends Component<IProps, IState> {
     ];
   };
 
-  private _renderRow(x: IAttachment) {
+  private _renderRow(x: IAttachmentModel) {
+    return (
+      <div>
+        <Attachment attachment={x} />
+      </div>
+    );
+  }
+
+  private _renderAttachmentRow(x: IAttachmentModel) {
     const {
       Id,
       CreatedOn,
@@ -103,15 +141,37 @@ export default class JobDetail extends Component<IProps, IState> {
       StatusReason,
       VariablePageLength,
     } = x;
-    return <div>Name</div>;
+    console.log('_renderAttachmentRow', x);
+    return (
+      <DocumentCard
+        type={DocumentCardType.compact}
+        onClickHref="javascript:void(0);"
+      >
+        <DocumentCardPreview {...previewPropsUsingIcon} />
+        <DocumentCardDetails>
+          <DocumentCardTitle
+            title="View and share files"
+            shouldTruncate={true}
+          />
+          <DocumentCardActivity
+            activity="Created a few minutes ago"
+            people={[people[2]]}
+          />
+        </DocumentCardDetails>
+      </DocumentCard>
+    );
   }
 
   private _renderAttachments() {
-    const docs = (this.props.job.Attachments as IAttachment[]) || [];
-    console.log('renderAttachments', docs);
-    let retVal = '';
-    docs.forEach(x => (retVal += this._renderRow(x)));
-    return retVal;
+    let docs =
+      (this.props.job.Attachments as IAttachmentModel[]) ||
+      ([] as IAttachmentModel[]);
+
+    return (
+      <div className="attachments-container">
+        {docs.map(x => this._renderAttachmentRow(x))}
+      </div>
+    );
   }
 
   render() {
@@ -122,9 +182,9 @@ export default class JobDetail extends Component<IProps, IState> {
     let generalActive = currentTab === 'general' || '' ? 'active' : '';
     let attachmentsActive = currentTab === 'attachments' ? 'active' : '';
     let tasksActive = currentTab === 'tasks' ? 'active' : '';
-    const attachments = this._renderAttachments();
     let jobName = job ? job.Name : '–';
     let jobType = job && job.Type ? job.Type.Name : '–';
+    let allAttachments = this._renderAttachments();
     return (
       <div className="job-detail-container">
         <div className="job-detail-main">
@@ -149,7 +209,7 @@ export default class JobDetail extends Component<IProps, IState> {
               </div>
             </div>
             <div className={'attachments ' + attachmentsActive}>
-              <p>{attachments}</p>
+              {allAttachments}
             </div>
             <div className={'tasks ' + tasksActive}>
               <p>tasks</p>

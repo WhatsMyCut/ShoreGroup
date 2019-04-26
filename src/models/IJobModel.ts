@@ -1,4 +1,4 @@
-import { IAttachment } from './IAttachment';
+import { IAttachmentModel } from './IAttachmentModel';
 import { ITaskModel } from './ITaskModel';
 
 export interface IJobType {
@@ -22,7 +22,7 @@ export interface IJobModel {
   ModifiedOn?: string;
   Type?: IJobType;
   StatusReason?: IJobStatusReason;
-  Attachments?: IAttachment[];
+  Attachments?: IAttachmentModel[];
   Tasks?: ITaskModel[];
 }
 

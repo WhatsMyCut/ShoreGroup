@@ -28,7 +28,7 @@ export interface IBinding {
   Name?: string;
   Value?: number;
 }
-export interface IAttachment {
+export interface IAttachmentModel {
   AzureBlobId?: number;
   Binding?: IBinding;
   Color?: IColor;
