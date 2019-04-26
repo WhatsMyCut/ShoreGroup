@@ -32,7 +32,7 @@ export default class JobListFilter extends Component<IProps, {}> {
   private _getItems = () => {
     return [
       {
-        key: 'newItem',
+        key: 'filterBy',
         name: 'Filter By',
         className: 'someClass',
         iconProps: {

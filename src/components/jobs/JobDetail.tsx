@@ -2,7 +2,8 @@ import '../../styles/jobs.scss';
 import React, { Component, MouseEvent } from 'react';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IJobModel } from '../../models/IJobModel';
-import { IAttachment } from '../../models/IAttachment';
+import Attachment from '../../components/attachments/Attachment';
+import { IAttachmentModel } from '../../models/IAttachmentModel';
 
 export interface IProps {
   disabled?: boolean;
@@ -17,7 +18,6 @@ export interface IState {
 export const State: IState = {
   currentTab: 'general',
 };
-
 export default class JobDetail extends Component<IProps, IState> {
   constructor(props: IProps, state: IState) {
     super(props);
@@ -49,7 +49,7 @@ export default class JobDetail extends Component<IProps, IState> {
     const hash = this.state.currentTab;
     return [
       {
-        key: 'newItem',
+        key: 'main',
         name: 'General',
         className: hash === 'general' || '' ? 'active' : '',
         iconProps: {
@@ -80,38 +80,19 @@ export default class JobDetail extends Component<IProps, IState> {
     ];
   };
 
-  private _renderRow(x: IAttachment) {
-    const {
-      Id,
-      CreatedOn,
-      ModifiedOn,
-      Url,
-      AzureBlobId,
-      Name,
-      Type,
-      PrintReady,
-      PageCount,
-      SimplexOrDuplex,
-      Orientation,
-      Color,
-      FlatSize,
-      FinishSize,
-      Stock,
-      PlusCoverStock,
-      Binding,
-      Finishing,
-      StatusReason,
-      VariablePageLength,
-    } = x;
-    return <div>Name</div>;
+  private _renderRow(attachment: IAttachmentModel, key: number) {
+    return <Attachment key={key} attachment={attachment} />;
   }
 
   private _renderAttachments() {
-    const docs = (this.props.job.Attachments as IAttachment[]) || [];
-    console.log('renderAttachments', docs);
-    let retVal = '';
-    docs.forEach(x => (retVal += this._renderRow(x)));
-    return retVal;
+    let docs =
+      (this.props.job.Attachments as IAttachmentModel[]) ||
+      ([] as IAttachmentModel[]);
+    return (
+      <div className="attachments-container">
+        {docs.map((i, index) => this._renderRow(i, index))}
+      </div>
+    );
   }
 
   render() {
@@ -122,7 +103,6 @@ export default class JobDetail extends Component<IProps, IState> {
     let generalActive = currentTab === 'general' || '' ? 'active' : '';
     let attachmentsActive = currentTab === 'attachments' ? 'active' : '';
     let tasksActive = currentTab === 'tasks' ? 'active' : '';
-    const attachments = this._renderAttachments();
     let jobName = job ? job.Name : '–';
     let jobType = job && job.Type ? job.Type.Name : '–';
     return (
@@ -149,7 +129,7 @@ export default class JobDetail extends Component<IProps, IState> {
               </div>
             </div>
             <div className={'attachments ' + attachmentsActive}>
-              <p>{attachments}</p>
+              {this._renderAttachments()}
             </div>
             <div className={'tasks ' + tasksActive}>
               <p>tasks</p>
