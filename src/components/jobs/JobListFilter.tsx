@@ -8,10 +8,11 @@ import {
   Button,
   ButtonType,
   IButtonProps,
+  CommandBarButton,
 } from 'office-ui-fabric-react/lib/Button';
 import { SearchBox } from 'office-ui-fabric-react/lib/components/SearchBox';
 import { CommandBar } from 'office-ui-fabric-react/lib/components/CommandBar';
-import { Redirect } from 'react-router';
+import { _getControlBarItems, _getFilterItems } from './JobFilterItems';
 
 export interface IProps {
   onClickAddJob?;
@@ -20,73 +21,46 @@ export interface IProps {
   onClickShowJobStatusFilter?;
 }
 
-export default class JobListFilter extends Component<IProps, {}> {
-  constructor(props) {
+export interface IState {
+  filterBy?: string;
+}
+
+export default class JobListFilter extends Component<IProps, IState> {
+  constructor(props: IProps, state: IState) {
     super(props);
-    this.state = {};
+    this.state = state;
   }
-  private _addJob = () => {
-    <Redirect to="/jobs/add" />;
-  };
-  // Data for CommandBar
-  private _getItems = () => {
-    return [
-      {
-        key: 'filterBy',
-        name: 'Filter By',
-        className: 'someClass',
-        iconProps: {
-          iconName: 'ChevronDown',
-        },
-        ariaLabel: 'New Job',
-        onClick: () => this._addJob(),
-      },
-      {
-        key: 'divider',
-        name: '',
-        className: 'command-bar-divider',
-        iconProps: {
-          iconName: 'Separator',
-          style: { color: '#000', maxWidth: 20 },
-        },
-      },
-      {
-        key: 'newItem',
-        name: 'New Job',
-        className: 'someClass',
-        iconProps: {
-          iconName: 'Add',
-        },
-        ariaLabel: 'New Job',
-        onClick: () => this._addJob(),
-      },
-    ];
-  };
 
   render() {
     return (
       <div className="job-list-filter">
         <div className="job-list-filter-menu">
           <CommandBar
-            items={this._getItems()}
-            //overflowItems={this.getOverlflowItems()}
+            items={_getControlBarItems()}
+            className="job-list-command-bar"
             overflowButtonProps={{ ariaLabel: 'More commands' }}
-            //farItems={this.getFarItems()}
             ariaLabel={
               'Use left and right arrow keys to navigate between commands'
             }
           />
         </div>
-        <div className="panel-body">
-          <div className="job-list-filter-keyword">
-            <SearchBox
-              placeholder="Filter by keyword"
-              onFocus={() => console.log('onFocus called')}
-              onBlur={() => console.log('onBlur called')}
-              iconProps={{ iconName: 'Filter' }}
-              onChange={this.props.onChangeSearchInput}
-            />
-          </div>
+        <div className="job-list-filter-container">
+          <SearchBox
+            className="job-list-filter-input"
+            placeholder="Filter by keyword"
+            onFocus={() => console.log('onFocus called')}
+            onBlur={() => console.log('onBlur called')}
+            iconProps={{ iconName: 'Filter' }}
+            onChange={this.props.onChangeSearchInput}
+          />
+          <CommandBar
+            items={_getFilterItems(this.state)}
+            className="job-list-filter-command-bar"
+            overflowButtonProps={{ ariaLabel: 'More commands' }}
+            ariaLabel={
+              'Use left and right arrow keys to navigate between commands'
+            }
+          />
         </div>
       </div>
     );

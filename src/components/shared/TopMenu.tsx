@@ -63,16 +63,6 @@ class TopMenu extends Component<{}, { logoutAction: boolean }> {
             className="navbar-collapse collapse nav navbar-nav navbar-right"
           >
             <ul className="nav navbar-nav">
-              <li>
-                <NavLink to={'/jobs'} activeClassName="active">
-                  Jobs
-                </NavLink>
-              </li>
-              <li>
-                <NavLink exact to={'/info'} activeClassName="active">
-                  Admin
-                </NavLink>
-              </li>
               <li className="dropdown">
                 <a
                   href="#"
