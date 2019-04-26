@@ -70,7 +70,6 @@ export default class JobHeader extends Component<IProps, {}> {
     const status = job['StatusReason'] as IJobStatusReason;
     const label = status ? status.Label : '–';
     const statusClassName = formatStatusLabel(label);
-    console.log('JobHeader', status, this.state, this.props);
 
     return (
       <div className="job-header">

@@ -3,17 +3,6 @@ import React, { Component, MouseEvent } from 'react';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IJobModel } from '../../models/IJobModel';
 import Attachment from '../../components/attachments/Attachment';
-import {
-  getTheme,
-  IDocumentCardPreviewProps,
-  DocumentCard,
-  DocumentCardType,
-  DocumentCardDetails,
-  DocumentCardPreview,
-  DocumentCardTitle,
-  DocumentCardActivity,
-  IDocumentCardActivityPerson,
-} from 'office-ui-fabric-react';
 import { IAttachmentModel } from '../../models/IAttachmentModel';
 
 export interface IProps {
@@ -29,25 +18,6 @@ export interface IState {
 export const State: IState = {
   currentTab: 'general',
 };
-export const theme = getTheme();
-export const previewPropsUsingIcon: IDocumentCardPreviewProps = {
-  previewImages: [
-    {
-      previewIconProps: {
-        iconName: 'OpenFile',
-        styles: { root: { fontSize: 42, color: theme.palette.white } },
-      },
-      width: 144,
-    },
-  ],
-  styles: { previewIcon: { backgroundColor: theme.palette.themePrimary } },
-};
-export const people: IDocumentCardActivityPerson[] = [
-  { name: 'Annie Lindqvist', profileImageSrc: '', initials: 'BB' },
-  { name: 'Roko Kolar', profileImageSrc: '', initials: 'RK' },
-  { name: 'Aaron Reid', profileImageSrc: '', initials: 'DD' },
-  { name: 'Christian Bergqvist', profileImageSrc: '', initials: 'CB' },
-];
 export default class JobDetail extends Component<IProps, IState> {
   constructor(props: IProps, state: IState) {
     super(props);
@@ -79,7 +49,7 @@ export default class JobDetail extends Component<IProps, IState> {
     const hash = this.state.currentTab;
     return [
       {
-        key: 'newItem',
+        key: 'main',
         name: 'General',
         className: hash === 'general' || '' ? 'active' : '',
         iconProps: {
@@ -110,66 +80,17 @@ export default class JobDetail extends Component<IProps, IState> {
     ];
   };
 
-  private _renderRow(x: IAttachmentModel) {
-    return (
-      <div>
-        <Attachment attachment={x} />
-      </div>
-    );
-  }
-
-  private _renderAttachmentRow(x: IAttachmentModel) {
-    const {
-      Id,
-      CreatedOn,
-      ModifiedOn,
-      Url,
-      AzureBlobId,
-      Name,
-      Type,
-      PrintReady,
-      PageCount,
-      SimplexOrDuplex,
-      Orientation,
-      Color,
-      FlatSize,
-      FinishSize,
-      Stock,
-      PlusCoverStock,
-      Binding,
-      Finishing,
-      StatusReason,
-      VariablePageLength,
-    } = x;
-    console.log('_renderAttachmentRow', x);
-    return (
-      <DocumentCard
-        type={DocumentCardType.compact}
-        onClickHref="javascript:void(0);"
-      >
-        <DocumentCardPreview {...previewPropsUsingIcon} />
-        <DocumentCardDetails>
-          <DocumentCardTitle
-            title="View and share files"
-            shouldTruncate={true}
-          />
-          <DocumentCardActivity
-            activity="Created a few minutes ago"
-            people={[people[2]]}
-          />
-        </DocumentCardDetails>
-      </DocumentCard>
-    );
+  private _renderRow(attachment: IAttachmentModel, key: number) {
+    return <Attachment key={key} attachment={attachment} />;
   }
 
   private _renderAttachments() {
     let docs =
       (this.props.job.Attachments as IAttachmentModel[]) ||
       ([] as IAttachmentModel[]);
-
     return (
       <div className="attachments-container">
-        {docs.map(x => this._renderAttachmentRow(x))}
+        {docs.map((i, index) => this._renderRow(i, index))}
       </div>
     );
   }
@@ -184,7 +105,6 @@ export default class JobDetail extends Component<IProps, IState> {
     let tasksActive = currentTab === 'tasks' ? 'active' : '';
     let jobName = job ? job.Name : '–';
     let jobType = job && job.Type ? job.Type.Name : '–';
-    let allAttachments = this._renderAttachments();
     return (
       <div className="job-detail-container">
         <div className="job-detail-main">
@@ -209,7 +129,7 @@ export default class JobDetail extends Component<IProps, IState> {
               </div>
             </div>
             <div className={'attachments ' + attachmentsActive}>
-              {allAttachments}
+              {this._renderAttachments()}
             </div>
             <div className={'tasks ' + tasksActive}>
               <p>tasks</p>

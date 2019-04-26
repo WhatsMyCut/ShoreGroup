@@ -60,7 +60,7 @@
   margin-right: 30px;
 }
 
-.selectionDetails {
+.selection-details {
   margin-bottom: 20px;
 }
 
@@ -76,7 +76,7 @@
 }
 
 .job-header-cells .job-header-info {
-  flex: 1 1 70%;
+  flex: 1 1 55%;
 }
 
 .job-detail-panel .ms-CommandBar {
@@ -90,15 +90,14 @@
   color: #000;
 }
 
-.job-detail-panel div {
+.job-detail-panel > div {
   flex: 1 0 100%;
-  display: flex;
-  visibility: hidden;
   flex-direction: row;
+  display: none;
 }
 
-.job-detail-panel div.active {
-  visibility: visible;
+.job-detail-panel > div.active {
+  display: flex;
 }
 
 .job-detail-container {
@@ -165,4 +164,12 @@
 .job-list-filter .ms-OverflowSet-item:nth-child(2):hover,
 .job-list-filter .ms-OverflowSet-item:nth-child(2):hover * {
   background-color: #f4f4f4;
+}
+
+.attachments {
+  flex-direction: column !important;
+}
+
+.job-detail-panel div.attachments-item .ms-DocumentCardDetails {
+  flex-direction: column !important;
 }
