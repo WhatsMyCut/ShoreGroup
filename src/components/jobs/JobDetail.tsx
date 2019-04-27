@@ -5,7 +5,12 @@ import { IJobModel, IJobType } from '../../models/IJobModel';
 import Attachment from '../../components/attachments/Attachment';
 import { AttachmentList } from '../../components/attachments/AttachmentList';
 import { IAttachmentModel } from '../../models/IAttachmentModel';
-import { List } from 'office-ui-fabric-react/lib/components/List';
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  SelectionMode,
+  IDetailsRowProps,
+} from 'office-ui-fabric-react/lib/components/DetailsList';
 import Moment from 'moment';
 import { render } from 'react-dom';
 
@@ -28,8 +33,6 @@ export const State: IState = {
   currentAttachment: null,
 };
 export default class JobDetail extends Component<IProps, IState> {
-  private _list: List<IJobModel>;
-
   constructor(props: IProps, state: IState) {
     super(props);
     this.state = state;
@@ -125,7 +128,8 @@ export default class JobDetail extends Component<IProps, IState> {
     return 50;
   }
 
-  private _onRenderCell = (item: IListItem, index: number): JSX.Element => {
+  private _onRenderRow = (item: IListItem, index: number): any => {
+    console.log('_onRenderCell', item, index);
     return (
       <div data-is-focusable={true}>
         <div className={'item-cell'}>
@@ -140,15 +144,53 @@ export default class JobDetail extends Component<IProps, IState> {
     return <div>{this.state.currentAttachment.Name}</div>;
   }
 
-  private _renderList(items: any): JSX.Element {
+  private _renderList(): JSX.Element {
     const { job } = this.props;
-    if (this.state.currentAttachment) return this._renderCurrentAttachment();
+    const columns = [
+      {
+        key: 'column1',
+        name: '',
+        fieldName: 'fieldName',
+        minWidth: 100,
+        maxWidth: 150,
+        isResizable: false,
+      },
+      {
+        key: 'column2',
+        name: '',
+        fieldName: 'fieldValue',
+        minWidth: 200,
+        maxWidth: 200,
+        isResizable: false,
+      },
+    ];
+    const jobName = job ? job.Name : '–';
+    const dueDate = Moment(job.DueDate).format('l');
+    const account = job.Account ? job.Account.Name : '–';
+    const jobType = job.Type ? job.Type.Name : '–';
+    const jobDesc = job ? job.Description : '–';
+    const items = [
+      { name: 'Job Name', value: jobName },
+      { name: 'Customer', value: account },
+      { name: 'Job Type', value: jobType },
+      { name: 'Job Description', value: jobDesc },
+      { name: 'Job Due Date', value: dueDate },
+    ].map((x: any, index: number) => {
+      console.log('item', x);
+      return {
+        key: x.name + index,
+        fieldName: <div className={'job-detail-key'}>{x.name}</div>,
+        fieldValue: <div className={'job-detail-value'}>{x.value}</div>,
+      };
+    });
     return (
-      <div className="job-details-panel">
-        <List
+      <div className="job-detail-data">
+        <DetailsList
           items={items}
-          getPageHeight={this._getPageHeight}
-          onRenderCell={this._onRenderCell}
+          columns={columns}
+          setKey="set"
+          selectionMode={SelectionMode.none}
+          layoutMode={DetailsListLayoutMode.fixedColumns}
         />
       </div>
     );
@@ -157,25 +199,10 @@ export default class JobDetail extends Component<IProps, IState> {
   render() {
     const { job } = this.props;
     const { currentTab } = this.state;
-    const jobName = job ? job.Name : '–';
-    const dueDate = Moment(job.DueDate).format('l');
-    const account = job.Account ? job.Account.Name : '–';
-    const jobType = job.Type ? job.Type.Name : '–';
-    const jobDesc = job ? job.Description : '–';
     const tasks = job.Tasks ? job.Tasks : [];
     let generalActive = currentTab === 'general' || '' ? 'active' : '';
     let attachmentsActive = currentTab === 'attachments' ? 'active' : '';
     let tasksActive = currentTab === 'tasks' ? 'active' : '';
-
-    const items = job
-      ? [
-          { 'Job Name': jobName } as IListItem,
-          { Customer: account } as IListItem,
-          { 'Job Type': jobType } as IListItem,
-          { 'Job Description': jobDesc } as IListItem,
-          { 'Job Due Date': dueDate } as IListItem,
-        ]
-      : ([] as IListItem[]);
 
     return (
       <div className="job-detail-container">
@@ -194,14 +221,12 @@ export default class JobDetail extends Component<IProps, IState> {
           <div className="job-detail-main">
             <div className="job-detail-panel">
               <div className={'general ' + generalActive}>
-                {this._renderList(items)}
+                {this._renderList()}
               </div>
               <div className={'attachments ' + attachmentsActive}>
                 {this._renderAttachments()}
               </div>
-              <div className={'tasks ' + tasksActive}>
-                {this._renderList(tasks)}
-              </div>
+              <div className={'tasks ' + tasksActive}>{this._renderList()}</div>
             </div>
           </div>
           <div className={'job-detail-comments'}>
