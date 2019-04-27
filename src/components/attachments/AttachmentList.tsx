@@ -169,7 +169,7 @@ export class AttachmentList extends Component<IProps, IAttachmentListState> {
         <MarqueeSelection selection={this._selection}>
           <DetailsList
             items={rows}
-            compact={isCompactMode}
+            compact={true}
             columns={columns}
             enableShimmer={true}
             selectionMode={
