@@ -5,6 +5,8 @@ import {
   Selection,
   SelectionMode,
   IColumn,
+  IDetailsRowProps,
+  DetailsRow,
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { IAttachmentModel } from '../../models/IAttachmentModel';
@@ -26,10 +28,12 @@ export interface IDocument {
   modifiedBy?: string;
   modifiedOn: string;
   fileSize?: string;
+  attachmentId?: string;
 }
 
 interface IProps {
   attachments?: IAttachmentModel[];
+  onSelectRow?: (row: IAttachmentModel) => void;
 }
 
 export class AttachmentList extends Component<IProps, IAttachmentListState> {
@@ -128,6 +132,7 @@ export class AttachmentList extends Component<IProps, IAttachmentListState> {
 
     this._selection = new Selection({
       onSelectionChanged: () => {
+        console.log('HERRERER');
         this.setState({
           selectionDetails: this._getSelectionDetails(),
         });
@@ -144,7 +149,10 @@ export class AttachmentList extends Component<IProps, IAttachmentListState> {
     };
   }
 
-  componentDidMount() {}
+  public _onClick = (x: any): any => {
+    const { onSelectRow } = this.props;
+    return onSelectRow(x as any);
+  };
 
   public render() {
     const {
@@ -158,12 +166,12 @@ export class AttachmentList extends Component<IProps, IAttachmentListState> {
     const rows = _generateDocuments(attachments);
     return (
       <div className="attachment-list-conttainer">
-        <div className={'selection-details'}>{selectionDetails}</div>
         <MarqueeSelection selection={this._selection}>
           <DetailsList
             items={rows}
             compact={isCompactMode}
             columns={columns}
+            enableShimmer={true}
             selectionMode={
               isModalSelection ? SelectionMode.multiple : SelectionMode.none
             }
@@ -173,6 +181,13 @@ export class AttachmentList extends Component<IProps, IAttachmentListState> {
             selection={this._selection}
             selectionPreservedOnEmptyClick={true}
             onItemInvoked={this._onItemInvoked}
+            onRenderRow={row => {
+              return (
+                <div onClick={() => this._onClick(row.item.attachmentId)}>
+                  <DetailsRow {...row} />
+                </div>
+              );
+            }}
             enterModalSelectionOnTouch={true}
             ariaLabelForSelectionColumn="Toggle selection"
             ariaLabelForSelectAllCheckbox="Toggle selection for all items"
@@ -294,6 +309,7 @@ function _generateDocuments(attachments: IAttachmentModel[]) {
     const modifiedOn = Moment(attachment.ModifiedOn).format('l');
     const fileSize = attachment.Type ? attachment.Type.Value + 'kb' : '–';
     const fileType = _getFileIcon(attachment);
+    const attId = attachment ? attachment.Id : null;
     let fileName = attachment.Name ? attachment.Name : '–';
     let userName = '[PLACEHOLDER]';
     items.push({
@@ -303,6 +319,7 @@ function _generateDocuments(attachments: IAttachmentModel[]) {
       modifiedBy: userName,
       modifiedOn: modifiedOn,
       fileSize: fileSize,
+      attachmentId: attId,
     });
   });
   return items;

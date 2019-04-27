@@ -73,7 +73,6 @@
 
 .job-header-cells > div {
   flex: 1 1 15%;
-  min-width: 250px;
 }
 
 .job-header-cells .job-header-info {
@@ -91,7 +90,6 @@
 
 .job-detail-panel {
   min-height: 200px;
-  background-color: #f9f9f9;
   color: #000;
 }
 
@@ -101,8 +99,7 @@
   display: none;
   padding: 10px;
 }
-.job-detail-tabs {
-}
+
 .job-detail-panel > div.attachments {
   padding: 0;
 }
@@ -119,6 +116,7 @@
 .job-detail-tabs {
   margin-bottom: 15px;
   border: 1px solid #ddd;
+  border-radius: 5px;
 }
 .job-detail-content {
   display: flex;
@@ -133,12 +131,16 @@
   flex: 1 1 100%;
   flex-direction: row;
   border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px 0;
 }
 
 .job-detail-comments {
   flex: 1 0 30%;
   margin: 0 0 0 25px;
   border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px 0;
 }
 
 .job-detail-comments h5 {

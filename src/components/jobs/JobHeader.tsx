@@ -50,7 +50,7 @@ export default class JobHeader extends Component<IProps, {}> {
             {client}
           </div>
           <div className="job-header-owner">
-            <h5>Owner</h5>
+            <h5>Sepire Owner</h5>
             <h4>{fullName}</h4>
           </div>
         </div>
