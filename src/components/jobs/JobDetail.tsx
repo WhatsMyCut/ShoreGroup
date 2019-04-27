@@ -7,6 +7,7 @@ import { AttachmentList } from '../../components/attachments/AttachmentList';
 import { IAttachmentModel } from '../../models/IAttachmentModel';
 import { List } from 'office-ui-fabric-react/lib/components/List';
 import Moment from 'moment';
+import { render } from 'react-dom';
 
 export interface IProps {
   disabled?: boolean;
@@ -51,7 +52,7 @@ export default class JobDetail extends Component<IProps, IState> {
     let h = window.location.hash
       ? window.location.hash.replace('#', '')
       : 'general';
-    this.setState({ currentTab: h });
+    this.setState({ currentTab: h, currentAttachment: null });
   };
 
   _setCurrentAttachment = (attachment: IAttachmentModel) => {
@@ -95,31 +96,30 @@ export default class JobDetail extends Component<IProps, IState> {
     ];
   };
 
-  private _renderRow(attachment: IAttachmentModel, key: number) {
-    return <Attachment key={key} attachment={attachment} />;
-  }
-
   private _renderAttachments() {
-    if (!this.props.job && !this.props.job.Attachments.length) {
-      return (
-        <div className="attachments-container">
-          <h4>No attachments.</h4>
-        </div>
-      );
-    } else {
-      let attachments = this.props.job.Attachments as IAttachmentModel[];
-      return (
-        <div className="attachments-container">
-          <AttachmentList attachments={attachments} />
-          {/* {docs.map((i, index) => this._renderRow(i, index))} */}
-        </div>
-      );
-    }
+    return !this.props.job ? (
+      <div className="attachments-container" />
+    ) : (
+      <div className="attachments-container">
+        <AttachmentList
+          attachments={this.props.job.Attachments}
+          onSelectRow={(x: IAttachmentModel) => {
+            return this.setState({ currentAttachment: x });
+          }}
+        />
+      </div>
+    );
   }
 
-  private _resolveList = (list: List<IListItem>): void => {
-    this._list = list;
-  };
+  private _renderSidePanel() {
+    let content;
+    if (this.state.currentAttachment) {
+      content = <div>{this.state.currentAttachment}</div>;
+    } else {
+      content = <div>Comments</div>;
+    }
+    return <div className={'job-side-panel'}>{content}</div>;
+  }
 
   private _getPageHeight(idx: number): number {
     return 50;
@@ -205,9 +205,8 @@ export default class JobDetail extends Component<IProps, IState> {
             </div>
           </div>
           <div className={'job-detail-comments'}>
-            <h5>Comments</h5>
             <div className="job-detail-comments-list">
-              {this._renderList(tasks)}
+              {this._renderSidePanel()}
             </div>
           </div>
         </div>
