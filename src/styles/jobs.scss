@@ -97,7 +97,6 @@
   flex: 1 0 100%;
   flex-direction: row;
   display: none;
-  padding: 10px;
 }
 
 .job-detail-panel > div.attachments {
@@ -106,6 +105,18 @@
 
 .job-detail-panel > div.active {
   display: flex;
+}
+
+.job-detail-panel .attachment-item .ms-DocumentCard {
+  max-width: 100% !important;
+}
+
+.job-detail-data {
+  flex: 1 1 100%;
+}
+
+.job-detail-data .ms-DetailsList-headerWrapper {
+  display: none;
 }
 
 .job-detail-container {
@@ -216,8 +227,4 @@
 
 .attachments {
   flex-direction: column !important;
-}
-
-.job-detail-panel .attachment-item .ms-DocumentCard {
-  max-width: 100% !important;
 }
