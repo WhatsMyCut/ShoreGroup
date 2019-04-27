@@ -3,6 +3,7 @@ import React, { Component, MouseEvent } from 'react';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IJobModel, IJobType } from '../../models/IJobModel';
 import Attachment from '../../components/attachments/Attachment';
+import { AttachmentList } from '../../components/attachments/AttachmentList';
 import { IAttachmentModel } from '../../models/IAttachmentModel';
 import { List } from 'office-ui-fabric-react/lib/components/List';
 import Moment from 'moment';
@@ -19,9 +20,11 @@ export interface IListItem {
 }
 export interface IState {
   currentTab?: string;
+  currentAttachment?: IAttachmentModel;
 }
 export const State: IState = {
   currentTab: 'general',
+  currentAttachment: null,
 };
 export default class JobDetail extends Component<IProps, IState> {
   private _list: List<IJobModel>;
@@ -49,6 +52,11 @@ export default class JobDetail extends Component<IProps, IState> {
       ? window.location.hash.replace('#', '')
       : 'general';
     this.setState({ currentTab: h });
+  };
+
+  _setCurrentAttachment = (attachment: IAttachmentModel) => {
+    this.setState({ currentAttachment: attachment });
+    return this.state;
   };
 
   // Data for CommandBar
@@ -92,14 +100,21 @@ export default class JobDetail extends Component<IProps, IState> {
   }
 
   private _renderAttachments() {
-    let docs =
-      (this.props.job.Attachments as IAttachmentModel[]) ||
-      ([] as IAttachmentModel[]);
-    return (
-      <div className="attachments-container">
-        {docs.map((i, index) => this._renderRow(i, index))}
-      </div>
-    );
+    if (!this.props.job && !this.props.job.Attachments.length) {
+      return (
+        <div className="attachments-container">
+          <h4>No attachments.</h4>
+        </div>
+      );
+    } else {
+      let attachments = this.props.job.Attachments as IAttachmentModel[];
+      return (
+        <div className="attachments-container">
+          <AttachmentList attachments={attachments} />
+          {/* {docs.map((i, index) => this._renderRow(i, index))} */}
+        </div>
+      );
+    }
   }
 
   private _resolveList = (list: List<IListItem>): void => {
@@ -121,9 +136,13 @@ export default class JobDetail extends Component<IProps, IState> {
     );
   };
 
+  private _renderCurrentAttachment(): JSX.Element {
+    return <div>{this.state.currentAttachment.Name}</div>;
+  }
+
   private _renderList(items: any): JSX.Element {
     const { job } = this.props;
-
+    if (this.state.currentAttachment) return this._renderCurrentAttachment();
     return (
       <div className="job-details-panel">
         <List
