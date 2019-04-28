@@ -9,10 +9,8 @@ import {
   DetailsList,
   DetailsListLayoutMode,
   SelectionMode,
-  IDetailsRowProps,
 } from 'office-ui-fabric-react/lib/components/DetailsList';
 import Moment from 'moment';
-import { render } from 'react-dom';
 
 export interface IProps {
   disabled?: boolean;
@@ -36,6 +34,7 @@ export default class JobDetail extends Component<IProps, IState> {
   constructor(props: IProps, state: IState) {
     super(props);
     this.state = state;
+    window.onresize = () => this.render();
   }
 
   componentWillMount() {
