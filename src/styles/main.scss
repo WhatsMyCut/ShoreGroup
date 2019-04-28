@@ -130,3 +130,21 @@ label {
     background-color: #e7e7e7;
   }
 }
+
+.dropzone {
+  height: 100px;
+  text-align: center;
+  vertical-align: middle;
+  margin: 0 5px 15px;
+  background-color: #eee;
+  padding: 15px;
+  color: #666;
+}
+
+.dropzone svg {
+  height: 50px !important;
+  width: 150px !important;
+}
+.dropzone svg path {
+  fill: #ccc;
+}
