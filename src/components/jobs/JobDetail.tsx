@@ -4,6 +4,7 @@ import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IJobModel, IJobType } from '../../models/IJobModel';
 import Attachment from '../../components/attachments/Attachment';
 import { AttachmentList } from '../../components/attachments/AttachmentList';
+import { AttachmentPane } from '../../components/attachments/AttachmentPane';
 import { IAttachmentModel } from '../../models/IAttachmentModel';
 import {
   DetailsList,
@@ -26,7 +27,7 @@ export interface IListItem {
 }
 export interface IState {
   currentTab?: string;
-  currentAttachment?: IAttachmentModel;
+  currentAttachment?: any;
 }
 export const State: IState = {
   currentTab: 'general',
@@ -60,7 +61,12 @@ export default class JobDetail extends Component<IProps, IState> {
   };
 
   _setCurrentAttachment = (attachment: IAttachmentModel) => {
-    this.setState({ currentAttachment: attachment });
+    const { job } = this.props;
+    const IAttachment = job
+      ? job.Attachments.filter(att => attachment.Id === att.Id)
+      : null;
+    console.log('_setCurrentAttachment', attachment, IAttachment);
+    this.setState({ currentAttachment: IAttachment });
     return this.state;
   };
 
@@ -101,7 +107,8 @@ export default class JobDetail extends Component<IProps, IState> {
   };
 
   private _renderAttachments() {
-    return !this.props.job ? (
+    const { job } = this.props;
+    return !job ? (
       <div className="attachments-container" />
     ) : (
       <div className="attachments-container">
@@ -112,9 +119,7 @@ export default class JobDetail extends Component<IProps, IState> {
         </div>
         <AttachmentList
           attachments={this.props.job.Attachments}
-          onSelectRow={(x: IAttachmentModel) => {
-            return this.setState({ currentAttachment: x });
-          }}
+          onSelectRow={this._setCurrentAttachment}
         />
       </div>
     );
@@ -122,8 +127,14 @@ export default class JobDetail extends Component<IProps, IState> {
 
   private _renderSidePanel() {
     let content;
-    if (this.state.currentAttachment) {
-      content = <div>{this.state.currentAttachment}</div>;
+    const { currentAttachment } = this.state;
+    const { job } = this.props;
+    if (currentAttachment) {
+      content = (
+        <div>
+          <AttachmentPane attachment={currentAttachment} />
+        </div>
+      );
     } else {
       content = <div>Comments</div>;
     }
@@ -182,7 +193,6 @@ export default class JobDetail extends Component<IProps, IState> {
       { name: 'Job Description', value: jobDesc },
       { name: 'Job Due Date', value: dueDate },
     ].map((x: any, index: number) => {
-      console.log('item', x);
       return {
         key: x.name + index,
         fieldName: <div className={'job-detail-key'}>{x.name}</div>,
