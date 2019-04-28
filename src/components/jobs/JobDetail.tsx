@@ -10,7 +10,9 @@ import {
   DetailsListLayoutMode,
   SelectionMode,
 } from 'office-ui-fabric-react/lib/components/DetailsList';
+import { Dropzone } from '../shared/DropZone';
 import Moment from 'moment';
+import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
 
 export interface IProps {
   disabled?: boolean;
@@ -103,6 +105,11 @@ export default class JobDetail extends Component<IProps, IState> {
       <div className="attachments-container" />
     ) : (
       <div className="attachments-container">
+        <div className="attachments-dropzone">
+          <Dropzone>
+            <Icon iconName="FileUpload" />
+          </Dropzone>
+        </div>
         <AttachmentList
           attachments={this.props.job.Attachments}
           onSelectRow={(x: IAttachmentModel) => {

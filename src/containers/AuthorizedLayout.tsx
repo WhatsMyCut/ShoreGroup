@@ -7,6 +7,8 @@ import Footer from '../components/shared/Footer';
 import { initializeIcons } from '@uifabric/icons';
 import { mergeStyles, registerIcons } from '@uifabric/styling';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons';
 
 interface IProps {
   children?: ReactNode;
@@ -23,6 +25,7 @@ export default class AuthorizedLayout extends Component<Props, {}> {
     registerIcons({
       icons: {
         Logo: <Icon className="logo" />,
+        FileUpload: <FontAwesomeIcon icon={faCloudUploadAlt} />,
       },
     });
   }
