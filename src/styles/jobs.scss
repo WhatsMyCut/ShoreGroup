@@ -99,6 +99,10 @@
   display: none;
 }
 
+.attachments {
+  flex-direction: column !important;
+}
+
 .job-detail-panel > div.attachments {
   padding: 0;
 }
@@ -224,7 +228,3 @@
   background-color: #f4f4f4;
 }
 /* /Divider */
-
-.attachments {
-  flex-direction: column !important;
-}

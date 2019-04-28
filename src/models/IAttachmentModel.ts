@@ -36,17 +36,17 @@ export interface IAttachmentModel {
   FinishSize?: IFinishSize;
   Finishing?: IFinishing[];
   FlatSize?: string;
-  Id?: string;
+  Id: string;
   ModifiedOn?: string;
-  Name?: string;
+  Name: string;
   Orientation?: string;
   PageCount?: string;
   PlusCoverStock?: string;
-  PrintReady: boolean;
+  PrintReady?: boolean;
   SimplexOrDuplex?: ISimplexDuplex;
   StatusReason: IJobStatusReason;
-  Stock: IStock;
-  Type: IJobType;
-  Url: IUrl;
+  Stock?: IStock;
+  Type?: IJobType;
+  Url?: IUrl;
   VariablePageLength?: boolean;
 }
