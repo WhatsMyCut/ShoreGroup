@@ -31,51 +31,72 @@ export interface IAttachmnetPaneItem {
   color: string;
   Id: string;
   Name: string;
+  data: any;
 }
 
 export interface IProps {
   attachment?: IAttachmentModel;
 }
 
-export class AttachmentPane extends Component<IProps, {}> {
+export class AttachmentPane extends Component<
+  IProps,
+  {
+    items: any;
+    attachment: any;
+  }
+> {
   private _items: IAttachmnetPaneItem[];
 
   constructor(props: IProps) {
     super(props);
 
-    const colors = [
-      '#eaeaea',
-      '#dadada',
-      '#d0d0d0',
-      '#c8c8c8',
-      '#a6a6a6',
-      '#c7e0f4',
-      '#71afe5',
-      '#eff6fc',
-      '#deecf9',
-    ];
+    const colors = ['#efefef', '#f4f4f4', '#ccc'];
     this._items = [];
     // Using splice prevents the colors from being duplicated
     const { attachment } = this.props;
     console.log('THERE', attachment);
-    for (let i = 0; i < 5; i++) {
+    this._items.push(
+      {
+        color: '#f4f4f4',
+        Id: '1',
+        Name: 'Attachment Details',
+        data: attachment,
+      },
+      {
+        color: '#ccc',
+        Id: '2',
+        Name: 'Finishing',
+        data: {},
+      },
+    );
+    for (let i = 0; i < 3; i++) {
       if (attachment) {
         this._items.push({
           color: colors.splice(Math.floor(Math.random() * colors.length), 1)[0],
           Id: attachment.Id,
           Name: attachment.Name,
+          data: {
+            somedata: {
+              var1: 'something',
+            },
+          },
         });
       }
     }
+    this.state = {
+      attachment: attachment,
+      items: this._items,
+    };
   }
 
   public render() {
-    const contentAreas = this._items.map(this._createContentArea);
     const { attachment } = this.props;
+    const { items } = this.state;
     const name = attachment ? attachment.Name : '–';
+    const contentAreas = items.map(this._createContentArea);
     return (
       <div className={'attachment-panel-container'}>
-        <h4>{name}</h4>
+        <div style={{ height: 20, color: 'black' }}>{name}</div>
         <div className={classNames.wrapper}>
           <ScrollablePane styles={{ root: classNames.pane }}>
             {contentAreas}
