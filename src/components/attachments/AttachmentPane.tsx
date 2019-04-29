@@ -4,6 +4,7 @@ import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { getTheme, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { IAttachmentModel, IFinishing } from '../../models/IAttachmentModel';
+import { AttachmentIcon } from '../attachments/AttachmentIcon';
 import Moment from 'moment';
 
 const theme = getTheme();
@@ -61,7 +62,7 @@ export class AttachmentPane extends Component<
 
   private _getListContent(group: any[]) {
     let content;
-    if (group.length) {
+    if (group && group.length) {
       content = group.map((x: IFinishing, i: number) => {
         return (
           <li key={i} className="panel-list-row">
@@ -82,7 +83,9 @@ export class AttachmentPane extends Component<
   }
 
   private _getAttachmentInfo(attachment: IAttachmentModel) {
-    const finishingContent = this._getListContent(attachment.Finishing);
+    const finishingContent = attachment
+      ? this._getListContent(attachment.Finishing)
+      : '';
     const details = [
       {
         key: 'Name',
@@ -139,7 +142,11 @@ export class AttachmentPane extends Component<
   }
 
   private _getAttachmentIcon(attachment: IAttachmentModel) {
-    return <div> Icon </div>;
+    return (
+      <div>
+        <AttachmentIcon attachment={attachment} />{' '}
+      </div>
+    );
   }
 
   private _getAttachmentItems(attachment: IAttachmentModel) {
