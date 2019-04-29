@@ -67,7 +67,7 @@ class JobDetailPage extends AppComponent<Props, IState> {
 
   render() {
     const { job, indicators } = this.props;
-    console.log('job', job);
+    console.log('job', job.Attachments);
     return (
       <div className="job-detail">
         <AppBreadcrumb show={true} job={job} />

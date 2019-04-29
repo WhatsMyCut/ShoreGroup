@@ -3,6 +3,7 @@ import { withRouter } from 'react-router';
 import { NavLink, Redirect } from 'react-router-dom';
 import Globals from '../../Globals';
 import AccountService from '../../api/AccountService';
+import AuthorizationService from '../../api/AuthorizationService';
 import { Dropdown, Collapse } from 'bootstrap3-native';
 import bind from 'bind-decorator';
 
@@ -20,6 +21,13 @@ class TopMenu extends Component<{}, { logoutAction: boolean }> {
     setTimeout(() => {
       window.location.href = '/login';
     }, 100);
+  }
+
+  @bind
+  async onClickUserInfo(e: React.MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+    var res = AuthorizationService.userinfo();
+    console.log(await res);
   }
 
   private elDropdown: HTMLAnchorElement;
@@ -80,6 +88,11 @@ class TopMenu extends Component<{}, { logoutAction: boolean }> {
                   <li>
                     <a href="#" onClick={this.onClickSignOut}>
                       Sign out
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" onClick={this.onClickUserInfo}>
+                      User Info
                     </a>
                   </li>
                 </ul>

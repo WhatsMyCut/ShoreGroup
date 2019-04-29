@@ -33,7 +33,7 @@ export interface IDocument {
 
 interface IProps {
   attachments?: IAttachmentModel[];
-  onSelectRow?: (row: IAttachmentModel) => void;
+  onSelectRow?: (row: string) => void;
 }
 
 export class AttachmentList extends Component<IProps, IAttachmentListState> {

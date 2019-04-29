@@ -60,12 +60,12 @@ export default class JobDetail extends Component<IProps, IState> {
     this.setState({ currentTab: h, currentAttachment: null });
   };
 
-  _setCurrentAttachment = (attachment: IAttachmentModel) => {
+  _setCurrentAttachment = (attachment: string) => {
     const { job } = this.props;
     const IAttachment = job
-      ? job.Attachments.filter(att => attachment.Id === att.Id)
+      ? job.Attachments.filter(att => attachment === att.Id)
       : null;
-    console.log('_setCurrentAttachment', attachment, IAttachment);
+    console.log('_setCurrentAttachment', IAttachment);
     this.setState({ currentAttachment: IAttachment });
     return this.state;
   };
@@ -132,7 +132,7 @@ export default class JobDetail extends Component<IProps, IState> {
     if (currentAttachment) {
       content = (
         <div>
-          <AttachmentPane attachment={currentAttachment} />
+          <AttachmentPane attachment={currentAttachment[0]} />
         </div>
       );
     } else {
