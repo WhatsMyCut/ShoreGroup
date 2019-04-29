@@ -28,7 +28,8 @@ export default class AppBreadcrumb extends AppComponent<IProps, {}> {
     ev: React.MouseEvent<HTMLElement>,
     item: IBreadcrumbItem,
   ): void => {
-    console.log(`Breadcrumb item with key "${item.key}" has been clicked.`);
+    let c = JSON.stringify(item);
+    console.log(`Breadcrumb item with key "${item.href}" has been clicked.`);
   };
 
   private _getCustomDivider = (dividerProps: IDividerAsProps): JSX.Element => {
@@ -47,13 +48,23 @@ export default class AppBreadcrumb extends AppComponent<IProps, {}> {
 
   private _getItems() {
     let items = [
-      { text: 'Jobs', key: 'f1', onClick: this._onBreadcrumbItemClicked },
+      {
+        text: 'Jobs',
+        key: 'f1',
+        href: '/jobs',
+        onClick: this._onBreadcrumbItemClicked,
+      },
     ];
 
     if (this.props.job) {
       const jobId = this.props.job.Id || '–';
       const jobName = this.props.job.Name || '–';
-      items.push({ text: jobName, key: 'jobid', onClick: () => undefined });
+      items.push({
+        text: jobName,
+        key: 'jobid',
+        href: '',
+        onClick: () => undefined,
+      });
     }
     return items;
   }
