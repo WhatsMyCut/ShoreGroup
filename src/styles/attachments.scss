@@ -1,0 +1,22 @@
+.attachment-info-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  flex: 1 1 100%;
+}
+.attachment-info-list li {
+  display: flex;
+}
+.panel-list-row {
+  border-bottom: 1px solid #f4f4f4;
+  font-size: 12px;
+}
+.panel-list-key {
+  flex: 0 0 30%;
+  font-weight: bold;
+  padding: 0 5px 0 0;
+}
+.panel-list-value {
+  flex: 1 0 auto;
+  padding: 0 5px;
+}
