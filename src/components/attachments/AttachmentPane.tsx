@@ -73,7 +73,7 @@ export class AttachmentPane extends Component<
         );
       });
     } else {
-      content = <div>No {typeof group} Options</div>;
+      content = <div className="panel-list-key">–</div>;
     }
     return (
       <div className="attachment-detail">
@@ -205,7 +205,6 @@ export class AttachmentPane extends Component<
   }
 
   private _getAttachmentItems(attachment: IAttachmentModel) {
-    const colors = ['#efefef', '#f4f4f4', '#ccc'];
     let items = [];
     items.push(
       {
@@ -215,13 +214,13 @@ export class AttachmentPane extends Component<
         data: this._getAttachmentIcon(attachment),
       },
       {
-        color: '#f4f4f4',
+        color: '#efefef',
         Id: '1',
         Name: 'Attachment Info',
         data: this._getAttachmentInfo(attachment),
       },
       {
-        color: '#efefef',
+        color: '#f4f4f4',
         Id: '2',
         Name: 'Attachment Details',
         data: this._getAttachmentDetails(attachment),
