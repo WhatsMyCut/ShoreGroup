@@ -43,7 +43,7 @@ export default class JobHeader extends Component<IProps, {}> {
           </div>
           <div className="job-header-status">
             <h5>Status</h5>
-            <h4 className={statusClassName}>{label}</h4>
+            <h4 className={'bold ' + statusClassName}>{label}</h4>
           </div>
           <div className="job-header-client">
             <h5>Client Owner</h5>
