@@ -10,7 +10,7 @@ import Moment from 'moment';
 const theme = getTheme();
 const classNames = mergeStyleSets({
   wrapper: {
-    height: '40vh',
+    height: '45vh',
     position: 'relative',
     maxHeight: 'inherit',
   },
