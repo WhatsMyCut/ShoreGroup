@@ -60,14 +60,15 @@ export class AttachmentPane extends Component<
     };
   }
 
-  private _getListContent(group: any[]) {
+  private _getListContent(group: any[], label: string) {
+    const header = label ? label : '-';
     let content;
     if (group && group.length) {
-      content = group.map((x: IFinishing, i: number) => {
+      content = group.map((x: any, i: number) => {
         return (
           <li key={i} className="panel-list-row">
-            <div className="panel-row-name">{x.Name}</div>
-            <div className="panel-row-value">{x.Value}</div>
+            <div className="panel-list-key">{x.Name}</div>
+            <div className="panel-list-value">{x.Value}</div>
           </li>
         );
       });
@@ -75,17 +76,36 @@ export class AttachmentPane extends Component<
       content = <div>No {typeof group} Options</div>;
     }
     return (
-      <div className={'panel-content'}>
-        <div className={'panel-content-header'}>Finishing</div>
-        <ul className="panel-content-list">{content}</ul>
+      <div className="attachment-detail">
+        <div className={'attachment-detail-header'}>{header}</div>
+        <div className={'attachment-detail-options'}>
+          <ul className="attachment-info-list">{content}</ul>
+        </div>
+      </div>
+    );
+  }
+
+  private _getDetailContent(content: any, label: string) {
+    const header = label ? label : '-';
+    const name =
+      typeof content === 'string'
+        ? content
+        : content && content.Name
+        ? content.Name
+        : '–';
+    const value = content && content.Value ? content.Value : '-';
+    return (
+      <div className="attachment-detail">
+        <div className={'attachment-detail-header'}>{header}</div>
+        <div className={'attachment-detail-nvp'}>
+          <div className="panel-list-key">{name}</div>
+          <div className="panel-list-value">{value}</div>
+        </div>
       </div>
     );
   }
 
   private _getAttachmentInfo(attachment: IAttachmentModel) {
-    const finishingContent = attachment
-      ? this._getListContent(attachment.Finishing)
-      : '';
     const details = [
       {
         key: 'Name',
@@ -100,20 +120,18 @@ export class AttachmentPane extends Component<
         value: Moment(attachment.ModifiedOn).format('l'),
       },
       {
-        key: 'Attachment Id',
-        value: attachment.Id,
-        className: 'smalltext',
+        key: 'Print Ready',
+        value: attachment.PrintReady ? 'Yes' : 'No',
+      },
+      {
+        key: 'Variable Page Length',
+        value: attachment.VariablePageLength ? 'Yes' : 'No',
       },
     ];
     const content = details.map(
       (item, index): JSX.Element => {
         return (
-          <li
-            key={index}
-            className={
-              'panel-list-row ' + (item.className ? item.className : '')
-            }
-          >
+          <li key={index} className={'panel-list-row '}>
             <div className="panel-list-key">{item.key}</div>
             <div className="panel-list-value">{item.value}</div>
           </li>
@@ -128,15 +146,52 @@ export class AttachmentPane extends Component<
   }
 
   private _getAttachmentDetails(attachment: IAttachmentModel) {
-    const finishingContent = this._getListContent(attachment.Finishing);
+    const bindingContent = this._getDetailContent(
+      attachment.Binding,
+      'Binding',
+    );
+    const colorContent = this._getDetailContent(attachment.Color, 'Color');
+    const finishingContent = this._getListContent(
+      attachment.Finishing,
+      'Finishing',
+    );
+    const finishSizeContent = this._getDetailContent(
+      attachment.FinishSize,
+      'Finish Size',
+    );
+    const flatSizeContent = this._getDetailContent(
+      attachment.FlatSize,
+      'Flat Size',
+    );
+    const orientationContent = this._getDetailContent(
+      attachment.Orientation,
+      'Orientation',
+    );
+    const stockContent = this._getDetailContent(attachment.Stock, 'Stock');
+    const pageCountContent = this._getDetailContent(
+      attachment.PageCount,
+      'Page Count',
+    );
+    const plusCoverStockContent = this._getDetailContent(
+      attachment.PlusCoverStock,
+      'Plus Cover Stock',
+    );
+    const simplexOrDuplexContent = this._getDetailContent(
+      attachment.SimplexOrDuplex,
+      'Simplex Or Duplex',
+    );
     return (
       <div>
-        <ul>
-          <li>
-            <div>Finishing</div>
-            <div>{finishingContent}</div>
-          </li>
-        </ul>
+        <div>{bindingContent}</div>
+        <div>{colorContent}</div>
+        <div>{finishingContent}</div>
+        <div>{finishSizeContent}</div>
+        <div>{flatSizeContent}</div>
+        <div>{orientationContent}</div>
+        <div>{pageCountContent}</div>
+        <div>{plusCoverStockContent}</div>
+        <div>{simplexOrDuplexContent}</div>
+        <div>{stockContent}</div>
       </div>
     );
   }
@@ -156,7 +211,7 @@ export class AttachmentPane extends Component<
       {
         color: '#f4f4f4',
         Id: '1',
-        Name: <b>{attachment.Name}</b>,
+        Name: <b>Attachment: "{attachment.Name}"</b>,
         data: this._getAttachmentIcon(attachment),
       },
       {
@@ -166,9 +221,9 @@ export class AttachmentPane extends Component<
         data: this._getAttachmentInfo(attachment),
       },
       {
-        color: '#ccc',
+        color: '#efefef',
         Id: '2',
-        Name: 'Details',
+        Name: 'Attachment Details',
         data: this._getAttachmentDetails(attachment),
       },
     );
@@ -187,16 +242,15 @@ export class AttachmentPane extends Component<
   render() {
     const { attachment } = this.props;
     const items = this._getAttachmentItems(attachment);
-    const name = attachment ? attachment.Name : '–';
     const contentAreas = items.map(this._createContentArea);
     return (
       <div className={'attachment-panel-container'}>
-        <div style={{ height: 20, color: 'black' }}>{name}</div>
         <div className={classNames.wrapper}>
           <ScrollablePane styles={{ root: classNames.pane }}>
             {contentAreas}
           </ScrollablePane>
         </div>
+        <div className="smalltext">Id: {attachment.Id}</div>
       </div>
     );
   }
@@ -213,7 +267,7 @@ export class AttachmentPane extends Component<
       >
         <Sticky stickyPosition={StickyPositionType.Both}>
           <div className={classNames.sticky} key={item.Id}>
-            {item.Name}
+            <b>{item.Name}</b>
           </div>
         </Sticky>
         <div className={classNames.textContent}>{item.data}</div>

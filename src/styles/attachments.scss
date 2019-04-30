@@ -1,22 +1,50 @@
 .attachment-info-list {
   list-style-type: none;
   margin: 0;
-  padding: 0;
+  padding: 2px 0;
   flex: 1 1 100%;
 }
 .attachment-info-list li {
   display: flex;
 }
+.attachment-info .panel-list-value {
+  border-bottom: 1px solid #ccc;
+}
 .panel-list-row {
-  border-bottom: 1px solid #f4f4f4;
-  font-size: 12px;
+  margin: 2px 0;
 }
 .panel-list-key {
-  flex: 0 0 30%;
+  flex: 0 0 35%;
   font-weight: bold;
-  padding: 0 5px 0 0;
+  padding-right: 5px;
 }
 .panel-list-value {
   flex: 1 0 auto;
   padding: 0 5px;
+}
+.attachment-detail {
+  display: flex;
+  flex-direction: row;
+}
+.attachment-detail-header {
+  flex: 1 1 30%;
+  font-weight: bold;
+  padding-right: 5px;
+}
+.attachment-detail-options {
+  flex: 1 1 60%;
+}
+.attachment-detail-nvp {
+  display: flex;
+  flex: 1 1 60%;
+  border-bottom: 1px solid #ccc;
+}
+.attachment-detail-options .panel-list-key,
+.attachment-detail-nvp .panel-list-key {
+  flex: 1 1 60%;
+  font-weight: normal;
+}
+.attachment-detail-options .panel-list-value,
+.attachment-detail-nvp .panel-list-value {
+  color: #999;
 }
