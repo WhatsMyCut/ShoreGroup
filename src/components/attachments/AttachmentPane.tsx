@@ -6,11 +6,12 @@ import { getTheme, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { IAttachmentModel, IFinishing } from '../../models/IAttachmentModel';
 import { AttachmentIcon } from '../attachments/AttachmentIcon';
 import Moment from 'moment';
+import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
 
 const theme = getTheme();
 const classNames = mergeStyleSets({
   wrapper: {
-    height: '45vh',
+    minHeight: '40vh',
     position: 'relative',
     maxHeight: 'inherit',
   },
@@ -39,14 +40,10 @@ export interface IAttachmnetPaneItem {
 
 export interface IProps {
   attachment?: IAttachmentModel;
+  closeAttachmentPanel?: any;
 }
 
-export class AttachmentPane extends Component<
-  IProps,
-  {
-    attachment: any;
-  }
-> {
+export class AttachmentPane extends Component<IProps, {}> {
   private _items: IAttachmnetPaneItem[];
 
   constructor(props: IProps) {
@@ -119,14 +116,6 @@ export class AttachmentPane extends Component<
         key: 'Modified Date',
         value: Moment(attachment.ModifiedOn).format('l'),
       },
-      {
-        key: 'Print Ready',
-        value: attachment.PrintReady ? 'Yes' : 'No',
-      },
-      {
-        key: 'Variable Page Length',
-        value: attachment.VariablePageLength ? 'Yes' : 'No',
-      },
     ];
     const content = details.map(
       (item, index): JSX.Element => {
@@ -180,6 +169,16 @@ export class AttachmentPane extends Component<
       attachment.SimplexOrDuplex,
       'Simplex Or Duplex',
     );
+
+    const vairablePageLengthContent = this._getDetailContent(
+      attachment.VariablePageLength ? 'Yes' : 'No',
+      'Variable Page Length',
+    );
+
+    const printReadyContent = this._getDetailContent(
+      attachment.PrintReady ? 'Yes' : 'No',
+      'Print Ready',
+    );
     return (
       <div>
         <div>{bindingContent}</div>
@@ -190,8 +189,10 @@ export class AttachmentPane extends Component<
         <div>{orientationContent}</div>
         <div>{pageCountContent}</div>
         <div>{plusCoverStockContent}</div>
+        <div>{printReadyContent}</div>
         <div>{simplexOrDuplexContent}</div>
         <div>{stockContent}</div>
+        <div>{vairablePageLengthContent}</div>
       </div>
     );
   }
@@ -199,7 +200,41 @@ export class AttachmentPane extends Component<
   private _getAttachmentIcon(attachment: IAttachmentModel) {
     return (
       <div>
-        <AttachmentIcon attachment={attachment} />{' '}
+        <AttachmentIcon attachment={attachment} />
+      </div>
+    );
+  }
+
+  private _gettAttachmentControls(attachment: IAttachmentModel) {
+    const { closeAttachmentPanel } = this.props;
+    console.log('HREHRER', closeAttachmentPanel);
+    const editIcon = (
+      <Icon
+        iconName="EditSolid12"
+        styles={{ root: { fontSize: 22, cursor: 'pointer' } }}
+        onClick={() => console.log('Edit Attachment', attachment)}
+        ariaLabel={'Edit Attachment'}
+      />
+    );
+    const dowloadIcon = (
+      <Icon
+        iconName="FileDownload"
+        styles={{ root: { fontSize: 22, bottom: 5, cursor: 'pointer' } }}
+        onClick={() => console.log('Download Attachment', attachment.Url)}
+      />
+    );
+    const closeIcon = (
+      <Icon
+        iconName="ChromeClose"
+        styles={{ root: { fontSize: 14, cursor: 'pointer', padding: 5 } }}
+        onClick={() => closeAttachmentPanel()}
+      />
+    );
+    return (
+      <div className={'attachment-control-container'}>
+        <div>{editIcon}</div>
+        <div>{dowloadIcon}</div>
+        <div>{closeIcon}</div>
       </div>
     );
   }
@@ -241,9 +276,11 @@ export class AttachmentPane extends Component<
   render() {
     const { attachment } = this.props;
     const items = this._getAttachmentItems(attachment);
+    const controls = this._gettAttachmentControls(attachment);
     const contentAreas = items.map(this._createContentArea);
     return (
       <div className={'attachment-panel-container'}>
+        <div className={'attachment-panel-controls'}>{controls}</div>
         <div className={classNames.wrapper}>
           <ScrollablePane styles={{ root: classNames.pane }}>
             {contentAreas}
@@ -255,8 +292,7 @@ export class AttachmentPane extends Component<
   }
 
   private _createContentArea = (item: IAttachmnetPaneItem, index: number) => {
-    //let rows = item.data ? item.data.map((key, val) => { val === null ? '' : <div key={index}>{key}: {val ? val : 'null'}</div>}) : '';
-    console.log('_createContentArea', item);
+    //console.log('_createContentArea', item);
     return (
       <div
         key={index}

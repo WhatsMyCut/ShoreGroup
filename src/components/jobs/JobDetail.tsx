@@ -132,7 +132,10 @@ export default class JobDetail extends Component<IProps, IState> {
     if (currentAttachment) {
       content = (
         <div>
-          <AttachmentPane attachment={currentAttachment[0]} />
+          <AttachmentPane
+            attachment={currentAttachment[0]}
+            closeAttachmentPanel={this._closeAttachmentPanel}
+          />
         </div>
       );
     } else {
@@ -145,20 +148,11 @@ export default class JobDetail extends Component<IProps, IState> {
     return 50;
   }
 
-  private _onRenderRow = (item: IListItem, index: number): any => {
-    console.log('_onRenderCell', item, index);
-    return (
-      <div data-is-focusable={true}>
-        <div className={'item-cell'}>
-          {index} &nbsp; {item.Name}
-        </div>
-        <div className={'item-cell'}>{item.Value}</div>
-      </div>
-    );
-  };
-
-  private _renderCurrentAttachment(): JSX.Element {
-    return <div>{this.state.currentAttachment.Name}</div>;
+  _closeAttachmentPanel() {
+    const { currentAttachment } = this.state;
+    console.log('_closecurrentAtt', currentAttachment);
+    this.setState({ currentAttachment: null });
+    return this.state;
   }
 
   private _renderList(): JSX.Element {

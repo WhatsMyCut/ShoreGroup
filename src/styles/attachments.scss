@@ -48,3 +48,21 @@
 .attachment-detail-nvp .panel-list-value {
   color: #999;
 }
+
+.attachment-control-container {
+  display: flex;
+  flex: 1 1 100%;
+  flex-direction: row;
+  justify-content: flex-end;
+  text-align: right;
+  margin-bottom: 5px;
+}
+
+.attachment-control-container > div {
+  padding-left: 5px;
+  margin: 0 5px;
+}
+
+.attachment-control-container > div:last-of-type {
+  padding: 0 0 0 15px;
+}
