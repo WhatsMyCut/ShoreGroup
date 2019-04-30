@@ -134,7 +134,10 @@ export default class JobDetail extends Component<IProps, IState> {
         <div>
           <AttachmentPane
             attachment={currentAttachment[0]}
-            closeAttachmentPanel={this._closeAttachmentPanel}
+            closeAttachmentPanel={() => {
+              console.log('closePanel', currentAttachment);
+              this.setState({ currentAttachment: null });
+            }}
           />
         </div>
       );
@@ -148,10 +151,10 @@ export default class JobDetail extends Component<IProps, IState> {
     return 50;
   }
 
-  _closeAttachmentPanel() {
+  _closeAttachmentPanel(state) {
     const { currentAttachment } = this.state;
-    console.log('_closecurrentAtt', currentAttachment);
-    this.setState({ currentAttachment: null });
+    console.log('_closeAttachmentPanel', currentAttachment);
+    this.setState(state);
     return this.state;
   }
 
