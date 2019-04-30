@@ -7,6 +7,9 @@ import { IAttachmentModel, IFinishing } from '../../models/IAttachmentModel';
 import { AttachmentIcon } from '../attachments/AttachmentIcon';
 import Moment from 'moment';
 import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
+import { Link } from 'office-ui-fabric-react/lib/components/Link';
+import { BaseButton } from 'office-ui-fabric-react/lib/components/Button';
+import Attachment from './Attachment';
 
 const theme = getTheme();
 const classNames = mergeStyleSets({
@@ -31,7 +34,7 @@ const classNames = mergeStyleSets({
   },
 });
 
-export interface IAttachmnetPaneItem {
+export interface IAttachmentPaneItem {
   color: string;
   Id: string;
   Name: string;
@@ -44,7 +47,7 @@ export interface IProps {
 }
 
 export class AttachmentPane extends Component<IProps, {}> {
-  private _items: IAttachmnetPaneItem[];
+  private _items: IAttachmentPaneItem[];
 
   constructor(props: IProps) {
     super(props);
@@ -52,10 +55,8 @@ export class AttachmentPane extends Component<IProps, {}> {
     // Using splice prevents the colors from being duplicated
     const { attachment } = this.props;
     console.log('THERE', attachment);
-    this.state = {
-      attachment: attachment,
-    };
   }
+  componentWillUnmount() {}
 
   private _getListContent(group: any[], label: string) {
     const header = label ? label : '-';
@@ -103,18 +104,43 @@ export class AttachmentPane extends Component<IProps, {}> {
   }
 
   private _getAttachmentInfo(attachment: IAttachmentModel) {
+    const name = attachment ? attachment.Name : '–';
+    const createdOn = attachment
+      ? Moment(attachment.CreatedOn).format('l')
+      : '–';
+    const modifiedOn = attachment
+      ? Moment(attachment.ModifiedOn).format('l')
+      : '–';
+    const url =
+      attachment && attachment.Url ? (
+        <div>
+          <Link to={attachment.Url} target={'_blank'}>
+            <Icon
+              iconName="FileDownload"
+              styles={{ root: { fontSize: 14, bottom: 5, cursor: 'pointer' } }}
+            />{' '}
+            Click to Download
+          </Link>
+        </div>
+      ) : (
+        '–'
+      );
     const details = [
       {
         key: 'Name',
-        value: attachment.Name,
+        value: name,
       },
       {
         key: 'Created Date',
-        value: Moment(attachment.CreatedOn).format('l'),
+        value: createdOn,
       },
       {
         key: 'Modified Date',
-        value: Moment(attachment.ModifiedOn).format('l'),
+        value: modifiedOn,
+      },
+      {
+        key: 'Download',
+        value: url,
       },
     ];
     const content = details.map(
@@ -135,50 +161,50 @@ export class AttachmentPane extends Component<IProps, {}> {
   }
 
   private _getAttachmentDetails(attachment: IAttachmentModel) {
-    const bindingContent = this._getDetailContent(
-      attachment.Binding,
-      'Binding',
-    );
-    const colorContent = this._getDetailContent(attachment.Color, 'Color');
-    const finishingContent = this._getListContent(
-      attachment.Finishing,
-      'Finishing',
-    );
-    const finishSizeContent = this._getDetailContent(
-      attachment.FinishSize,
-      'Finish Size',
-    );
-    const flatSizeContent = this._getDetailContent(
-      attachment.FlatSize,
-      'Flat Size',
-    );
-    const orientationContent = this._getDetailContent(
-      attachment.Orientation,
-      'Orientation',
-    );
-    const stockContent = this._getDetailContent(attachment.Stock, 'Stock');
-    const pageCountContent = this._getDetailContent(
-      attachment.PageCount,
-      'Page Count',
-    );
-    const plusCoverStockContent = this._getDetailContent(
-      attachment.PlusCoverStock,
-      'Plus Cover Stock',
-    );
-    const simplexOrDuplexContent = this._getDetailContent(
-      attachment.SimplexOrDuplex,
-      'Simplex Or Duplex',
-    );
+    const bindingContent = attachment
+      ? this._getDetailContent(attachment.Binding, 'Binding')
+      : '–';
+    const colorContent = attachment
+      ? this._getDetailContent(attachment.Color, 'Color')
+      : '–';
+    const finishingContent = attachment
+      ? this._getListContent(attachment.Finishing, 'Finishing')
+      : '–';
+    const finishSizeContent = attachment
+      ? this._getDetailContent(attachment.FinishSize, 'Finish Size')
+      : '–';
+    const flatSizeContent = attachment
+      ? this._getDetailContent(attachment.FlatSize, 'Flat Size')
+      : '–';
+    const orientationContent = attachment
+      ? this._getDetailContent(attachment.Orientation, 'Orientation')
+      : '–';
+    const stockContent = attachment
+      ? this._getDetailContent(attachment.Stock, 'Stock')
+      : '–';
+    const pageCountContent = attachment
+      ? this._getDetailContent(attachment.PageCount, 'Page Count')
+      : '–';
+    const plusCoverStockContent = attachment
+      ? this._getDetailContent(attachment.PlusCoverStock, 'Plus Cover Stock')
+      : '–';
+    const simplexOrDuplexContent = attachment
+      ? this._getDetailContent(attachment.SimplexOrDuplex, 'Simplex Or Duplex')
+      : '–';
 
-    const vairablePageLengthContent = this._getDetailContent(
-      attachment.VariablePageLength ? 'Yes' : 'No',
-      'Variable Page Length',
-    );
+    const vairablePageLengthContent = attachment
+      ? this._getDetailContent(
+          attachment.VariablePageLength ? 'Yes' : 'No',
+          'Variable Page Length',
+        )
+      : '–';
 
-    const printReadyContent = this._getDetailContent(
-      attachment.PrintReady ? 'Yes' : 'No',
-      'Print Ready',
-    );
+    const printReadyContent = attachment
+      ? this._getDetailContent(
+          attachment.PrintReady ? 'Yes' : 'No',
+          'Print Ready',
+        )
+      : '–';
     return (
       <div>
         <div>{bindingContent}</div>
@@ -205,53 +231,36 @@ export class AttachmentPane extends Component<IProps, {}> {
     );
   }
 
-  private _gettAttachmentControls(attachment: IAttachmentModel) {
-    const { closeAttachmentPanel } = this.props;
-    console.log('HREHRER', closeAttachmentPanel);
-    const editIcon = (
-      <Icon
-        iconName="EditSolid12"
-        styles={{ root: { fontSize: 22, cursor: 'pointer' } }}
-        onClick={() => console.log('Edit Attachment', attachment)}
-        ariaLabel={'Edit Attachment'}
-      />
-    );
-    const dowloadIcon = (
-      <Icon
-        iconName="FileDownload"
-        styles={{ root: { fontSize: 22, bottom: 5, cursor: 'pointer' } }}
-        onClick={() => console.log('Download Attachment', attachment.Url)}
-      />
-    );
-    const closeIcon = (
+  private _gettCloseBtn() {
+    const { attachment, closeAttachmentPanel } = this.props;
+    return (
       <Icon
         iconName="ChromeClose"
-        styles={{ root: { fontSize: 14, cursor: 'pointer', padding: 5 } }}
-        onClick={() => closeAttachmentPanel()}
+        styles={{ root: { fontSize: 12, cursor: 'pointer', paddingRight: 0 } }}
+        onClick={closeAttachmentPanel}
       />
-    );
-    return (
-      <div className={'attachment-control-container'}>
-        <div>{editIcon}</div>
-        <div>{dowloadIcon}</div>
-        <div>{closeIcon}</div>
-      </div>
     );
   }
 
   private _getAttachmentItems(attachment: IAttachmentModel) {
     let items = [];
+    const name = attachment ? attachment.Name : '_';
     items.push(
       {
         color: '#f4f4f4',
         Id: '1',
-        Name: <b>Attachment: "{attachment.Name}"</b>,
+        Name: (
+          <div>
+            <b>Attachment: "{name}"</b>
+            <span className="close-btn">{this._gettCloseBtn()}</span>
+          </div>
+        ),
         data: this._getAttachmentIcon(attachment),
       },
       {
         color: '#efefef',
         Id: '1',
-        Name: 'Attachment Info',
+        Name: 'File Info',
         data: this._getAttachmentInfo(attachment),
       },
       {
@@ -276,22 +285,21 @@ export class AttachmentPane extends Component<IProps, {}> {
   render() {
     const { attachment } = this.props;
     const items = this._getAttachmentItems(attachment);
-    const controls = this._gettAttachmentControls(attachment);
     const contentAreas = items.map(this._createContentArea);
+    const attId = attachment ? attachment.Id : '–';
     return (
       <div className={'attachment-panel-container'}>
-        <div className={'attachment-panel-controls'}>{controls}</div>
         <div className={classNames.wrapper}>
           <ScrollablePane styles={{ root: classNames.pane }}>
             {contentAreas}
           </ScrollablePane>
         </div>
-        <div className="smalltext">Id: {attachment.Id}</div>
+        <div className="smalltext">Id: {attId}</div>
       </div>
     );
   }
 
-  private _createContentArea = (item: IAttachmnetPaneItem, index: number) => {
+  private _createContentArea = (item: IAttachmentPaneItem, index: number) => {
     //console.log('_createContentArea', item);
     return (
       <div
