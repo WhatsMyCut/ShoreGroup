@@ -7,9 +7,7 @@
 import React, { MouseEvent, ChangeEvent } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import bind from 'bind-decorator';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
-import Moment from 'moment';
 
 import AppComponent from '../components/shared/AppComponent';
 import Loader from '../components/shared/Loader';
@@ -20,6 +18,7 @@ import JobDetail from '../components/jobs/JobDetail';
 import * as JobStore from '../store/JobStore';
 import AppBreadcrumb from '../components/shared/AppBreadcrumb';
 import { getTheme } from 'office-ui-fabric-react/lib/Styling';
+import loadThemeByName from '../styles/loadThemeByName';
 
 interface IProps {
   location?: string;
@@ -35,17 +34,18 @@ interface IState {
   currentTab: string;
 }
 
-const theme = getTheme();
-
 class JobDetailPage extends AppComponent<Props, IState> {
   private fetch: (id: string) => void;
   private currentTab: string;
+  protected theme: any;
   constructor(props: Props, state: IState) {
     super(props);
+    loadThemeByName('blue');
     this.fetch = AwesomeDebouncePromise((id: string) => {
       props.fetchRequest(id);
     }, 500);
     this.state = state;
+    this.theme = getTheme();
     const hash = window.location.hash;
     this.currentTab = 'general';
     switch (hash) {
@@ -75,8 +75,8 @@ class JobDetailPage extends AppComponent<Props, IState> {
       <div className="job-detail">
         <AppBreadcrumb show={true} job={job} />
         <Loader show={indicators.operationLoading} />
-        <JobHeader job={job} theme={theme} />
-        <JobDetail job={job} currentTab={this.currentTab} theme={theme} />
+        <JobHeader job={job} theme={this.theme} />
+        <JobDetail job={job} currentTab={this.currentTab} theme={this.theme} />
       </div>
     );
   }

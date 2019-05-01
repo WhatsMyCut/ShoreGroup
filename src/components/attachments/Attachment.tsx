@@ -90,6 +90,7 @@ export default class Attachment extends Component<Props, {}> {
             />
           </DocumentCardDetails>
         </DocumentCard>
+        {this.props.attachment && <div>here</div>}
       </div>
     );
   }

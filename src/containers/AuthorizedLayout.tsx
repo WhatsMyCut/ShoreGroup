@@ -5,7 +5,7 @@ import NavMenu from '../components/shared/NavMenu';
 import { ToastContainer } from 'react-toastify';
 import Footer from '../components/shared/Footer';
 import { initializeIcons } from '@uifabric/icons';
-import { mergeStyles, registerIcons, getTheme } from '@uifabric/styling';
+import { mergeStyleSets, registerIcons, getTheme } from '@uifabric/styling';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -22,6 +22,7 @@ type Props = IProps;
 
 export default class AuthorizedLayout extends Component<Props, {}> {
   props: Props;
+  theme: void;
 
   constructor(props) {
     super(props);
@@ -33,9 +34,8 @@ export default class AuthorizedLayout extends Component<Props, {}> {
         FileDownload: <FontAwesomeIcon icon={faCloudDownloadAlt} />,
       },
     });
-    const theme = getTheme();
-    loadThemeByName('orange');
-    console.log('Theme: ', theme);
+    this.theme = loadThemeByName('orange');
+    console.log('Theme: ', this.theme);
   }
 
   public render() {
