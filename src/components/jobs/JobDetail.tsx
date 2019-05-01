@@ -115,8 +115,11 @@ export default class JobDetail extends Component<IProps, IState> {
     ) : (
       <div className="attachments-container">
         <div className="attachments-dropzone">
-          <Dropzone>
-            <Icon iconName="FileUpload" />
+          <Dropzone theme={this.theme}>
+            <Icon
+              iconName="FileUpload"
+              style={{ color: this.theme.palette.themePrimary }}
+            />
           </Dropzone>
         </div>
         <AttachmentList
@@ -224,6 +227,12 @@ export default class JobDetail extends Component<IProps, IState> {
         <div className="job-detail-tabs">
           <CommandBar
             items={this.getItems()}
+            theme={this.theme}
+            styles={{
+              root: {
+                backgroundColor: this.theme.palette.themeLight,
+              },
+            }}
             //overflowItems={this.getOverlflowItems()}
             overflowButtonProps={{ ariaLabel: 'More commands' }}
             //farItems={this.getFarItems()}

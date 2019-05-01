@@ -83,7 +83,7 @@ export class AttachmentPane extends Component<IProps, {}> {
     );
   }
 
-  private _getDetailContent(content: any, label: string) {
+  private _getDetailContent(content: any, label?: string) {
     const header = label ? label : '-';
     const name =
       typeof content === 'string'
@@ -103,7 +103,7 @@ export class AttachmentPane extends Component<IProps, {}> {
     );
   }
 
-  private _getAttachmentInfo(attachment: IAttachmentModel) {
+  private _getFileInfo(attachment: IAttachmentModel) {
     const name = attachment ? attachment.Name : '–';
     const createdOn = attachment
       ? Moment(attachment.CreatedOn).format('l')
@@ -191,14 +191,12 @@ export class AttachmentPane extends Component<IProps, {}> {
     const simplexOrDuplexContent = attachment
       ? this._getDetailContent(attachment.SimplexOrDuplex, 'Simplex Or Duplex')
       : '–';
-
     const vairablePageLengthContent = attachment
       ? this._getDetailContent(
           attachment.VariablePageLength ? 'Yes' : 'No',
           'Variable Page Length',
         )
       : '–';
-
     const printReadyContent = attachment
       ? this._getDetailContent(
           attachment.PrintReady ? 'Yes' : 'No',
@@ -231,7 +229,7 @@ export class AttachmentPane extends Component<IProps, {}> {
     );
   }
 
-  private _gettCloseBtn() {
+  private _getCloseBtn() {
     const { attachment, closeAttachmentPanel } = this.props;
     return (
       <Icon
@@ -242,7 +240,7 @@ export class AttachmentPane extends Component<IProps, {}> {
     );
   }
 
-  private _getAttachmentItems(attachment: IAttachmentModel) {
+  private _getPanelSections(attachment: IAttachmentModel) {
     let items = [];
     const name = attachment ? attachment.Name : '_';
     items.push(
@@ -252,39 +250,30 @@ export class AttachmentPane extends Component<IProps, {}> {
         Name: (
           <div>
             <b>Attachment: "{name}"</b>
-            <span className="close-btn">{this._gettCloseBtn()}</span>
+            <span className="close-btn">{this._getCloseBtn()}</span>
           </div>
         ),
         data: this._getAttachmentIcon(attachment),
       },
       {
         color: theme.palette.neutralLighter,
-        Id: '1',
+        Id: '2',
         Name: 'File Info',
-        data: this._getAttachmentInfo(attachment),
+        data: this._getFileInfo(attachment),
       },
       {
         color: theme.palette.neutralLighterAlt,
-        Id: '2',
+        Id: '3',
         Name: 'Attachment Details',
         data: this._getAttachmentDetails(attachment),
       },
     );
-    // for (let i = 0; i < 3; i++) {
-    //   if (attachment) {
-    //     items.push({
-    //       color: colors.splice(Math.floor(Math.random() * colors.length), 1)[0],
-    //       Id: attachment.Id,
-    //       Name: attachment.Name,
-    //     });
-    //   }
-    // }
     return items;
   }
 
   render() {
     const { attachment } = this.props;
-    const items = this._getAttachmentItems(attachment);
+    const items = this._getPanelSections(attachment);
     const contentAreas = items.map(this._createContentArea);
     const attId = attachment ? attachment.Id : '–';
     return (
