@@ -216,7 +216,7 @@ export default class JobList extends Component<IProps, IJobsListState> {
       columns: columns,
       selectionDetails: this._getSelectionDetails(),
       isModalSelection: false,
-      isCompactMode: false,
+      isCompactMode: true,
     };
   }
 
@@ -238,7 +238,7 @@ export default class JobList extends Component<IProps, IJobsListState> {
         <MarqueeSelection selection={this._selection}>
           <DetailsList
             items={items}
-            compact={true}
+            compact={isCompactMode}
             columns={columns}
             selectionMode={
               isModalSelection ? SelectionMode.multiple : SelectionMode.none

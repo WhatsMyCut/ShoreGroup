@@ -2,10 +2,8 @@ import '../../styles/jobs.scss';
 import React, { Component, MouseEvent } from 'react';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IJobModel, IJobType } from '../../models/IJobModel';
-import Attachment from '../../components/attachments/Attachment';
 import { AttachmentList } from '../../components/attachments/AttachmentList';
 import { AttachmentPane } from '../../components/attachments/AttachmentPane';
-import { IAttachmentModel } from '../../models/IAttachmentModel';
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -14,12 +12,14 @@ import {
 import { Dropzone } from '../shared/DropZone';
 import Moment from 'moment';
 import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
+import { ITheme } from '@uifabric/styling';
 
 export interface IProps {
   disabled?: boolean;
   checked?: boolean;
   job: IJobModel;
   currentTab?: string;
+  theme?: ITheme;
 }
 export interface IListItem {
   Name?: string;
@@ -34,8 +34,10 @@ export const State: IState = {
   currentAttachment: null,
 };
 export default class JobDetail extends Component<IProps, IState> {
+  protected theme: ITheme;
   constructor(props: IProps, state: IState) {
     super(props);
+    this.theme = props.theme;
     this.state = state;
     window.onresize = () => this.render();
   }
