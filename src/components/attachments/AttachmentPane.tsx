@@ -247,7 +247,7 @@ export class AttachmentPane extends Component<IProps, {}> {
     const name = attachment ? attachment.Name : '_';
     items.push(
       {
-        color: '#f4f4f4',
+        color: theme.palette.neutralLight,
         Id: '1',
         Name: (
           <div>
@@ -258,13 +258,13 @@ export class AttachmentPane extends Component<IProps, {}> {
         data: this._getAttachmentIcon(attachment),
       },
       {
-        color: '#efefef',
+        color: theme.palette.neutralLighter,
         Id: '1',
         Name: 'File Info',
         data: this._getAttachmentInfo(attachment),
       },
       {
-        color: '#f4f4f4',
+        color: theme.palette.neutralLighterAlt,
         Id: '2',
         Name: 'Attachment Details',
         data: this._getAttachmentDetails(attachment),

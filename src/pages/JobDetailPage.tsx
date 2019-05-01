@@ -19,6 +19,7 @@ import JobHeader from '../components/jobs/JobHeader';
 import JobDetail from '../components/jobs/JobDetail';
 import * as JobStore from '../store/JobStore';
 import AppBreadcrumb from '../components/shared/AppBreadcrumb';
+import { getTheme } from 'office-ui-fabric-react/lib/Styling';
 
 interface IProps {
   location?: string;
@@ -33,6 +34,8 @@ interface IState {
   job: IJobModel;
   currentTab: string;
 }
+
+const theme = getTheme();
 
 class JobDetailPage extends AppComponent<Props, IState> {
   private fetch: (id: string) => void;
@@ -72,8 +75,8 @@ class JobDetailPage extends AppComponent<Props, IState> {
       <div className="job-detail">
         <AppBreadcrumb show={true} job={job} />
         <Loader show={indicators.operationLoading} />
-        <JobHeader job={job} />
-        <JobDetail job={job} currentTab={this.currentTab} />
+        <JobHeader job={job} theme={theme} />
+        <JobDetail job={job} currentTab={this.currentTab} theme={theme} />
       </div>
     );
   }

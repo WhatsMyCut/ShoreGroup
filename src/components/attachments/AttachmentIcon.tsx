@@ -11,14 +11,18 @@ import {
 import { ImageFit } from 'office-ui-fabric-react/lib/Image';
 import { IAttachmentModel } from '../../models/IAttachmentModel';
 import Moment from 'moment';
+import { getTheme } from 'office-ui-fabric-react/lib/Styling';
+import { ITheme } from '@uifabric/styling';
 
 export interface Props {
   attachment: IAttachmentModel;
 }
 
 export class AttachmentIcon extends Component<Props, {}> {
+  private theme: ITheme;
   constructor(props: Props) {
     super(props);
+    this.theme = getTheme();
   }
 
   people: IDocumentCardActivityPerson[] = [
@@ -52,7 +56,7 @@ export class AttachmentIcon extends Component<Props, {}> {
             iconName: type,
             styles: {
               root: {
-                color: '#813a7c',
+                color: this.theme.palette.themePrimary,
                 fontSize: '80px',
                 width: '85px',
                 height: '120px',
@@ -60,7 +64,11 @@ export class AttachmentIcon extends Component<Props, {}> {
             },
           }}
         />
-        <DocumentCardActivity activity={modifiedOn} people={[this.people[0]]} />
+        <DocumentCardActivity
+          activity={modifiedOn}
+          people={[this.people[0]]}
+          theme={this.theme}
+        />
       </div>
     );
   }

@@ -12,15 +12,19 @@ import {
   _getOwnerPersona,
   _getJobPersona,
 } from '../shared/AppPersona';
+import { ITheme } from '@uifabric/styling';
 
 export interface IProps {
   disabled?: boolean;
   checked?: boolean;
   job?: IJobModel;
+  theme?: ITheme;
 }
 export default class JobHeader extends Component<IProps, {}> {
+  protected theme: ITheme;
   constructor(props: IProps) {
     super(props);
+    this.theme = props.theme;
   }
 
   render() {

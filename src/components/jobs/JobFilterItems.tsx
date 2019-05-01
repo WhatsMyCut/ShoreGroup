@@ -1,8 +1,10 @@
 import { Redirect } from 'react-router';
 import { IJobModel, IJobType } from '../../models/IJobModel';
 import { IContextualMenuItem } from 'office-ui-fabric-react/lib/components/ContextualMenu';
+import { getTheme } from 'office-ui-fabric-react/lib/Styling';
 // Data for CommandBar
 export const _getControlBarItems = () => {
+  const theme = getTheme();
   return [
     {
       key: 'filterBy',
@@ -45,7 +47,7 @@ export const _getControlBarItems = () => {
       className: 'command-bar-divider',
       iconProps: {
         iconName: 'Separator',
-        style: { color: '#000', maxWidth: 20 },
+        style: { color: theme.palette.black, maxWidth: 20 },
       },
     },
     {
