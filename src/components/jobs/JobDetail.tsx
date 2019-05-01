@@ -4,6 +4,8 @@ import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IJobModel, IJobType } from '../../models/IJobModel';
 import { AttachmentList } from '../../components/attachments/AttachmentList';
 import { AttachmentPane } from '../../components/attachments/AttachmentPane';
+import { TaskList } from '../../components/tasks/TaskList';
+import { TaskPane } from '../tasks/TaskPane';
 import { Dropzone } from '../shared/DropZone';
 import Moment from 'moment';
 import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
@@ -25,10 +27,12 @@ export interface IListItem {
 export interface IState {
   currentTab?: string;
   currentAttachment?: any;
+  currentTask?: any;
 }
 export const State: IState = {
   currentTab: 'general',
   currentAttachment: null,
+  currentTask: null,
 };
 export default class JobDetail extends Component<IProps, IState> {
   protected theme: ITheme;
@@ -93,7 +97,11 @@ export default class JobDetail extends Component<IProps, IState> {
     let h = window.location.hash
       ? window.location.hash.replace('#', '')
       : 'general';
-    this.setState({ currentTab: h, currentAttachment: null });
+    this.setState({
+      currentTab: h,
+      currentAttachment: null,
+      currentTask: null,
+    });
   };
 
   _setCurrentAttachment = (attachment: string) => {
@@ -103,6 +111,14 @@ export default class JobDetail extends Component<IProps, IState> {
       : null;
     console.log('_setCurrentAttachment', IAttachment);
     this.setState({ currentAttachment: IAttachment });
+    return this.state;
+  };
+
+  _setCurrentTask = () => {
+    const { job } = this.props;
+    const task = job ? job.Tasks.filter(task => task === task.taskID) : null;
+    console.log('_setCurrentTask', task);
+    this.setState({ currentTask: task });
     return this.state;
   };
 
@@ -164,9 +180,23 @@ export default class JobDetail extends Component<IProps, IState> {
     );
   }
 
+  private _renderTasks() {
+    const { job } = this.props;
+    return !job ? (
+      <div className="tasks-container" />
+    ) : (
+      <div className="tasks-container">
+        <TaskList
+          tasks={this.props.job.Tasks}
+          onSelectRow={this._setCurrentTask}
+        />
+      </div>
+    );
+  }
+
   private _renderSidePanel() {
     let content;
-    const { currentAttachment } = this.state;
+    const { currentAttachment, currentTask } = this.state;
     const { job } = this.props;
     if (currentAttachment) {
       content = (
@@ -176,6 +206,18 @@ export default class JobDetail extends Component<IProps, IState> {
             closeAttachmentPanel={() => {
               console.log('closePanel', currentAttachment);
               this.setState({ currentAttachment: null });
+            }}
+          />
+        </div>
+      );
+    } else if (currentTask) {
+      content = (
+        <div>
+          <TaskPane
+            task={currentTask[0]}
+            closeTaskPanel={() => {
+              console.log('closePanel', currentTask);
+              this.setState({ currentTask: null });
             }}
           />
         </div>
@@ -281,7 +323,9 @@ export default class JobDetail extends Component<IProps, IState> {
               <div className={'attachments ' + attachmentsActive}>
                 {this._renderAttachments()}
               </div>
-              <div className={'tasks ' + tasksActive}>{this._renderList()}</div>
+              <div className={'tasks ' + tasksActive}>
+                {this._renderTasks()}
+              </div>
             </div>
           </div>
           <div className={'job-detail-comments'}>
