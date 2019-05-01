@@ -4,32 +4,44 @@ export interface IPriority {
   Name?: string;
   Value?: number;
 }
+export interface IInstruction {
+  Name?: string;
+  Value?: number;
+}
+export interface ICarrierAccount {
+  Name?: string;
+  Value?: number;
+}
+export interface IProofType {
+  Name?: string;
+  Value?: number;
+}
 export interface ITaskModel {
   Attachment?: IAttachmentModel;
   CASS?: boolean;
-  CASSInstructions: null;
+  CASSInstructions: IInstruction;
   CreatedOn?: string;
   Dedupe?: boolean;
   DueDate?: string;
-  FedexAccount: null;
+  FedexAccount: ICarrierAccount;
   Household?: boolean;
-  HouseholdInstructions: null;
+  HouseholdInstructions: IInstruction;
   Id: string;
   ModifiedOn?: string;
   NCOA?: boolean;
-  NCOAInstructions: null;
+  NCOAInstructions: IInstruction;
   Presort?: boolean;
   Priority: IPriority;
-  ProofInstructions: null;
-  ProofType: null;
+  ProofInstructions: IInstruction;
+  ProofType: IProofType;
   SpotColorMatch?: boolean;
-  SpotColorMatchInstructions: null;
+  SpotColorMatchInstructions: IInstruction;
   StatusReason: IJobStatusReason;
   Subject?: string;
-  TaskNumber: null;
+  TaskNumber: number;
   Type: IJobType;
-  UPSAccount: null;
-  USPSAccount: null;
+  UPSAccount: ICarrierAccount;
+  USPSAccount: ICarrierAccount;
   VariableProgramming?: boolean;
-  VariableProgrammingInstructions: null;
+  VariableProgrammingInstructions: IInstruction;
 }
