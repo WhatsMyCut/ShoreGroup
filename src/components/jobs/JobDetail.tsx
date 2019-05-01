@@ -4,15 +4,12 @@ import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IJobModel, IJobType } from '../../models/IJobModel';
 import { AttachmentList } from '../../components/attachments/AttachmentList';
 import { AttachmentPane } from '../../components/attachments/AttachmentPane';
-import {
-  DetailsList,
-  DetailsListLayoutMode,
-  SelectionMode,
-} from 'office-ui-fabric-react/lib/components/DetailsList';
 import { Dropzone } from '../shared/DropZone';
 import Moment from 'moment';
 import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
-import { ITheme } from '@uifabric/styling';
+import { List } from 'office-ui-fabric-react/lib/components/List';
+import { ITheme } from 'office-ui-fabric-react/lib/Styling';
+import { mergeStyleSets } from '@uifabric/styling';
 
 export interface IProps {
   disabled?: boolean;
@@ -35,6 +32,7 @@ export const State: IState = {
 };
 export default class JobDetail extends Component<IProps, IState> {
   protected theme: ITheme;
+  protected classNames: any;
   constructor(props: IProps, state: IState) {
     super(props);
     this.theme = props.theme;
@@ -44,6 +42,42 @@ export default class JobDetail extends Component<IProps, IState> {
 
   componentWillMount() {
     this.getHash();
+    this.classNames = mergeStyleSets({
+      jobDetailList: {
+        width: '100%',
+        fontSize: 'medium',
+      },
+      jobDetailRow: {
+        display: 'flex',
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: '100%',
+        flexDirection: 'row',
+        width: '100%',
+        borderBottom: '1px solid ' + this.theme.palette.themeLighter,
+      },
+      jobDetailKey: {
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: '40%',
+        backgroundColor: this.theme.palette.themeLighter,
+        color: this.theme.palette.black,
+        padding: 10,
+        fontWeight: 'bolder',
+        textShadow:
+          '2px 2px 2px ' +
+          this.theme.palette.themeDark +
+          ' -1px -1px 2px ' +
+          this.theme.palette.themeDarkAlt,
+      },
+      jobDetailValue: {
+        flexGrow: 1,
+        flexShrink: 0,
+        flexBasis: '60%',
+        padding: 10,
+        fontWeight: 'normal',
+      },
+    });
   }
 
   alertClicked(e: MouseEvent) {
@@ -194,23 +228,20 @@ export default class JobDetail extends Component<IProps, IState> {
       { name: 'Job Type', value: jobType },
       { name: 'Job Description', value: jobDesc },
       { name: 'Job Due Date', value: dueDate },
-    ].map((x: any, index: number) => {
-      return {
-        key: x.name + index,
-        fieldName: <div className={'job-detail-key'}>{x.name}</div>,
-        fieldValue: <div className={'job-detail-value'}>{x.value}</div>,
-      };
-    });
+    ];
     return (
-      <div className="job-detail-data">
-        <DetailsList
-          items={items}
-          columns={columns}
-          setKey="set"
-          selectionMode={SelectionMode.none}
-          layoutMode={DetailsListLayoutMode.fixedColumns}
-        />
-      </div>
+      <List
+        items={items}
+        className={this.classNames.jobDetailList}
+        onRenderCell={(item, itemProps) => {
+          return (
+            <div className={this.classNames.jobDetailRow}>
+              <div className={this.classNames.jobDetailKey}>{item.name}</div>
+              <div className={this.classNames.jobDetailValue}>{item.value}</div>
+            </div>
+          );
+        }}
+      />
     );
   }
 
