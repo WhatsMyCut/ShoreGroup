@@ -29,8 +29,7 @@ export default class TaskEditor extends Component<IProps, {}> {
       <Formik
         enableReinitialize={true}
         initialValues={{
-          name: this.props.data.name || '',
-          description: this.props.data.description || '',
+          name: this.props.data.Subject || '',
         }}
         onSubmit={(values, { setSubmitting }) => {}}
       >
@@ -48,7 +47,7 @@ export default class TaskEditor extends Component<IProps, {}> {
             <input
               type="hidden"
               name="taskID"
-              defaultValue={(this.props.data.taskID || 0).toString()}
+              defaultValue={(this.props.data.Id || 0).toString()}
             />
             <div className="form-group">
               <label className="control-label required" htmlFor="task__name">
@@ -81,7 +80,7 @@ export default class TaskEditor extends Component<IProps, {}> {
                 name="description"
                 data-value-type="string"
                 data-val-required="false"
-                value={values.description}
+                value={values.name}
                 onChange={handleChange}
                 onBlur={handleBlur}
               />

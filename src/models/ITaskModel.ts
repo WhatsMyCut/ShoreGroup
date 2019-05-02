@@ -43,5 +43,5 @@ export interface ITaskModel {
   UPSAccount: ICarrierAccount;
   USPSAccount: ICarrierAccount;
   VariableProgramming?: boolean;
-  VariableProgrammingInstructions: IInstruction;
+  VariableProgrammingInstructions?: IInstruction;
 }

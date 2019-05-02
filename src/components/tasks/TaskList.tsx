@@ -47,14 +47,14 @@ export class TaskList extends Component<IProps, ITaskListState> {
     const { tasks } = props;
     const _columns: IColumn[] = [
       {
-        key: 'column2',
+        key: 'column1',
         name: 'Name',
         fieldName: 'name',
         minWidth: 210,
         maxWidth: 350,
         isRowHeader: true,
-        isResizable: true,
-        isSorted: true,
+        isResizable: false,
+        isSorted: false,
         isSortedDescending: false,
         sortAscendingAriaLabel: 'Sorted A to Z',
         sortDescendingAriaLabel: 'Sorted Z to A',
@@ -99,11 +99,21 @@ export class TaskList extends Component<IProps, ITaskListState> {
     const { tasks } = this.props;
     const rows = _generateDocuments(tasks);
     return (
-      <div className="task-list-conttainer">
+      <div className="list-container">
         <MarqueeSelection selection={this._selection}>
           <DetailsList
+            styles={{
+              root: {
+                display: 'flex',
+                flexGrow: 1,
+                flexShrink: 1,
+                flexBasis: '90%',
+                height: 'auto',
+                minHeight: '40vh',
+              },
+            }}
             items={rows}
-            compact={true}
+            compact={isCompactMode}
             columns={columns}
             enableShimmer={true}
             selectionMode={
@@ -207,8 +217,8 @@ function _generateDocuments(tasks: ITaskModel[]) {
   const items: IDocument[] = [];
   const rows = tasks ? tasks : [];
   rows.map((task: ITaskModel) => {
-    const taskId = task ? task.taskID : null;
-    let fileName = task.name ? task.name : '–';
+    const taskId = task ? task.Id : null;
+    let fileName = task.Subject ? task.Subject : '–';
     let userName = '[PLACEHOLDER]';
     items.push({
       name: fileName,

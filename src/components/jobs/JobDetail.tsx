@@ -12,6 +12,7 @@ import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
 import { List } from 'office-ui-fabric-react/lib/components/List';
 import { ITheme } from 'office-ui-fabric-react/lib/Styling';
 import { mergeStyleSets } from '@uifabric/styling';
+import { ITaskModel } from '../../models/ITaskModel';
 
 export interface IProps {
   disabled?: boolean;
@@ -116,7 +117,7 @@ export default class JobDetail extends Component<IProps, IState> {
 
   _setCurrentTask = () => {
     const { job } = this.props;
-    const task = job ? job.Tasks.filter(task => task === task.taskID) : null;
+    const task = job ? job.Tasks.filter(task => task.Id === task.Id) : null;
     console.log('_setCurrentTask', task);
     this.setState({ currentTask: task });
     return this.state;
@@ -303,7 +304,7 @@ export default class JobDetail extends Component<IProps, IState> {
             theme={this.theme}
             styles={{
               root: {
-                backgroundColor: this.theme.palette.themeLight,
+                backgroundColor: '#f4f4f4',
               },
             }}
             //overflowItems={this.getOverlflowItems()}

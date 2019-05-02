@@ -13,6 +13,7 @@ const theme = getTheme();
 const classNames = mergeStyleSets({
   wrapper: {
     minHeight: '40vh',
+    height: '100%',
     position: 'relative',
     maxHeight: 'inherit',
   },
@@ -29,6 +30,15 @@ const classNames = mergeStyleSets({
   },
   textContent: {
     padding: '15px 10px',
+  },
+  taskInfoList: {
+    listStyleType: 'none',
+    margin: 0,
+    paddingVertical: 2,
+    paddingHorizontal: 0,
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: '100%',
   },
 });
 
@@ -72,10 +82,10 @@ export class TaskPane extends Component<IProps, {}> {
       content = <div className="panel-list-key">–</div>;
     }
     return (
-      <div className="task-detail">
+      <div className={'task-detail'}>
         <div className={'task-detail-header'}>{header}</div>
         <div className={'task-detail-options'}>
-          <ul className="task-info-list">{content}</ul>
+          <ul className={'taskInfoList'}>{content}</ul>
         </div>
       </div>
     );
@@ -102,7 +112,7 @@ export class TaskPane extends Component<IProps, {}> {
   }
 
   private _getFileInfo(task: ITaskModel) {
-    const name = task ? task.name : '–';
+    const name = task ? task.Subject : '–';
     const details = [
       {
         key: 'Name',
@@ -151,7 +161,7 @@ export class TaskPane extends Component<IProps, {}> {
 
   private _getPanelSections(task: ITaskModel) {
     let items = [];
-    const name = task ? task.name : '_';
+    const name = task ? task.Subject : '_';
     items.push(
       {
         color: theme.palette.neutralLight,
@@ -184,7 +194,7 @@ export class TaskPane extends Component<IProps, {}> {
     const { task } = this.props;
     const items = this._getPanelSections(task);
     const contentAreas = items.map(this._createContentArea);
-    const attId = task ? task.taskID : '–';
+    const attId = task ? task.Id : '–';
     return (
       <div className={'task-panel-container'}>
         <div className={classNames.wrapper}>

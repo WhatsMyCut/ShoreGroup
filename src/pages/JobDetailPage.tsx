@@ -40,7 +40,7 @@ class JobDetailPage extends AppComponent<Props, IState> {
   protected theme: any;
   constructor(props: Props, state: IState) {
     super(props);
-    loadThemeByName('blue');
+    loadThemeByName('teal');
     this.fetch = AwesomeDebouncePromise((id: string) => {
       props.fetchRequest(id);
     }, 500);

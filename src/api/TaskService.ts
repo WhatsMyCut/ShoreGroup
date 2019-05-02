@@ -31,10 +31,9 @@ export default class TaskService extends ServiceBase {
     return !term
       ? result.value
       : result.value.filter(
-          task =>
-            task.name.indexOf(term) > -1 ||
-            task.description.indexOf(term) > -1 ||
-            task.taskID.toString().indexOf(term) > -1,
+          (task: ITaskModel) =>
+            task.Subject.indexOf(term) > -1 ||
+            task.Id.toString().indexOf(term) > -1,
         );
   }
 
@@ -82,10 +81,10 @@ export default class TaskService extends ServiceBase {
       data: model,
     });
 
-    if (!result || !result.value || !result.value.taskID) {
+    if (!result || !result.value || !result.value.Id) {
       return 0;
     }
 
-    return result.value.taskID;
+    return result.value[0].Id;
   }
 }
