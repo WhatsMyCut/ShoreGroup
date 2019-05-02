@@ -10,6 +10,7 @@ export interface IUserInfoModel {
   name?: string;
   email?: string;
   account?: string;
+  accounts?: IUserGroupModel[];
   programs?: string[];
-  userGroup?: IUserGroupModel[];
+  roles?: string[];
 }
