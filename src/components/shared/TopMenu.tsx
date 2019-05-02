@@ -26,8 +26,8 @@ class TopMenu extends Component<{}, { logoutAction: boolean }> {
   @bind
   async onClickUserInfo(e: React.MouseEvent<HTMLAnchorElement>) {
     e.preventDefault();
-    var res = AuthorizationService.userinfo();
-    console.log(await res);
+    var userinfo = await AuthorizationService.userinfo();
+    console.log(userinfo);
   }
 
   private elDropdown: HTMLAnchorElement;
