@@ -150,7 +150,7 @@ function loadThemeByName(name: ThemeName, substituteFontFamily?: boolean): void;
 function loadThemeByName(
   name: ThemeName,
   fontFamilySubstitution: boolean | string | undefined,
-): void {
+): ITheme {
   if (!themes[name]) {
     throw new TypeError(
       '[loadThemeByName] Illegal first argument "name" - unkown theme',
@@ -175,7 +175,7 @@ function loadThemeByName(
     });
   }
 
-  loadTheme(theme);
+  return loadTheme(theme);
 }
 
 // --- exports ------------------------------------------------------

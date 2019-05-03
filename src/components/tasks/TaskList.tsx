@@ -47,14 +47,94 @@ export class TaskList extends Component<IProps, ITaskListState> {
     const { tasks } = props;
     const _columns: IColumn[] = [
       {
-        key: 'column2',
-        name: 'Name',
-        fieldName: 'name',
-        minWidth: 210,
-        maxWidth: 350,
+        key: 'column1',
+        name: 'Subject',
+        fieldName: 'Subject',
+        minWidth: 1,
+        maxWidth: 100,
         isRowHeader: true,
         isResizable: true,
-        isSorted: true,
+        isSorted: false,
+        isSortedDescending: false,
+        sortAscendingAriaLabel: 'Sorted A to Z',
+        sortDescendingAriaLabel: 'Sorted Z to A',
+        onColumnClick: this._onColumnClick,
+        data: 'string',
+        isPadded: true,
+      },
+      {
+        key: 'column2',
+        name: 'Job Task Type',
+        fieldName: 'Type',
+        minWidth: 1,
+        maxWidth: 100,
+        isRowHeader: true,
+        isResizable: true,
+        isSorted: false,
+        isSortedDescending: false,
+        sortAscendingAriaLabel: 'Sorted A to Z',
+        sortDescendingAriaLabel: 'Sorted Z to A',
+        onColumnClick: this._onColumnClick,
+        data: 'string',
+        isPadded: true,
+      },
+      {
+        key: 'column3',
+        name: 'Owner',
+        fieldName: 'Owner',
+        minWidth: 1,
+        maxWidth: 100,
+        isRowHeader: true,
+        isResizable: true,
+        isSorted: false,
+        isSortedDescending: false,
+        sortAscendingAriaLabel: 'Sorted A to Z',
+        sortDescendingAriaLabel: 'Sorted Z to A',
+        onColumnClick: this._onColumnClick,
+        data: 'string',
+        isPadded: true,
+      },
+      {
+        key: 'column4',
+        name: 'Priority',
+        fieldName: 'Priority',
+        minWidth: 1,
+        maxWidth: 100,
+        isRowHeader: true,
+        isResizable: true,
+        isSorted: false,
+        isSortedDescending: false,
+        sortAscendingAriaLabel: 'Sorted A to Z',
+        sortDescendingAriaLabel: 'Sorted Z to A',
+        onColumnClick: this._onColumnClick,
+        data: 'string',
+        isPadded: true,
+      },
+      {
+        key: 'column5',
+        name: 'Due Date',
+        fieldName: 'DueDate',
+        minWidth: 1,
+        maxWidth: 100,
+        isRowHeader: true,
+        isResizable: true,
+        isSorted: false,
+        isSortedDescending: false,
+        sortAscendingAriaLabel: 'Sorted A to Z',
+        sortDescendingAriaLabel: 'Sorted Z to A',
+        onColumnClick: this._onColumnClick,
+        data: 'string',
+        isPadded: true,
+      },
+      {
+        key: 'column6',
+        name: 'Actual End',
+        fieldName: 'DueDate',
+        minWidth: 1,
+        maxWidth: 100,
+        isRowHeader: true,
+        isResizable: true,
+        isSorted: false,
         isSortedDescending: false,
         sortAscendingAriaLabel: 'Sorted A to Z',
         sortDescendingAriaLabel: 'Sorted Z to A',
@@ -99,11 +179,21 @@ export class TaskList extends Component<IProps, ITaskListState> {
     const { tasks } = this.props;
     const rows = _generateDocuments(tasks);
     return (
-      <div className="task-list-conttainer">
+      <div className="list-container">
         <MarqueeSelection selection={this._selection}>
           <DetailsList
+            styles={{
+              root: {
+                display: 'flex',
+                flexGrow: 1,
+                flexShrink: 1,
+                flexBasis: '90%',
+                height: 'auto',
+                minHeight: '40vh',
+              },
+            }}
             items={rows}
-            compact={true}
+            compact={isCompactMode}
             columns={columns}
             enableShimmer={true}
             selectionMode={
@@ -207,8 +297,8 @@ function _generateDocuments(tasks: ITaskModel[]) {
   const items: IDocument[] = [];
   const rows = tasks ? tasks : [];
   rows.map((task: ITaskModel) => {
-    const taskId = task ? task.taskID : null;
-    let fileName = task.name ? task.name : '–';
+    const taskId = task ? task.Id : null;
+    let fileName = task.Subject ? task.Subject : '–';
     let userName = '[PLACEHOLDER]';
     items.push({
       name: fileName,

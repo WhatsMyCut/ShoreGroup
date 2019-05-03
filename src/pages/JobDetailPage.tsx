@@ -37,15 +37,15 @@ interface IState {
 class JobDetailPage extends AppComponent<Props, IState> {
   private fetch: (id: string) => void;
   private currentTab: string;
+  state: any;
   protected theme: any;
   constructor(props: Props, state: IState) {
     super(props);
-    loadThemeByName('blue');
     this.fetch = AwesomeDebouncePromise((id: string) => {
       props.fetchRequest(id);
     }, 500);
     this.state = state;
-    this.theme = getTheme();
+    this.theme = loadThemeByName('teal');
     const hash = window.location.hash;
     this.currentTab = 'general';
     switch (hash) {
@@ -75,7 +75,7 @@ class JobDetailPage extends AppComponent<Props, IState> {
       <div className="job-detail">
         <AppBreadcrumb show={true} job={job} />
         <Loader show={indicators.operationLoading} />
-        <JobHeader job={job} theme={this.theme} />
+        <JobHeader job={job} />
         <JobDetail job={job} currentTab={this.currentTab} theme={this.theme} />
       </div>
     );

@@ -103,7 +103,8 @@
   display: none;
 }
 
-.attachments {
+.attachments,
+.tasks {
   flex-direction: column !important;
 }
 
@@ -127,16 +128,6 @@
   display: none;
 }
 
-.job-detail-container {
-  display: flex;
-  flex: 1 1 100%;
-  flex-direction: column;
-}
-.job-detail-tabs {
-  margin-bottom: 15px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
 .job-detail-content {
   display: flex;
   flex: 1 1 100%;
@@ -232,3 +223,16 @@
   background-color: #f4f4f4;
 }
 /* /Divider */
+
+.panel-list-row {
+  margin: 2px 0;
+}
+.panel-list-key {
+  flex: 0 0 35%;
+  font-weight: bold;
+  padding-right: 5px;
+}
+.panel-list-value {
+  flex: 1 0 auto;
+  padding: 0 5px;
+}

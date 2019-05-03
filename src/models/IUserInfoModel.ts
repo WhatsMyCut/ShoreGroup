@@ -2,12 +2,15 @@ export interface IUserGroupModel {
   guid?: string;
   name?: string;
   groupType?: string;
+  groups?: IUserGroupModel[];
 }
 
 export interface IUserInfoModel {
   guid?: string;
   name?: string;
+  email?: string;
   account?: string;
-  program?: string;
-  userGroup?: IUserGroupModel[];
+  accounts?: IUserGroupModel[];
+  programs?: string[];
+  roles?: string[];
 }

@@ -74,10 +74,10 @@ export class AttachmentPane extends Component<IProps, {}> {
       content = <div className="panel-list-key">–</div>;
     }
     return (
-      <div className="attachment-detail">
+      <div className={'attachment-detail'}>
         <div className={'attachment-detail-header'}>{header}</div>
         <div className={'attachment-detail-options'}>
-          <ul className="attachment-info-list">{content}</ul>
+          <ul className={'attachment-info-list'}>{content}</ul>
         </div>
       </div>
     );
@@ -154,7 +154,7 @@ export class AttachmentPane extends Component<IProps, {}> {
       },
     );
     return (
-      <div className="attachment-info">
+      <div className={'attachment-info'}>
         <ul className={'attachment-info-list'}>{content}</ul>
       </div>
     );

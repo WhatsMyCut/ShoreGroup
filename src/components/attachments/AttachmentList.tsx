@@ -165,7 +165,7 @@ export class AttachmentList extends Component<IProps, IAttachmentListState> {
     const { attachments } = this.props;
     const rows = _generateDocuments(attachments);
     return (
-      <div className="attachment-list-conttainer">
+      <div className={'list-container'}>
         <MarqueeSelection selection={this._selection}>
           <DetailsList
             items={rows}

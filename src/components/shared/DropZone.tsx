@@ -1,9 +1,11 @@
 import React, { useCallback, ReactNode } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { ITheme, mergeStyleSets } from '@uifabric/styling';
 
 interface IProps {
   onClick?: object;
   children?: ReactNode;
+  theme?: ITheme;
 }
 
 export const Dropzone = IProps => {
@@ -21,10 +23,30 @@ export const Dropzone = IProps => {
     acceptedFiles.forEach(file => reader.readAsBinaryString(file));
   }, []);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const classNames = mergeStyleSets({
+    dropzone: {
+      height: 100,
+      textAlign: 'center',
+      verticalAlign: 'middle',
+      margin: '0 5px 15px',
+      backgroundColor: IProps.theme.palette.themeLighter,
+      padding: 15,
+      color: IProps.theme.palette.themeDark,
+      selectors: {
+        '& svg': {
+          height: '50px !important',
+          width: '150px !important',
+        },
+        '& svg path': {
+          fill: IProps.theme.palette.themeDarkerAlt,
+        },
+      },
+    },
+  });
 
   return (
     <div
-      className={'dropzone'}
+      className={classNames.dropzone}
       {...getRootProps({
         onClick: event => console.log(event),
       })}

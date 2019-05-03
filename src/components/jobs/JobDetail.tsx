@@ -12,6 +12,7 @@ import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
 import { List } from 'office-ui-fabric-react/lib/components/List';
 import { ITheme } from 'office-ui-fabric-react/lib/Styling';
 import { mergeStyleSets } from '@uifabric/styling';
+import { ITaskModel } from '../../models/ITaskModel';
 
 export interface IProps {
   disabled?: boolean;
@@ -67,19 +68,36 @@ export default class JobDetail extends Component<IProps, IState> {
         backgroundColor: this.theme.palette.themeLighter,
         color: this.theme.palette.black,
         padding: 10,
-        fontWeight: 'bolder',
-        textShadow:
-          '2px 2px 2px ' +
-          this.theme.palette.themeDark +
-          ' -1px -1px 2px ' +
-          this.theme.palette.themeDarkAlt,
+        fontSize: 12,
       },
       jobDetailValue: {
         flexGrow: 1,
         flexShrink: 0,
         flexBasis: '60%',
         padding: 10,
-        fontWeight: 'normal',
+      },
+      jobDetailContainer: {
+        display: 'flex',
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: '100%',
+        flexDirection: 'column',
+      },
+      jobDetailTabs: [
+        {
+          marginBottom: 15,
+          border: '1px solid' + this.theme.palette.themePrimary,
+          borderRadius: 5,
+          backgroundColor: this.theme.palette.themeLighter,
+        },
+        'ms-OverflowSet',
+        {
+          backgroundColor: 'red',
+        },
+      ],
+
+      active: {
+        borderBottom: '3px solid' + this.theme.palette.themePrimary,
       },
     });
   }
@@ -116,7 +134,7 @@ export default class JobDetail extends Component<IProps, IState> {
 
   _setCurrentTask = () => {
     const { job } = this.props;
-    const task = job ? job.Tasks.filter(task => task === task.taskID) : null;
+    const task = job ? job.Tasks.filter(task => task.Id === task.Id) : null;
     console.log('_setCurrentTask', task);
     this.setState({ currentTask: task });
     return this.state;
@@ -129,9 +147,9 @@ export default class JobDetail extends Component<IProps, IState> {
       {
         key: 'main',
         name: 'General',
-        className: hash === 'general' || '' ? 'active' : '',
+        className: hash === 'general' || '' ? this.classNames.active : '',
         iconProps: {
-          iconName: 'Add',
+          iconName: 'BulletedList',
         },
         ariaLabel: 'General',
         onClick: () => this.setHash('general'),
@@ -139,7 +157,7 @@ export default class JobDetail extends Component<IProps, IState> {
       {
         key: 'attachments',
         name: 'Attachments',
-        className: hash === 'attachments' ? 'active' : '',
+        className: hash === 'attachments' ? this.classNames.active : '',
         iconProps: {
           iconName: 'FilePDB',
         },
@@ -149,9 +167,9 @@ export default class JobDetail extends Component<IProps, IState> {
       {
         key: 'share',
         name: 'Tasks',
-        className: hash === 'tasks' ? 'active' : '',
+        className: hash === 'tasks' ? this.classNames.active : '',
         iconProps: {
-          iconName: 'ClipboardList',
+          iconName: 'ActivateOrders',
         },
         onClick: () => this.setHash('tasks'),
       },
@@ -262,14 +280,16 @@ export default class JobDetail extends Component<IProps, IState> {
     const jobName = job ? job.Name : '–';
     const dueDate = Moment(job.DueDate).format('l');
     const account = job.Account ? job.Account.Name : '–';
+    const owner = job.Owner ? job.Owner.FullName : '–';
     const jobType = job.Type ? job.Type.Name : '–';
     const jobDesc = job ? job.Description : '–';
     const items = [
       { name: 'Job Name', value: jobName },
-      { name: 'Customer', value: account },
-      { name: 'Job Type', value: jobType },
       { name: 'Job Description', value: jobDesc },
+      { name: 'Job Type', value: jobType },
       { name: 'Job Due Date', value: dueDate },
+      { name: 'Customer Owner', value: account },
+      { name: 'Sepire Owner', value: owner },
     ];
     return (
       <List
@@ -296,14 +316,14 @@ export default class JobDetail extends Component<IProps, IState> {
     let tasksActive = currentTab === 'tasks' ? 'active' : '';
 
     return (
-      <div className="job-detail-container">
-        <div className="job-detail-tabs">
+      <div className={this.classNames.jobDetailContainer}>
+        <div className={this.classNames.jobDetailTabs}>
           <CommandBar
             items={this.getItems()}
             theme={this.theme}
             styles={{
               root: {
-                backgroundColor: this.theme.palette.themeLight,
+                backgroundColor: '#f4f4f4',
               },
             }}
             //overflowItems={this.getOverlflowItems()}
