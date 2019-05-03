@@ -45,7 +45,7 @@ class JobDetailPage extends AppComponent<Props, IState> {
       props.fetchRequest(id);
     }, 500);
     this.state = state;
-    this.theme = loadThemeByName('teal');
+    this.theme = getTheme();
     const hash = window.location.hash;
     this.currentTab = 'general';
     switch (hash) {
