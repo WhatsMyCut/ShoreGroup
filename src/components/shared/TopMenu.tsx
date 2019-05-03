@@ -6,11 +6,15 @@ import AccountService from '../../api/AccountService';
 import AuthorizationService from '../../api/AuthorizationService';
 import { Dropdown, Collapse } from 'bootstrap3-native';
 import bind from 'bind-decorator';
+import { IUserInfoModel } from '../../models/IUserInfoModel';
 
-class TopMenu extends Component<{}, { logoutAction: boolean }> {
+class TopMenu extends Component<
+  {},
+  { logoutAction: boolean; userInfo: IUserInfoModel }
+> {
   constructor(props) {
     super(props);
-    this.state = { logoutAction: false };
+    this.state = { logoutAction: false, userInfo: null };
   }
 
   @bind
@@ -26,8 +30,10 @@ class TopMenu extends Component<{}, { logoutAction: boolean }> {
   @bind
   async onClickUserInfo(e: React.MouseEvent<HTMLAnchorElement>) {
     e.preventDefault();
-    var userinfo = await AuthorizationService.userinfo();
-    console.log(userinfo);
+    AuthorizationService.userinfo().then(value => {
+      this.setState({ userInfo: value });
+      console.log(value);
+    });
   }
 
   private elDropdown: HTMLAnchorElement;
@@ -41,6 +47,17 @@ class TopMenu extends Component<{}, { logoutAction: boolean }> {
   componentDidUpdate() {}
 
   render() {
+    var accountList = null;
+    if (this.state.userInfo && this.state.userInfo.accounts) {
+      accountList = this.state.userInfo.accounts.map(function(account) {
+        return (
+          <li>
+            <a href="{account.guid}">{account.name}</a>
+          </li>
+        );
+      });
+    }
+
     if (this.state.logoutAction) {
       return <Redirect to="/login" />;
     }
@@ -95,6 +112,7 @@ class TopMenu extends Component<{}, { logoutAction: boolean }> {
                       User Info
                     </a>
                   </li>
+                  {accountList}
                 </ul>
               </li>
             </ul>
