@@ -1,13 +1,10 @@
 import React, { Component, MouseEvent } from 'react';
-import { withRouter } from 'react-router';
-import { Redirect } from 'react-router-dom';
-import { Nav, INavLink } from 'office-ui-fabric-react/lib/Nav';
 import { IconButton } from 'office-ui-fabric-react/lib/Button';
 import AccountService from '../../api/AccountService';
 import bind from 'bind-decorator';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { mergeStyles } from '@uifabric/styling';
 import { Z_FIXED } from 'zlib';
+import { NavLink } from 'react-router-dom';
+import { getTheme, mergeStyleSets, ITheme } from '@uifabric/styling';
 
 const noOp = () => undefined;
 
@@ -16,13 +13,55 @@ interface IState {
   isExpanded: boolean;
 }
 
-class NavMenu extends Component<any, IState> {
-  constructor(props) {
+const State: IState = {
+  isAuthorized: true,
+  isExpanded: false,
+};
+
+interface IProps {
+  theme: any;
+}
+class NavMenu extends Component<IProps, IState> {
+  private classNames: any;
+  state: IState;
+  theme: ITheme;
+  constructor(props: IProps) {
     super(props);
-    this.state = {
-      isAuthorized: true,
-      isExpanded: false,
-    };
+    this.theme = props.theme;
+    this.classNames = mergeStyleSets({
+      sidebar: {
+        display: 'flex',
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: 60,
+        flexDirection: 'column',
+        alignItems: 'center',
+        borderRight: '1px solid #ccc',
+        backgroundColor: this.theme.palette.themePrimary,
+        bottom: -10,
+        height: window.innerHeight,
+        maxWidth: 50,
+        minWidth: 50,
+      },
+      jobDetailList: {
+        width: '100%',
+        fontSize: 'medium',
+      },
+      sidebarLink: {
+        display: 'flex',
+        width: '100%',
+        color: this.theme.palette.white,
+        paddingVertical: 30,
+        paddingHorizontal: 0,
+        fontSize: 22,
+      },
+      logoStyles: {
+        color: this.theme.palette.white,
+        height: 30,
+        width: 30,
+      },
+    });
+    this.state = State;
   }
 
   @bind
@@ -52,49 +91,67 @@ class NavMenu extends Component<any, IState> {
 
   render() {
     if (!this.state.isAuthorized) {
-      return <Redirect to="/login" />;
+      return <NavLink to="/login" />;
     }
-    const ILogoStyles = { color: '#000', height: 30, width: 30 };
     const expandIcon = this.state.isExpanded
       ? 'DoubleChevronLeft'
       : 'DoubleChevronRight';
-    let ISidebarClassName = 'sidebar';
-    ISidebarClassName += this.state.isExpanded ? 'expanded' : '';
+    let sidebarClassName = this.classNames.sidebar;
+    sidebarClassName += this.state.isExpanded ? ' expanded' : '';
+    let sidebarLinkClassName = this.classNames.sidebarLink;
     return (
-      <div className={ISidebarClassName}>
+      <div className={sidebarClassName}>
         <IconButton
           type={'command'}
+          className={sidebarLinkClassName}
           href="/"
-          iconProps={{ iconName: 'Logo', style: ILogoStyles }}
+          iconProps={{
+            iconName: 'Logo',
+            className: this.classNames.logoStyles,
+          }}
           style={{ height: 60 }}
           ariaLabel="Sephire. Use left and right arrow keys to navigate"
         />
         <IconButton
           href="/jobs/add"
-          iconProps={{ iconName: 'AddTo' }}
+          iconProps={{
+            iconName: 'AddTo',
+            className: this.classNames.sidebarLink,
+          }}
           ariaLabel="Add New Job"
         />
         <IconButton
           href="/jobs"
-          iconProps={{ iconName: 'BusinessCenterLogo' }}
+          iconProps={{
+            iconName: 'BusinessCenterLogo',
+            className: this.classNames.sidebarLink,
+          }}
           ariaLabel="Job List"
         />
-        <IconButton
+        {/* <IconButton
           href="/orders"
-          iconProps={{ iconName: 'Product' }}
+          iconProps={{ iconName: 'Product', className: this.classNames.sidebarLink }}
           ariaLabel="Job List"
         />
         <IconButton
           href="/tasks"
-          iconProps={{ iconName: 'ClipboardList' }}
+          iconProps={{ iconName: 'ClipboardList', className: this.classNames.sidebarLink }}
           ariaLabel="Task List"
+        /> */}
+        <IconButton
+          iconProps={{
+            iconName: 'PlayerSettings',
+            className: this.classNames.sidebarLink,
+            style: { marginTop: 50 },
+          }}
+          ariaLabel="Admin"
         />
         <IconButton
-          iconProps={{ iconName: 'PlayerSettings' }}
-          ariaLabel="My Actions"
-        />
-        <IconButton
-          iconProps={{ iconName: expandIcon, style: { fontSize: 14 } }}
+          iconProps={{
+            iconName: expandIcon,
+            className: this.classNames.sidebarLink,
+            style: { fontSize: 14, alignSelf: 'flex-end' },
+          }}
           ariaLabel={this.state.isExpanded ? 'Collapse' : 'Expand'}
           onClick={() => this.toggleExpanded}
         />
@@ -103,4 +160,4 @@ class NavMenu extends Component<any, IState> {
   }
 }
 
-export default withRouter(NavMenu as any);
+export default NavMenu;

@@ -19,10 +19,10 @@ interface IProps {
 }
 
 type Props = IProps;
+const theme = loadThemeByName('teal');
 
 export default class AuthorizedLayout extends Component<Props, {}> {
   props: Props;
-  theme: void;
 
   constructor(props) {
     super(props);
@@ -34,14 +34,13 @@ export default class AuthorizedLayout extends Component<Props, {}> {
         FileDownload: <FontAwesomeIcon icon={faCloudDownloadAlt} />,
       },
     });
-    this.theme = loadThemeByName('orange');
-    console.log('Theme: ', this.theme);
+    console.log('Theme: ', theme);
   }
 
   public render() {
     return (
       <div id="authorizedLayout" className="layout">
-        <NavMenu />
+        <NavMenu theme={theme} />
         <div className="mainContent">
           <TopMenu />
           <div className="panel-content">{this.props.children}</div>

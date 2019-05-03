@@ -4,49 +4,10 @@
   background: white !important;
 }
 
-.sidebar {
-  display: flex;
-  flex: 0 1 60px;
-  flex-direction: column;
-  align-items: center;
-  border-right: 1px solid #ccc;
-  background-image: linear-gradient(#9a9a9a, #000);
-  bottom: -10px;
-}
-.sidebar > a,
-.sidebar > button {
-  margin: 10px 0;
-}
-.sidebar:last-child {
-  align-self: flex-end;
-}
 .mainContent {
   flex: 1 0 90%;
   border-right: 1px solid #ccc;
 }
 .panel-content {
   padding: 0 20px 30px;
-}
-
-.sidebar .ms-Button.ms-Button--commandBar {
-  background-color: transparent;
-  width: 50px;
-}
-
-.sidebar .logo {
-  padding-bottom: 5px;
-}
-
-.sidebar .ms-Button-icon {
-  color: white;
-  font-size: 2.5rem;
-  width: 100%;
-  margin: 35px 0;
-}
-
-.sidebar *:nth-child(5) {
-  margin-bottom: auto;
-}
-.sidebar:last-child .ms-Button-icon {
-  font-size: 2rem;
 }
