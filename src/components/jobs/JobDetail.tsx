@@ -83,21 +83,41 @@ export default class JobDetail extends Component<IProps, IState> {
         flexBasis: '100%',
         flexDirection: 'column',
       },
-      jobDetailTabs: [
-        {
-          marginBottom: 15,
-          border: '1px solid' + this.theme.palette.themePrimary,
-          borderRadius: 5,
-          backgroundColor: this.theme.palette.themeLighter,
+      jobDetailTabs: {
+        marginBottom: 15,
+        border: '1px solid' + this.theme.palette.themePrimary,
+        borderRadius: 5,
+        backgroundColor: this.theme.palette.themeLighter,
+        selectors: {
+          '& .ms-CommandBar': {
+            padding: 0,
+            backgroundColor: 'transparent',
+          },
+          '& .ms-CommandBar .ms-Button': {
+            backgroundColor: 'transparent',
+          },
         },
-        'ms-OverflowSet',
-        {
-          backgroundColor: 'red',
-        },
-      ],
-
+      },
       active: {
         borderBottom: '3px solid' + this.theme.palette.themePrimary,
+      },
+      jobDetailMain: {
+        flexGrow: 1,
+        flexShrink: 1,
+        flexBasis: '100%',
+        flexDirection: 'row',
+        border: '1px solid' + this.theme.palette.themePrimary,
+        borderRadius: 5,
+        padding: '5px 0',
+      },
+      jobDetailComments: {
+        flexGrow: 1,
+        flexShrink: 0,
+        flexBasis: '30%',
+        margin: '0 0 0 25px',
+        border: '1px solid' + this.theme.palette.themePrimary,
+        borderRadius: 5,
+        padding: '5px 0',
       },
     });
   }
@@ -335,7 +355,7 @@ export default class JobDetail extends Component<IProps, IState> {
           />
         </div>
         <div className="job-detail-content">
-          <div className="job-detail-main">
+          <div className={this.classNames.jobDetailMain}>
             <div className="job-detail-panel">
               <div className={'general ' + generalActive}>
                 {this._renderList()}
@@ -348,7 +368,7 @@ export default class JobDetail extends Component<IProps, IState> {
               </div>
             </div>
           </div>
-          <div className={'job-detail-comments'}>
+          <div className={this.classNames.jobDetailComments}>
             <div className="job-detail-comments-list">
               {this._renderSidePanel()}
             </div>
