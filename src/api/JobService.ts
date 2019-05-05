@@ -24,7 +24,7 @@ export default class JobService extends ServiceBase {
   public static async fetch(id: string = null): Promise<IJobModel[]> {
     id = id == null ? '' : `/${id}`;
     var result = await this.requestJson<IJobModel[]>({
-      url: `${window['endPoint']}/api/job` + id,
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/job` + id,
       method: 'GET',
     });
     return result.value;
@@ -38,7 +38,7 @@ export default class JobService extends ServiceBase {
    */
   public static async update(model: IJobModel): Promise<IJobModel> {
     var result = await this.requestJson<IJobModel>({
-      url: `${window['endPoint']}/api/job`,
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/job`,
       method: 'PUT',
       data: model,
     });
@@ -53,7 +53,7 @@ export default class JobService extends ServiceBase {
    */
   public static async delete(id: string): Promise<boolean> {
     var result = await this.requestJson<IJobModel>({
-      url: `${window['endPoint']}/api/job/${id}`,
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/job/${id}`,
       method: 'DELETE',
     });
 
@@ -69,7 +69,7 @@ export default class JobService extends ServiceBase {
    */
   public static async add(model: IJobModel): Promise<string> {
     var result = await this.requestJson<IJobModel>({
-      url: `${window['endPoint']}/api/job`,
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/job`,
       method: 'POST',
       data: model,
     });

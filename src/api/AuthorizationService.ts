@@ -15,7 +15,7 @@ export default class AuthorizationService extends ServiceBase {
    */
   public static async userinfo(): Promise<IUserInfoModel> {
     var result = await this.requestJson<IUserInfoModel>({
-      url: `${window['endPoint']}/api/userinfo`,
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/userinfo`,
       method: 'GET',
     });
     return result.value;

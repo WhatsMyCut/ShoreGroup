@@ -24,7 +24,7 @@ export default class TaskService extends ServiceBase {
   public static async search(term: string = null): Promise<ITaskModel[]> {
     if (term == null) term = '';
     var result = await this.requestJson<ITaskModel[]>({
-      url: `${window['endPoint']}/api/Task?query=${term}`,
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/Task?query=${term}`,
       method: 'GET',
     });
 
@@ -45,7 +45,7 @@ export default class TaskService extends ServiceBase {
    */
   public static async update(model: ITaskModel): Promise<ITaskModel> {
     var result = await this.requestJson<ITaskModel>({
-      url: `${window['endPoint']}/api/Task`,
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/Task`,
       method: 'PUT',
       data: model,
     });
@@ -60,7 +60,7 @@ export default class TaskService extends ServiceBase {
    */
   public static async delete(id: number): Promise<boolean> {
     var result = await this.requestJson<ITaskModel>({
-      url: `${window['endPoint']}/api/Task/${id}`,
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/Task/${id}`,
       method: 'DELETE',
     });
 
@@ -76,7 +76,7 @@ export default class TaskService extends ServiceBase {
    */
   public static async add(model: ITaskModel): Promise<number> {
     var result = await this.requestJson<ITaskModel>({
-      url: `${window['endPoint']}/api/Task`,
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/Task`,
       method: 'POST',
       data: model,
     });
