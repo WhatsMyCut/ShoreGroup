@@ -1,8 +1,7 @@
-﻿import { ILoginModel } from '../models/ILoginModel';
-import { IServiceUser } from '../models/IServiceUser';
+﻿import { IUserInfoModel } from '../models/IUserInfoModel';
 import { clone } from '../Utils';
 import { Action, Reducer } from 'redux';
-import AccountService from '../api/AccountService';
+import AuthorizationService from '../api/AuthorizationService';
 import { AppThunkAction } from './index';
 
 export interface IState {
@@ -10,6 +9,7 @@ export interface IState {
     operationLoading: boolean;
     loginSuccess: boolean;
   };
+  userInfo?: IUserInfoModel;
 }
 
 export enum Actions {
@@ -20,10 +20,10 @@ export enum Actions {
    * It must be called in method 'componentDidMount'
    * of a component.
    */
-  Init = 'LOGIN_INIT',
-  Request = 'LOGIN_REQUEST',
-  Success = 'LOGIN_SUCCESS',
-  Failure = 'LOGIN_FAILURE',
+  Init = 'AUTH_INIT',
+  Request = 'AUTH_REQUEST',
+  Success = 'AUTH_SUCCESS',
+  Failure = 'AUTH_FAILURE',
 }
 
 interface IInit {
@@ -36,7 +36,7 @@ interface IRequest {
 
 interface ISuccess {
   type: Actions.Success;
-  payload: IServiceUser;
+  payload: IUserInfoModel;
 }
 
 interface IFailure {
@@ -50,19 +50,20 @@ export const actionCreators = {
     dispatch({ type: Actions.Init });
     return;
   },
-  loginRequest: (model: ILoginModel): AppThunkAction<KnownAction> => async (
+
+  loginRequest: (): AppThunkAction<KnownAction> => async (
     dispatch,
     getState,
   ) => {
     dispatch({ type: Actions.Request });
 
-    var result = await AccountService.login(model);
-    if (result.hasErrors) {
+    var result = await AuthorizationService.userinfo();
+    if (result['errors'] && result['errors'].length) {
       dispatch({ type: Actions.Failure });
       return;
     }
-
-    dispatch({ type: Actions.Success, payload: result.value });
+    const user = result['Result'] as IUserInfoModel;
+    dispatch({ type: Actions.Success, payload: user });
     return;
   },
 };
@@ -97,7 +98,7 @@ export const reducer: Reducer<IState> = (
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
       indicators.loginSuccess = true;
-      return { ...currentState, indicators };
+      return { ...currentState, indicators, userInfo: action.payload };
     case Actions.Failure:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
