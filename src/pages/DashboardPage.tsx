@@ -4,32 +4,44 @@
  * @author Mike Taylor <mike.taylor@shoregrp.com>
  */
 
-import React, { MouseEvent, ChangeEvent } from 'react';
+import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import bind from 'bind-decorator';
-import AwesomeDebouncePromise from 'awesome-debounce-promise';
-import Moment from 'moment';
 
 import AppComponent from '../components/shared/AppComponent';
-import { ApplicationState, reducers } from '../store/index';
-import * as JobStore from '../store/JobStore';
-type Props = RouteComponentProps<{}>;
+import { ApplicationState } from '../store/index';
+import * as LoginStore from '../store/LoginStore';
+import { IUserInfoModel } from '../models/IUserInfoModel';
 
-interface IState {}
+//type Props = RouteComponentProps<{}>;
 
-class DashboardPage extends AppComponent<Props, IState> {
-  constructor(props: Props) {
+interface IState {
+  userInfo?: IUserInfoModel;
+}
+interface IProps {
+  userInfo?: IUserInfoModel;
+}
+class DashboardPage extends Component<IProps, IState> {
+  constructor(props: IProps, state: IState) {
     super(props);
+    this.state = state;
   }
   render() {
-    return <div> Dashboard Page </div>;
+    console.log('DashboardPage', this.state, this.props);
+    const { userInfo } = this.props;
+    const user = userInfo ? userInfo.guid : '–';
+    return (
+      <div>
+        <h1>Dashboard Page</h1>
+        {user}
+      </div>
+    );
   }
 }
 
 var component = connect(
-  (state: ApplicationState) => state.jobs,
-  JobStore.actionCreators,
+  (state: ApplicationState) => state.login,
+  LoginStore.actionCreators,
 )(DashboardPage as any);
 
 export default (withRouter(component as any) as any) as typeof DashboardPage;
