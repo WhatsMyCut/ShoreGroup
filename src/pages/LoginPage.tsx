@@ -35,7 +35,7 @@ class LoginPage extends AppComponent<Props, {}> {
     e.preventDefault();
     if (this.elForm.isValid()) {
       var data = this.elForm.getData<ILoginModel>();
-      this.props.loginRequest(data);
+      this.props.loginRequest();
     }
   }
 
