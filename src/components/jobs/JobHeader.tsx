@@ -28,7 +28,7 @@ export default class JobHeader extends Component<IProps, {}> {
   }
 
   render() {
-    const job = this.props.job as IJobModel;
+    const { job } = this.props;
     const status = job.StatusReason as IJobStatusReason;
     const account = job.Account as IJobAccount;
     const owner = job.Owner as IJobOwner;

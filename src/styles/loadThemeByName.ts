@@ -4,7 +4,7 @@ import {
   ITheme,
 } from 'office-ui-fabric-react/lib/Styling';
 
-const themes = {
+export const themes = {
   default: {},
 
   blue: {
@@ -145,6 +145,7 @@ const themes = {
 
 type ThemeName = keyof typeof themes;
 
+function loadThemeByName(name: string, fontFamily?: string): void;
 function loadThemeByName(name: ThemeName, fontFamily?: string): void;
 function loadThemeByName(name: ThemeName, substituteFontFamily?: boolean): void;
 function loadThemeByName(

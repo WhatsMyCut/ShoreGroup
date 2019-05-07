@@ -12,6 +12,7 @@ import { NavLink, Redirect } from 'react-router-dom';
 import Globals from '../../Globals';
 import AccountService from '../../api/AccountService';
 import bind from 'bind-decorator';
+import themes from '../../styles/loadThemeByName';
 
 import {
   Dropdown,
@@ -32,10 +33,12 @@ import { mergeStyleSets, ITheme } from '@uifabric/styling';
 import { copySync } from 'fs-extra';
 import { userInfo } from 'os';
 import { IGroup } from 'office-ui-fabric-react';
+import { theme } from '../attachments/Attachment';
 
 interface IProps {
   userInfo?: IUserInfoModel;
   theme?: any;
+  onChangeTheme?: any;
 }
 
 interface IState {
@@ -155,7 +158,28 @@ class TopMenu extends AppComponent<IProps, IState> {
       );
     };
 
-    const _renderAccounts = () => {
+    const _onChangeTheme = (theme: string) => {
+      const { onChangeTheme } = this.props;
+      return onChangeTheme(theme);
+    };
+
+    const _getThemesItems = () => {
+      const retArr = [];
+      if (themes && themes.length) {
+        for (let i = 0; i < themes.length; i++) {
+          const x = themes[i];
+          retArr.push({
+            key: i,
+            text: x,
+            canCheck: true,
+            isChecked: true,
+            onClick: () => console.log('theme clicked: ', x),
+          });
+        }
+      }
+      return retArr;
+    };
+    const _getAccountItems = () => {
       const { userInfo } = this.props;
       const accounts = userInfo ? userInfo.accounts : [];
       const selectedAccount = userInfo ? userInfo.account : '-';
@@ -236,7 +260,7 @@ class TopMenu extends AppComponent<IProps, IState> {
                     iconName: 'AccountManagement',
                   },
                   subMenuProps: {
-                    items: _renderAccounts(),
+                    items: _getAccountItems(),
                   },
                 },
                 {
@@ -254,15 +278,7 @@ class TopMenu extends AppComponent<IProps, IState> {
                   text: 'Theme',
                   iconProps: { iconName: 'Theme' },
                   subMenuProps: {
-                    items: [
-                      {
-                        key: 'sub-a',
-                        text: 'blue',
-                        canCheck: true,
-                        isChecked: true,
-                        onClick: () => console.log('blue'),
-                      },
-                    ],
+                    items: _getThemesItems(),
                   },
                 },
                 {

@@ -10,6 +10,8 @@ import {
 } from 'office-ui-fabric-react/lib/DetailsList';
 import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
 import { ITaskModel } from '../../models/ITaskModel';
+import Moment from 'moment';
+import { Checkbox } from 'office-ui-fabric-react/lib/components/Checkbox';
 
 export interface ITaskListState {
   columns: IColumn[];
@@ -20,9 +22,13 @@ export interface ITaskListState {
 }
 
 export interface IDocument {
-  name: string;
-  value: string;
-  taskId?: string;
+  Subject: string;
+  Type: string;
+  ModifiedOn?: string;
+  DueDate?: string;
+  Priority?: string;
+  ActualEnd?: string;
+  complete?: boolean;
 }
 
 interface IProps {
@@ -37,8 +43,8 @@ export class TaskList extends Component<IProps, ITaskListState> {
     items: IDocument[];
     columns: IColumn[];
     selectionDetails: string;
-    isModalSelection: false;
-    isCompactMode: false;
+    isModalSelection: boolean;
+    isCompactMode: boolean;
     tasks?: ITaskModel[];
   };
 
@@ -48,26 +54,46 @@ export class TaskList extends Component<IProps, ITaskListState> {
     const _columns: IColumn[] = [
       {
         key: 'column1',
-        name: 'Subject',
-        fieldName: 'Subject',
-        minWidth: 1,
-        maxWidth: 100,
+        name: '',
+        iconName: 'Checkbox',
+        fieldName: 'complete',
+        minWidth: 12,
+        maxWidth: 12,
         isRowHeader: true,
-        isResizable: true,
+        isResizable: false,
         isSorted: false,
         isSortedDescending: false,
         sortAscendingAriaLabel: 'Sorted A to Z',
         sortDescendingAriaLabel: 'Sorted Z to A',
         onColumnClick: this._onColumnClick,
-        data: 'string',
-        isPadded: true,
+        data: 'boolean',
+        isPadded: false,
+        onRender: (item: IDocument) => {
+          return (
+            <div>
+              <Checkbox
+                checked={item.complete}
+                ariaLabel={'Mark Task Complete'}
+                styles={{
+                  checkbox: {
+                    height: 12,
+                    width: 12,
+                    padding: 0,
+                    position: 'relative',
+                    left: -5,
+                  },
+                }}
+              />
+            </div>
+          );
+        },
       },
       {
         key: 'column2',
-        name: 'Job Task Type',
-        fieldName: 'Type',
-        minWidth: 1,
-        maxWidth: 100,
+        name: 'Subject',
+        fieldName: 'Subject',
+        minWidth: 20,
+        maxWidth: 250,
         isRowHeader: true,
         isResizable: true,
         isSorted: false,
@@ -80,9 +106,9 @@ export class TaskList extends Component<IProps, ITaskListState> {
       },
       {
         key: 'column3',
-        name: 'Owner',
-        fieldName: 'Owner',
-        minWidth: 1,
+        name: 'Job Task Type',
+        fieldName: 'Type',
+        minWidth: 20,
         maxWidth: 100,
         isRowHeader: true,
         isResizable: true,
@@ -98,8 +124,8 @@ export class TaskList extends Component<IProps, ITaskListState> {
         key: 'column4',
         name: 'Priority',
         fieldName: 'Priority',
-        minWidth: 1,
-        maxWidth: 100,
+        minWidth: 20,
+        maxWidth: 60,
         isRowHeader: true,
         isResizable: true,
         isSorted: false,
@@ -114,7 +140,7 @@ export class TaskList extends Component<IProps, ITaskListState> {
         key: 'column5',
         name: 'Due Date',
         fieldName: 'DueDate',
-        minWidth: 1,
+        minWidth: 20,
         maxWidth: 100,
         isRowHeader: true,
         isResizable: true,
@@ -130,8 +156,8 @@ export class TaskList extends Component<IProps, ITaskListState> {
         key: 'column6',
         name: 'Actual End',
         fieldName: 'DueDate',
-        minWidth: 1,
-        maxWidth: 100,
+        minWidth: 20,
+        maxWidth: 120,
         isRowHeader: true,
         isResizable: true,
         isSorted: false,
@@ -146,9 +172,10 @@ export class TaskList extends Component<IProps, ITaskListState> {
 
     this._selection = new Selection({
       onSelectionChanged: () => {
-        console.log('HERRERER');
+        const details = this._getSelectionDetails();
+        console.log('HERRERER', details);
         this.setState({
-          selectionDetails: this._getSelectionDetails(),
+          selectionDetails: details,
         });
       },
     });
@@ -158,7 +185,7 @@ export class TaskList extends Component<IProps, ITaskListState> {
       columns: _columns,
       selectionDetails: this._getSelectionDetails(),
       isModalSelection: false,
-      isCompactMode: false,
+      isCompactMode: true,
       tasks: tasks,
     };
   }
@@ -243,7 +270,7 @@ export class TaskList extends Component<IProps, ITaskListState> {
       case 1:
         return (
           '1 item selected: ' +
-          (this._selection.getSelection()[0] as IDocument).name
+          (this._selection.getSelection()[0] as IDocument).Subject
         );
       default:
         return `${selectionCount} items selected`;
@@ -293,16 +320,26 @@ function _copyAndSort<T>(
 }
 
 function _generateDocuments(tasks: ITaskModel[]) {
-  console.log('Mapping', tasks);
+  console.log('tasks', tasks);
   const items: IDocument[] = [];
   const rows = tasks ? tasks : [];
   rows.map((task: ITaskModel) => {
     const taskId = task ? task.Id : null;
-    let fileName = task.Subject ? task.Subject : '–';
+    const taskType = task && task.Type ? task.Type.Name : '–';
+    const priority = task && task.Priority ? task.Priority.Name : '–';
+    const fileName = task.Subject ? task.Subject : '–';
+    const modifiedOn = task ? Moment(task.ModifiedOn).format('l') : '–';
+    const dueDate = task ? Moment(task.DueDate).format('l') : '–';
+    const complete =
+      task && task.StatusReason ? task.StatusReason.Label !== 'Open' : false;
     let userName = '[PLACEHOLDER]';
     items.push({
-      name: fileName,
-      value: fileName,
+      complete: complete,
+      Subject: fileName,
+      Type: taskType,
+      ModifiedOn: modifiedOn,
+      DueDate: dueDate,
+      Priority: priority,
     });
   });
   return items;

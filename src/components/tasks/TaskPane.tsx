@@ -113,10 +113,30 @@ export class TaskPane extends Component<IProps, {}> {
 
   private _getFileInfo(task: ITaskModel) {
     const name = task ? task.Subject : '–';
+    const taskNo = task ? task.TaskNumber : '–';
+    const type = task && task.Type ? task.Type.Name : '–';
+    const modified = task ? Moment(task.ModifiedOn).format('l') : '–';
+    const dueDate = task ? Moment(task.DueDate).format('l') : '–';
     const details = [
       {
         key: 'Name',
         value: name,
+      },
+      {
+        key: 'Task Number',
+        value: taskNo,
+      },
+      {
+        key: 'Type',
+        value: type,
+      },
+      {
+        key: 'Modified Date',
+        value: modified,
+      },
+      {
+        key: 'Due Date',
+        value: dueDate,
       },
     ];
     const content = details.map(
@@ -137,9 +157,89 @@ export class TaskPane extends Component<IProps, {}> {
   }
 
   private _getTaskDetails(task: ITaskModel) {
+    const attachmentContent = task
+      ? this._getDetailContent(task.Attachment, 'Attachment')
+      : '–';
+    const cassContent = task ? this._getDetailContent(task.CASS, 'CASS') : '–';
+    const cassInstructionContent = task
+      ? this._getDetailContent(task.CASSInstructions, 'CASS Instructions')
+      : '–';
+    const dedupeContent = task
+      ? this._getDetailContent(task.Dedupe, 'Dedupe')
+      : '–';
+    const fedExAccountContent = task
+      ? this._getDetailContent(task.FedexAccount, 'FedEx Account')
+      : '–';
+    const householdContent = task
+      ? this._getDetailContent(task.Household, 'Household')
+      : '–';
+    const householdInstContent = task
+      ? this._getDetailContent(
+          task.HouseholdInstructions,
+          'Household Instructions',
+        )
+      : '–';
+    const ncoaContent = task ? this._getDetailContent(task.NCOA, 'NCOA') : '–';
+    const ncoaInstContent = task
+      ? this._getDetailContent(task.NCOAInstructions, 'NCOA Instructions')
+      : '–';
+    const presortContent = task
+      ? this._getDetailContent(task.Presort, 'Presort')
+      : '–';
+    const priorityContent = task
+      ? this._getDetailContent(task.Priority, 'Priority')
+      : '–';
+    const proofInstContent = task
+      ? this._getDetailContent(task.ProofInstructions, 'Proof Instructions')
+      : '–';
+    const proofTypeContent = task
+      ? this._getDetailContent(task.ProofType, 'Proof Type')
+      : '–';
+    const spotColorMatchContent = task
+      ? this._getDetailContent(task.SpotColorMatch, 'Spot Color Match')
+      : '–';
+    const spotColorInstContent = task
+      ? this._getDetailContent(
+          task.SpotColorMatchInstructions,
+          'SCM Instructions',
+        )
+      : '–';
+    const upsContent = task
+      ? this._getDetailContent(task.UPSAccount, 'UPS Account')
+      : '–';
+    const uspsContent = task
+      ? this._getDetailContent(task.USPSAccount, 'USPS Account')
+      : '–';
+    const vprogContent = task
+      ? this._getDetailContent(task.VariableProgramming, 'Variable Programming')
+      : '–';
+    const vprogInstContent = task
+      ? this._getDetailContent(
+          task.VariableProgrammingInstructions,
+          'Variable Programming Instructions',
+        )
+      : '–';
     return (
       <div>
-        <div>[placeholder]</div>
+        <div>{attachmentContent}</div>
+        <div>{cassContent}</div>
+        <div>{cassInstructionContent}</div>
+        <div>{dedupeContent}</div>
+        <div>{fedExAccountContent}</div>
+        <div>{householdContent}</div>
+        <div>{householdInstContent}</div>
+        <div>{ncoaContent}</div>
+        <div>{ncoaInstContent}</div>
+        <div>{presortContent}</div>
+        <div>{priorityContent}</div>
+        <div>{proofInstContent}</div>
+        <div>{proofTypeContent}</div>
+        <div>{spotColorMatchContent}</div>
+        <div>{spotColorInstContent}</div>
+        <div>{upsContent}</div>
+        <div>{uspsContent}</div>
+        <div>{vprogContent}</div>
+        <div>{vprogInstContent}</div>
       </div>
     );
   }
@@ -164,25 +264,19 @@ export class TaskPane extends Component<IProps, {}> {
     const name = task ? task.Subject : '_';
     items.push(
       {
-        color: theme.palette.neutralLight,
-        Id: '1',
+        color: theme.palette.neutralLighter,
+        Id: '2',
         Name: (
           <div>
             <b>Task: "{name}"</b>
             <span className="close-btn">{this._getCloseBtn()}</span>
           </div>
         ),
-        data: this._getTaskIcon(task),
-      },
-      {
-        color: theme.palette.neutralLighter,
-        Id: '2',
-        Name: 'File Info',
         data: this._getFileInfo(task),
       },
       {
-        color: theme.palette.neutralLighterAlt,
-        Id: '3',
+        color: theme.palette.neutralLight,
+        Id: '1',
         Name: 'Task Details',
         data: this._getTaskDetails(task),
       },

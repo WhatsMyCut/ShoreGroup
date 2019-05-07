@@ -36,13 +36,19 @@ type Props = RouteComponentProps<{}> &
   typeof LoginStore.actionCreators &
   LoginStore.IState;
 
-const theme = loadThemeByName('teal');
+interface IState {
+  currentTheme?: string;
+}
 
-class AuthorizedLayout extends Component<Props, {}> {
+class AuthorizedLayout extends Component<Props, IState> {
   props: Props;
   private fetch: () => void;
-  constructor(props) {
+  theme: void;
+  constructor(props: Props) {
     super(props);
+    this.state = {
+      currentTheme: 'default',
+    };
     initializeIcons();
     registerIcons({
       icons: {
@@ -55,26 +61,25 @@ class AuthorizedLayout extends Component<Props, {}> {
         Theme: <FontAwesomeIcon icon={faPalette} />,
       },
     });
-    this.fetch = AwesomeDebouncePromise(() => {
-      // AuthorizationService.userinfo().then(value => {
-      //   const result = value['Result'] as IUserInfoModel;
-      //   this.setState({ userInfo: result });
-      //   console.log(result);
-      // });
-    }, 500);
   }
 
-  componentDidMount() {
+  componentWillMount() {
+    this.theme = loadThemeByName(this.state.currentTheme);
     this.props.loginRequest();
   }
+
+  protected onChangeTheme = (theme: string) => {
+    console.log('onChangeTheme', theme);
+    this.setState({ currentTheme: theme });
+  };
 
   public render() {
     //const { userInfo } = this.state;
     return (
       <div id="authorizedLayout" className="layout">
-        <NavMenu theme={theme} />
+        <NavMenu theme={this.theme} />
         <div className="mainContent">
-          <TopMenu theme={theme} />
+          <TopMenu theme={this.theme} onChangeTheme={this.onChangeTheme} />
           <div className="panel-content">{this.props.children}</div>
           <Footer />
         </div>
