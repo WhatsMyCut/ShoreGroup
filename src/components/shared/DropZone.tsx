@@ -28,7 +28,7 @@ export const Dropzone = IProps => {
       height: 100,
       textAlign: 'center',
       verticalAlign: 'middle',
-      margin: '0 5px 15px',
+      margin: '5px 5px 15px',
       backgroundColor: IProps.theme.palette.themeLighter,
       padding: 15,
       color: IProps.theme.palette.themeDark,
