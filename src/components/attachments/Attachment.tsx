@@ -1,4 +1,5 @@
-﻿import React, { Component } from 'react';
+﻿import React from 'react';
+import AppComponent from '../shared/AppComponent';
 import { IAttachmentModel } from '../../models/IAttachmentModel';
 import {
   getTheme,
@@ -39,7 +40,7 @@ interface IProps {
 
 type Props = IProps;
 
-export default class Attachment extends Component<Props, {}> {
+export default class Attachment extends AppComponent<Props, {}> {
   props: Props;
 
   constructor(props) {

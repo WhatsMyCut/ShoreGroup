@@ -66,6 +66,11 @@ class JobDetail extends Component<IProps, IState> {
         flexDirection: 'row',
         width: '100%',
         borderBottom: '1px solid ' + this.theme.palette.themeLighter,
+        selectors: {
+          '&:last-child': {
+            borderBottom: 'transparent',
+          },
+        },
       },
       jobDetailKey: {
         flexGrow: 1,
@@ -73,8 +78,15 @@ class JobDetail extends Component<IProps, IState> {
         flexBasis: '40%',
         backgroundColor: this.theme.palette.themeLighter,
         color: this.theme.palette.black,
+        borderBottom: '1px solid ' + this.theme.palette.themeLight,
+        borderRight: '1px solid ' + this.theme.palette.themeLight,
         padding: 10,
         fontSize: 12,
+        selectors: {
+          '&:last-child': {
+            borderBottom: 'transparent',
+          },
+        },
       },
       jobDetailValue: {
         flexGrow: 1,
@@ -97,6 +109,7 @@ class JobDetail extends Component<IProps, IState> {
         selectors: {
           '& .ms-CommandBar': {
             padding: 0,
+            paddingLeft: 5,
             backgroundColor: 'transparent',
           },
           '& .ms-CommandBar .ms-Button': {
@@ -114,7 +127,7 @@ class JobDetail extends Component<IProps, IState> {
         flexDirection: 'row',
         border: '1px solid' + this.theme.palette.themePrimary,
         borderRadius: 5,
-        padding: '5px 0',
+        padding: 0,
       },
       jobDetailComments: {
         flexGrow: 1,
@@ -349,7 +362,7 @@ class JobDetail extends Component<IProps, IState> {
             theme={this.theme}
             styles={{
               root: {
-                backgroundColor: '#f4f4f4',
+                backgroundColor: this.theme.palette.themeLight,
               },
             }}
             //overflowItems={this.getOverlflowItems()}
