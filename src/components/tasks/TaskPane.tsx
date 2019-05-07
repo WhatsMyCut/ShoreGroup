@@ -74,6 +74,9 @@ const classNames = mergeStyleSets({
         display: 'flex',
         listStyleType: 'none',
       },
+      '& li div:first-of-type': {
+        borderBottomColor: 'transparent',
+      },
       '& li div:last-of-type': {
         borderBottom: '1px solid' + theme.palette.themeDarkAlt,
       },
@@ -83,13 +86,12 @@ const classNames = mergeStyleSets({
   panelListKey: {
     flex: '0 0 35%',
     fontWeight: 'bold',
-    paddingRight: 5,
-    borderBottomColor: 'transparent',
+    borderBottom: '1px solid' + theme.palette.themeDarkAlt,
   },
 
   panelListValue: {
     flex: '1 1 auto',
-    borderBottom: '1px solid' + theme.palette.themeLighter,
+    borderBottom: '1px solid' + theme.palette.themeDarkAlt,
   },
 
   panelListRow: {
