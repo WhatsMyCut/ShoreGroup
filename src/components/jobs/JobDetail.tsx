@@ -66,16 +66,11 @@ class JobDetail extends Component<IProps, IState> {
         flexDirection: 'row',
         width: '100%',
         borderBottom: '1px solid ' + this.theme.palette.themeLighter,
-        selectors: {
-          '&:last-child': {
-            borderBottom: 'transparent',
-          },
-        },
       },
       jobDetailKey: {
         flexGrow: 1,
         flexShrink: 1,
-        flexBasis: '40%',
+        flexBasis: '25%',
         backgroundColor: this.theme.palette.themeLighter,
         color: this.theme.palette.black,
         borderBottom: '1px solid ' + this.theme.palette.themeLight,
@@ -91,7 +86,7 @@ class JobDetail extends Component<IProps, IState> {
       jobDetailValue: {
         flexGrow: 1,
         flexShrink: 0,
-        flexBasis: '60%',
+        flexBasis: '75%',
         padding: 10,
       },
       jobDetailContainer: {
