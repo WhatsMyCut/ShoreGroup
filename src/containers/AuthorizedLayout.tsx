@@ -17,6 +17,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCloudUploadAlt,
   faCloudDownloadAlt,
+  faAddressCard,
+  faShieldAlt,
+  faPalette,
+  faBell,
 } from '@fortawesome/free-solid-svg-icons';
 import loadThemeByName from '../styles/loadThemeByName';
 import AuthorizationService from '../api/AuthorizationService';
@@ -45,6 +49,10 @@ class AuthorizedLayout extends Component<Props, {}> {
         Logo: <Icon className="logo" />,
         FileUpload: <FontAwesomeIcon icon={faCloudUploadAlt} />,
         FileDownload: <FontAwesomeIcon icon={faCloudDownloadAlt} />,
+        EditProfile: <FontAwesomeIcon icon={faAddressCard} />,
+        Security: <FontAwesomeIcon icon={faShieldAlt} />,
+        Notifications: <FontAwesomeIcon icon={faBell} />,
+        Theme: <FontAwesomeIcon icon={faPalette} />,
       },
     });
     this.fetch = AwesomeDebouncePromise(() => {
@@ -66,7 +74,7 @@ class AuthorizedLayout extends Component<Props, {}> {
       <div id="authorizedLayout" className="layout">
         <NavMenu theme={theme} />
         <div className="mainContent">
-          <TopMenu />
+          <TopMenu theme={theme} />
           <div className="panel-content">{this.props.children}</div>
           <Footer />
         </div>
