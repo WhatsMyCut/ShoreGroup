@@ -19,10 +19,10 @@ const classNames = mergeStyleSets({
   },
   pane: {
     maxWidth: 400,
-    border: '1px solid ' + theme.palette.neutralLight,
+    border: '1px solid ' + theme.palette.themeLight,
   },
   sticky: {
-    color: theme.palette.neutralDark,
+    color: theme.palette.themeDark,
     padding: '5px 20px 5px 10px',
     fontSize: '13px',
     borderTop: '1px solid ' + theme.palette.black,
@@ -31,14 +31,69 @@ const classNames = mergeStyleSets({
   textContent: {
     padding: '15px 10px',
   },
+  taskDetail: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+
+  taskDetailHeader: {
+    flex: '1 1 30%',
+    fontWeight: 'bold',
+    paddingRight: 5,
+  },
+  taskDetailOptions: {
+    flex: '1 1 60%',
+  },
+  taskDetailNVP: {
+    display: 'flex',
+    flex: '1 1 60%',
+    borderBottom: '1px solid' + theme.palette.themeLighter,
+    selectors: {
+      '& > div:first-of-type': {
+        flex: '1 0 60%',
+      },
+    },
+  },
+  taskInfo: {
+    padding: 0,
+    selectors: {
+      '& ul': {
+        listStyleType: 'none !important',
+        paddingLeft: '0 !important',
+      },
+    },
+  },
   taskInfoList: {
-    listStyleType: 'none',
-    margin: 0,
     paddingVertical: 2,
     paddingHorizontal: 0,
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: '100%',
+    selectors: {
+      '& li': {
+        display: 'flex',
+        listStyleType: 'none',
+      },
+      '& li div:last-of-type': {
+        borderBottom: '1px solid' + theme.palette.themeDarkAlt,
+      },
+    },
+  },
+
+  panelListKey: {
+    flex: '0 0 35%',
+    fontWeight: 'bold',
+    paddingRight: 5,
+    borderBottomColor: 'transparent',
+  },
+
+  panelListValue: {
+    flex: '1 1 auto',
+    borderBottom: '1px solid' + theme.palette.themeLighter,
+  },
+
+  panelListRow: {
+    margin: '2px 0',
   },
 });
 
@@ -66,26 +121,26 @@ export class TaskPane extends Component<IProps, {}> {
   }
   componentWillUnmount() {}
 
-  private _getListContent(group: any[], label: string) {
+  _getListContent(group: any[], label: string) {
     const header = label ? label : '-';
     let content;
     if (group && group.length) {
       content = group.map((x: any, i: number) => {
         return (
-          <li key={i} className="panel-list-row">
-            <div className="panel-list-key">{x.Name}</div>
-            <div className="panel-list-value">{x.Value}</div>
+          <li key={i} className={classNames.panelListRow}>
+            <div className={classNames.panelListKey}>{x.Name}</div>
+            <div className={classNames.panelListValue}>{x.Value}</div>
           </li>
         );
       });
     } else {
-      content = <div className="panel-list-key">–</div>;
+      content = <div className={classNames.panelListKey}>–</div>;
     }
     return (
-      <div className={'task-detail'}>
-        <div className={'task-detail-header'}>{header}</div>
-        <div className={'task-detail-options'}>
-          <ul className={'taskInfoList'}>{content}</ul>
+      <div className={classNames.taskDetail}>
+        <div className={classNames.taskDetailHeader}>{header}</div>
+        <div className={classNames.taskDetailOptions}>
+          <ul className={classNames.taskInfoList}>{content}</ul>
         </div>
       </div>
     );
@@ -101,11 +156,11 @@ export class TaskPane extends Component<IProps, {}> {
         : '–';
     const value = content && content.Value ? content.Value : '-';
     return (
-      <div className="task-detail">
-        <div className={'task-detail-header'}>{header}</div>
-        <div className={'task-detail-nvp'}>
-          <div className="panel-list-key">{name}</div>
-          <div className="panel-list-value">{value}</div>
+      <div className={classNames.taskDetail}>
+        <div className={classNames.taskDetailHeader}>{header}</div>
+        <div className={classNames.taskDetailNVP}>
+          <div className={classNames.panelListKey}>{name}</div>
+          <div className={classNames.panelListValue}>{value}</div>
         </div>
       </div>
     );
@@ -142,16 +197,16 @@ export class TaskPane extends Component<IProps, {}> {
     const content = details.map(
       (item, index): JSX.Element => {
         return (
-          <li key={index} className={'panel-list-row '}>
-            <div className="panel-list-key">{item.key}</div>
-            <div className="panel-list-value">{item.value}</div>
+          <li key={index} className={classNames.panelListRow}>
+            <div className={classNames.panelListKey}>{item.key}</div>
+            <div className={classNames.panelListValue}>{item.value}</div>
           </li>
         );
       },
     );
     return (
-      <div className="task-info">
-        <ul className={'task-info-list'}>{content}</ul>
+      <div className={classNames.taskInfo}>
+        <ul className={classNames.taskInfoList}>{content}</ul>
       </div>
     );
   }
@@ -253,7 +308,14 @@ export class TaskPane extends Component<IProps, {}> {
     return (
       <Icon
         iconName="ChromeClose"
-        styles={{ root: { fontSize: 12, cursor: 'pointer', paddingRight: 0 } }}
+        styles={{
+          root: {
+            fontSize: 12,
+            cursor: 'pointer',
+            paddingRight: 0,
+            color: theme.palette.black,
+          },
+        }}
         onClick={closeTaskPanel}
       />
     );
@@ -264,7 +326,7 @@ export class TaskPane extends Component<IProps, {}> {
     const name = task ? task.Subject : '_';
     items.push(
       {
-        color: theme.palette.neutralLighter,
+        color: theme.palette.themeLighter,
         Id: '2',
         Name: (
           <div>
@@ -275,7 +337,7 @@ export class TaskPane extends Component<IProps, {}> {
         data: this._getFileInfo(task),
       },
       {
-        color: theme.palette.neutralLight,
+        color: theme.palette.themeLight,
         Id: '1',
         Name: 'Task Details',
         data: this._getTaskDetails(task),

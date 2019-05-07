@@ -312,13 +312,15 @@ class JobDetail extends Component<IProps, IState> {
       },
     ];
     const jobName = job ? job.Name : '–';
+    const jobNumber = job && job.JobName ? job.JobName : '–';
     const dueDate = Moment(job.DueDate).format('l');
-    const account = job.Account ? job.Account.name : '–';
-    const owner = job.Owner ? job.Owner.FullName : '–';
-    const jobType = job.Type ? job.Type.Name : '–';
+    const account = job && job.Account ? job.Account.name : '–';
+    const owner = job && job.Owner ? job.Owner.FullName : '–';
+    const jobType = job && job.Type ? job.Type.Name : '–';
     const jobDesc = job ? job.Description : '–';
     const items = [
       { name: 'Job Name', value: jobName },
+      { name: 'Job Number', value: jobNumber },
       { name: 'Job Description', value: jobDesc },
       { name: 'Job Type', value: jobType },
       { name: 'Job Due Date', value: dueDate },
