@@ -7,7 +7,7 @@ import { ApplicationState } from '../../store';
 import * as LoginStore from '../../store/LoginStore';
 import { IUserInfoModel } from '../../models/IUserInfoModel';
 
-import { _getOwnerPersona, _getDefaultPersona } from '../shared/AppPersona';
+import { _getDefaultPersona, _getUserPersona } from '../shared/AppPersona';
 import { NavLink, Redirect } from 'react-router-dom';
 import Globals from '../../Globals';
 import AccountService from '../../api/AccountService';
@@ -19,9 +19,18 @@ import {
   IDropdownOption,
   IDropdownProps,
 } from 'office-ui-fabric-react/lib/Dropdown';
+import {
+  IContextualMenuItem,
+  ContextualMenuItemType,
+  DirectionalHint,
+} from 'office-ui-fabric-react/lib/ContextualMenu';
+import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
+
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IJobOwner } from '../../models/IJobModel';
 import { mergeStyleSets, ITheme } from '@uifabric/styling';
+import { copySync } from 'fs-extra';
+import { userInfo } from 'os';
 
 interface IProps {
   userInfo?: IUserInfoModel;
@@ -75,6 +84,10 @@ class TopMenu extends AppComponent<IProps, IState> {
           },
         },
       },
+      personaCoin: {
+        backgroundColor: props.theme.palette.themePrimary,
+        borderRadius: '50%',
+      },
     });
   }
 
@@ -108,10 +121,25 @@ class TopMenu extends AppComponent<IProps, IState> {
 
   componentDidUpdate() {}
 
+  private _initials(string: string) {
+    const spl = string.split(' ');
+    let retVal = spl[0].charAt(0);
+    if (spl[1]) {
+      retVal += spl[1].charAt(0);
+    }
+    return retVal;
+  }
+
   render() {
     var accountList = null;
     const { userInfo } = this.props;
     const user = userInfo ? userInfo.name : '–';
+    const _renderIcon = (): JSX.Element => {
+      const name =
+        userInfo && userInfo.name ? this._initials(userInfo.name) : '–';
+      return <div className={'profileCoin'}>{name}</div>;
+    };
+
     if (this.state.userInfo && this.state.userInfo.accounts) {
       accountList = this.state.userInfo.accounts.map(function(account) {
         return (
@@ -133,28 +161,92 @@ class TopMenu extends AppComponent<IProps, IState> {
               CompliChain
             </a>
           </div>
-          <Dropdown
-            placeholder="Select an option"
-            onRenderPlaceholder={this._onRenderPlaceholder}
-            onRenderTitle={this._onRenderTitle}
-            onRenderOption={this._onRenderOption}
-            styles={{ root: { marginTop: 5 }, dropdown: { width: 220 } }}
-            options={[
-              { key: 'A', text: 'My Profile', data: { icon: 'EditProfile' } },
-              { key: 'B', text: 'Security', data: { icon: 'Security' } },
-              {
-                key: 'C',
-                text: 'Notifications',
-                data: { icon: 'Notifications' },
+          <DefaultButton
+            onRenderMenuIcon={_renderIcon}
+            styles={{
+              root: {
+                margin: 10,
+                height: 40,
+                width: 40,
+                minWidth: 'auto',
+                borderRadius: '50%',
+                backgroundColor: this.props.theme.palette.themePrimary,
+                color: this.props.theme.palette.white,
+                fontSize: 18,
+                fontWeight: 'bold',
               },
-              { key: 'D', text: 'Theme', data: { icon: 'Theme' } },
-              {
-                key: 'divider_2',
-                text: '-',
-                itemType: DropdownMenuItemType.Divider,
-              },
-              { key: 'F', text: 'Log Out', data: { icon: 'FollowUser' } },
-            ]}
+            }}
+            menuProps={{
+              shouldFocusOnMount: true,
+              items: [
+                // {
+                //   key: 'persona',
+                //   onRender: this._renderPersona,
+                // },
+                {
+                  key: 'A',
+                  text: 'My Profile',
+                  iconProps: {
+                    iconName: 'EditProfile',
+                  },
+                },
+                {
+                  key: 'B',
+                  text: 'Accounts',
+                  iconProps: {
+                    iconName: 'AccountManagement',
+                  },
+                  subMenuProps: {
+                    items: [
+                      {
+                        key: '1',
+                        text: '',
+                        canCheck: true,
+                        isChecked: true,
+                        onClick: () => console.log('account clicked'),
+                      },
+                    ],
+                  },
+                },
+                {
+                  key: 'C',
+                  text: 'Security',
+                  iconProps: { iconName: 'Security' },
+                },
+                {
+                  key: 'D',
+                  text: 'Notifications',
+                  iconProps: { iconName: 'Notifications' },
+                },
+                {
+                  key: 'E',
+                  text: 'Theme',
+                  iconProps: { iconName: 'Theme' },
+                  subMenuProps: {
+                    items: [
+                      {
+                        key: 'sub-a',
+                        text: 'blue',
+                        canCheck: true,
+                        isChecked: true,
+                        onClick: () => console.log('blue'),
+                      },
+                    ],
+                  },
+                },
+                {
+                  key: 'divider_2',
+                  itemType: ContextualMenuItemType.Divider,
+                },
+                {
+                  key: 'F',
+                  text: 'Log Out',
+                  iconProps: {
+                    iconName: 'FollowUser',
+                  },
+                },
+              ],
+            }}
           />
         </div>
       </div>
