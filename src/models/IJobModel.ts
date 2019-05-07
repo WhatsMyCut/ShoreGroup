@@ -1,5 +1,6 @@
 import { IAttachmentModel } from './IAttachmentModel';
 import { ITaskModel } from './ITaskModel';
+import { IUserGroupModel } from './IUserInfoModel';
 
 export interface IJobType {
   Name?: string;
@@ -13,8 +14,11 @@ export interface IJobStatusReason {
 }
 
 export interface IJobAccount {
-  Id?: string;
-  Name?: string;
+  crmGuid?: string;
+  groupType: number;
+  groups: IUserGroupModel[];
+  guid: string;
+  name: string;
 }
 
 export interface IJobOwner {

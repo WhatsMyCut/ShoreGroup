@@ -85,8 +85,8 @@ export const _getUserPersona = (user: IUserInfoModel) => {
 
 export const _getAccountPersona = (account: IJobAccount) => {
   const accountInitials =
-    account.Name.split(' ')[0].charAt(0) +
-      account.Name.split(' ')[1].charAt(0) || '?';
+    account.name.split(' ')[0].charAt(0) +
+      account.name.split(' ')[1].charAt(0) || '?';
   const examplePersona: IPersonaSharedProps = {
     secondaryText: 'Designer',
     tertiaryText: 'In a meeting',
@@ -95,7 +95,7 @@ export const _getAccountPersona = (account: IJobAccount) => {
 
   const personaWithInitials: IPersonaSharedProps = {
     //...examplePersona,
-    text: account.Name,
+    text: account.name,
     imageInitials: accountInitials,
   };
   return <Persona {...personaWithInitials} />;

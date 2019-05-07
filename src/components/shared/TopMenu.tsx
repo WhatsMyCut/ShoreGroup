@@ -27,10 +27,11 @@ import {
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { IJobOwner } from '../../models/IJobModel';
+import { IJobOwner, IJobAccount } from '../../models/IJobModel';
 import { mergeStyleSets, ITheme } from '@uifabric/styling';
 import { copySync } from 'fs-extra';
 import { userInfo } from 'os';
+import { IGroup } from 'office-ui-fabric-react';
 
 interface IProps {
   userInfo?: IUserInfoModel;
@@ -154,6 +155,27 @@ class TopMenu extends AppComponent<IProps, IState> {
       );
     };
 
+    const _renderAccounts = () => {
+      const { userInfo } = this.props;
+      const accounts = userInfo ? userInfo.accounts : [];
+      const selectedAccount = userInfo ? userInfo.account : '-';
+      console.log('userInfo', userInfo || '–');
+      const retArr = [];
+      if (accounts && accounts.length) {
+        for (let i = 0; i < accounts.length; i++) {
+          const x = accounts[i];
+          retArr.push({
+            key: i,
+            text: x.name,
+            canCheck: true,
+            isChecked: x.guid === selectedAccount,
+            onClick: () => console.log('account clicked', x),
+          });
+        }
+      }
+      return retArr;
+    };
+
     if (this.state.userInfo && this.state.userInfo.accounts) {
       accountList = this.state.userInfo.accounts.map(function(account) {
         return (
@@ -214,15 +236,7 @@ class TopMenu extends AppComponent<IProps, IState> {
                     iconName: 'AccountManagement',
                   },
                   subMenuProps: {
-                    items: [
-                      {
-                        key: '1',
-                        text: '',
-                        canCheck: true,
-                        isChecked: true,
-                        onClick: () => console.log('account clicked'),
-                      },
-                    ],
+                    items: _renderAccounts(),
                   },
                 },
                 {

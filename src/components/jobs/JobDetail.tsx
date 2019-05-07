@@ -1,5 +1,9 @@
 import '../../styles/jobs.scss';
 import React, { Component, MouseEvent } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import * as JobStore from '../../store/JobStore';
+import { ApplicationState, reducers } from '../../store/index';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
 import { IJobModel, IJobType } from '../../models/IJobModel';
 import { AttachmentList } from '../../components/attachments/AttachmentList';
@@ -29,13 +33,15 @@ export interface IState {
   currentTab?: string;
   currentAttachment?: any;
   currentTask?: any;
+  job?: IJobModel;
 }
 export const State: IState = {
   currentTab: 'general',
   currentAttachment: null,
   currentTask: null,
+  job: null,
 };
-export default class JobDetail extends Component<IProps, IState> {
+class JobDetail extends Component<IProps, IState> {
   protected theme: ITheme;
   protected classNames: any;
   constructor(props: IProps, state: IState) {
@@ -299,7 +305,7 @@ export default class JobDetail extends Component<IProps, IState> {
     ];
     const jobName = job ? job.Name : '–';
     const dueDate = Moment(job.DueDate).format('l');
-    const account = job.Account ? job.Account.Name : '–';
+    const account = job.Account ? job.Account.name : '–';
     const owner = job.Owner ? job.Owner.FullName : '–';
     const jobType = job.Type ? job.Type.Name : '–';
     const jobDesc = job ? job.Description : '–';
@@ -378,3 +384,10 @@ export default class JobDetail extends Component<IProps, IState> {
     );
   }
 }
+
+var component = connect(
+  (state: ApplicationState) => state.job,
+  JobStore.actionCreators,
+)(JobDetail as any);
+
+export default (withRouter(component as any) as any) as typeof JobDetail;
