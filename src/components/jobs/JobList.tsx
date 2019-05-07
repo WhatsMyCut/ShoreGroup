@@ -111,7 +111,7 @@ export default class JobList extends Component<IProps, IJobsListState> {
         data: 'string',
         isPadded: true,
         onRender: (item: IJobModel) => {
-          return <span>{item.Account ? item.Account.Name : 'n/a'}</span>;
+          return <span>{item.Account ? item.Account.name : 'n/a'}</span>;
         },
       },
       {
