@@ -18,6 +18,7 @@ import {
 } from 'office-ui-fabric-react/lib/Shimmer';
 import { IJobOwner, IJobAccount, IJobModel } from '../../models/IJobModel';
 import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
+import { IUserInfoModel } from '../../models/IUserInfoModel';
 
 export const customThemeForShimmer: ITheme = createTheme({
   palette: {
@@ -60,6 +61,24 @@ export const _getOwnerPersona = (owner: IJobOwner) => {
     ...examplePersona,
     text: owner.FullName,
     imageInitials: ownerInitials,
+  };
+  return <Persona {...personaWithInitials} />;
+};
+
+export const _getUserPersona = (user: IUserInfoModel) => {
+  const initials =
+    user.name.split(' ')[0].charAt(0) + user.name.split(' ')[1].charAt(0) ||
+    '?';
+  const examplePersona: IPersonaSharedProps = {
+    secondaryText: 'Designer',
+    tertiaryText: 'In a meeting',
+    optionalText: 'Available at 4:00pm',
+  };
+
+  const personaWithInitials: IPersonaSharedProps = {
+    ...examplePersona,
+    text: user.name,
+    imageInitials: initials,
   };
   return <Persona {...personaWithInitials} />;
 };

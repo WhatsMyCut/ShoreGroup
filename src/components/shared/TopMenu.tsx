@@ -70,6 +70,9 @@ class TopMenu extends AppComponent<IProps, IState> {
             border: '1px solid' + props.theme.palette.themeSecondary,
             height: 50,
           },
+          '& .ms-ContextualMenu-Callout': {
+            border: '1px solid red',
+          },
         },
       },
       navbarBrandContainer: {
@@ -87,6 +90,9 @@ class TopMenu extends AppComponent<IProps, IState> {
       personaCoin: {
         backgroundColor: props.theme.palette.themePrimary,
         borderRadius: '50%',
+      },
+      menuPersona: {
+        padding: 5,
       },
     });
   }
@@ -140,6 +146,14 @@ class TopMenu extends AppComponent<IProps, IState> {
       return <div className={'profileCoin'}>{name}</div>;
     };
 
+    const _renderPersona = (): JSX.Element => {
+      return (
+        <div className={this.classNames.menuPersona}>
+          {_getUserPersona(userInfo)}
+        </div>
+      );
+    };
+
     if (this.state.userInfo && this.state.userInfo.accounts) {
       accountList = this.state.userInfo.accounts.map(function(account) {
         return (
@@ -172,17 +186,20 @@ class TopMenu extends AppComponent<IProps, IState> {
                 borderRadius: '50%',
                 backgroundColor: this.props.theme.palette.themePrimary,
                 color: this.props.theme.palette.white,
-                fontSize: 18,
-                fontWeight: 'bold',
               },
             }}
             menuProps={{
               shouldFocusOnMount: true,
               items: [
-                // {
-                //   key: 'persona',
-                //   onRender: this._renderPersona,
-                // },
+                {
+                  key: 'persona',
+                  onRender: _renderPersona,
+                  styles: { root: { padding: 5 } },
+                },
+                {
+                  key: 'divider_1',
+                  itemType: ContextualMenuItemType.Divider,
+                },
                 {
                   key: 'A',
                   text: 'My Profile',
