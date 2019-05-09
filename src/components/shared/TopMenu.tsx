@@ -8,32 +8,21 @@ import * as LoginStore from '../../store/LoginStore';
 import { IUserInfoModel } from '../../models/IUserInfoModel';
 
 import { _getDefaultPersona, _getUserPersona } from '../shared/AppPersona';
-import { NavLink, Redirect } from 'react-router-dom';
-import Globals from '../../Globals';
+import { Redirect } from 'react-router-dom';
 import AccountService from '../../api/AccountService';
 import bind from 'bind-decorator';
-import themes from '../../styles/loadThemeByName';
+import { themes } from '../../styles/loadThemeByName';
 
 import {
-  Dropdown,
-  DropdownMenuItemType,
   IDropdownOption,
   IDropdownProps,
 } from 'office-ui-fabric-react/lib/Dropdown';
-import {
-  IContextualMenuItem,
-  ContextualMenuItemType,
-  DirectionalHint,
-} from 'office-ui-fabric-react/lib/ContextualMenu';
+import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMenu';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { IJobOwner, IJobAccount } from '../../models/IJobModel';
-import { mergeStyleSets, ITheme } from '@uifabric/styling';
-import { copySync } from 'fs-extra';
-import { userInfo } from 'os';
-import { IGroup } from 'office-ui-fabric-react';
-import { theme } from '../attachments/Attachment';
+import { mergeStyleSets, ITheme, getTheme } from '@uifabric/styling';
+import { Link } from 'office-ui-fabric-react/lib/components/Link';
 
 interface IProps {
   userInfo?: IUserInfoModel;
@@ -50,10 +39,13 @@ class TopMenu extends AppComponent<IProps, IState> {
   constructor(props: IProps, state: IState) {
     super(props);
     this.state = state;
+  }
+  componentWillMount() {
+    const theme = getTheme();
     this.classNames = mergeStyleSets({
       topmenuContainer: {
         width: '100%',
-        backgroundColor: props.theme.palette.themeLighterAlt,
+        backgroundColor: theme.palette.themeLighterAlt,
       },
       navbarHeader: {
         display: 'flex',
@@ -71,7 +63,7 @@ class TopMenu extends AppComponent<IProps, IState> {
             paddingBottom: 10,
           },
           '& .ms-Dropdown-title': {
-            border: '1px solid' + props.theme.palette.themeSecondary,
+            border: '1px solid' + theme.palette.themeSecondary,
             height: 50,
           },
           '& .ms-ContextualMenu-Callout': {
@@ -87,12 +79,12 @@ class TopMenu extends AppComponent<IProps, IState> {
         fontSize: 18,
         selectors: {
           '& a': {
-            color: props.theme.palette.themeSecondary + ' !important',
+            color: theme.palette.themeSecondary + ' !important',
           },
         },
       },
       personaCoin: {
-        backgroundColor: props.theme.palette.themePrimary,
+        backgroundColor: theme.palette.themePrimary,
         borderRadius: '50%',
       },
       menuPersona: {
@@ -160,30 +152,47 @@ class TopMenu extends AppComponent<IProps, IState> {
 
     const _onChangeTheme = (theme: string) => {
       const { onChangeTheme } = this.props;
-      return onChangeTheme(theme);
+      onChangeTheme(theme);
     };
 
     const _getThemesItems = () => {
       const retArr = [];
-      if (themes && themes.length) {
-        for (let i = 0; i < themes.length; i++) {
-          const x = themes[i];
+      const { theme } = this.props;
+      if (themes) {
+        const themeNames = Object.keys(themes);
+        themeNames.map((x, i) => {
+          const c = themes[x];
+          const cPrime =
+            c && c.palette
+              ? c.palette.themePrimary
+              : { palette: { themePrimary: '#000' } };
+          const tPrime =
+            theme && theme.palette
+              ? theme.palette.themePrimary
+              : { palette: { themePrimary: '#000' } };
           retArr.push({
             key: i,
             text: x,
             canCheck: true,
-            isChecked: true,
-            onClick: () => console.log('theme clicked: ', x),
+            isChecked: cPrime === tPrime,
+            onClick: () => _onChangeTheme(x),
           });
-        }
+        });
       }
       return retArr;
+    };
+    const _renderEmail = (text: string, subject: string): JSX.Element => {
+      return (
+        <a href={'mailto:support@sepire.com&Subject=' + encodeURI(subject)}>
+          {text}
+        </a>
+      );
     };
     const _getAccountItems = () => {
       const { userInfo } = this.props;
       const accounts = userInfo ? userInfo.accounts : [];
       const selectedAccount = userInfo ? userInfo.account : '-';
-      console.log('userInfo', userInfo || '–');
+      console.log('userInfo', userInfo, theme.palette.themePrimary);
       const retArr = [];
       if (accounts && accounts.length) {
         for (let i = 0; i < accounts.length; i++) {
@@ -213,6 +222,7 @@ class TopMenu extends AppComponent<IProps, IState> {
     if (this.state.logoutAction) {
       return <Redirect to="/login" />;
     }
+    const theme = getTheme();
     return (
       <div className={this.classNames.topmenuContainer}>
         <div className={this.classNames.navbarHeader}>
@@ -230,8 +240,8 @@ class TopMenu extends AppComponent<IProps, IState> {
                 width: 40,
                 minWidth: 'auto',
                 borderRadius: '50%',
-                backgroundColor: this.props.theme.palette.themePrimary,
-                color: this.props.theme.palette.white,
+                backgroundColor: theme.palette.themePrimary,
+                color: theme.palette.white,
               },
             }}
             menuProps={{
@@ -287,6 +297,38 @@ class TopMenu extends AppComponent<IProps, IState> {
                 },
                 {
                   key: 'F',
+                  text: 'Support',
+                  iconProps: {
+                    iconName: 'Support',
+                  },
+                  subMenuProps: {
+                    items: [
+                      {
+                        key: 1,
+                        name: _renderEmail(
+                          'Report a Site Issue',
+                          'CompliChain Site Issue',
+                        ),
+                        iconProps: { iconName: 'Bug' },
+                      },
+                      {
+                        key: 2,
+                        name: _renderEmail(
+                          'Report Compliance Issue',
+                          'Compliance Issue',
+                        ),
+                        iconProps: { iconName: 'BlockedSite' },
+                      },
+                      {
+                        key: 3,
+                        name: _renderEmail('Request Help', 'Help'),
+                        iconProps: { iconName: 'Help' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  key: 'G',
                   text: 'Log Out',
                   iconProps: {
                     iconName: 'FollowUser',
