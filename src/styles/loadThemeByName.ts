@@ -157,8 +157,7 @@ function loadThemeByName(
       '[loadThemeByName] Illegal first argument "name" - unkown theme',
     );
   }
-
-  const theme: ITheme = createTheme(themes[name]);
+  const theme: ITheme = createTheme(themes[name as ThemeName]);
 
   let fontFamily: string | null = null;
 
@@ -175,6 +174,7 @@ function loadThemeByName(
       fonts[fontSize].fontFamily = fontFamily;
     });
   }
+  console.log('HERErE', theme);
 
   return loadTheme(theme);
 }

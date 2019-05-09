@@ -27,7 +27,10 @@ class NavMenu extends Component<IProps, IState> {
   theme: ITheme;
   constructor(props: IProps) {
     super(props);
-    this.theme = props.theme;
+    this.state = State;
+  }
+  componentWillMount() {
+    const theme = getTheme();
     this.classNames = mergeStyleSets({
       sidebar: {
         display: 'flex',
@@ -37,7 +40,7 @@ class NavMenu extends Component<IProps, IState> {
         flexDirection: 'column',
         alignItems: 'center',
         borderRight: '1px solid #ccc',
-        backgroundColor: this.theme.palette.themePrimary,
+        backgroundColor: theme.palette.themePrimary,
         bottom: -10,
         height: window.innerHeight,
         maxWidth: 50,
@@ -50,18 +53,17 @@ class NavMenu extends Component<IProps, IState> {
       sidebarLink: {
         display: 'flex',
         width: '100%',
-        color: this.theme.palette.white,
+        color: theme.palette.white,
         paddingVertical: 30,
         paddingHorizontal: 0,
         fontSize: 22,
       },
       logoStyles: {
-        color: this.theme.palette.white,
+        color: theme.palette.white,
         height: 30,
         width: 30,
       },
     });
-    this.state = State;
   }
 
   @bind
