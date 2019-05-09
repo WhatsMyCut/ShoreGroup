@@ -25,6 +25,7 @@ import {
   faShieldAlt,
   faPalette,
   faBell,
+  faHandsHelping,
 } from '@fortawesome/free-solid-svg-icons';
 import loadThemeByName from '../styles/loadThemeByName';
 import AuthorizationService from '../api/AuthorizationService';
@@ -52,7 +53,7 @@ class AuthorizedLayout extends Component<Props, IState> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      currentTheme: 'orange',
+      currentTheme: 'default',
     };
     initializeIcons();
     registerIcons({
@@ -64,20 +65,19 @@ class AuthorizedLayout extends Component<Props, IState> {
         Security: <FontAwesomeIcon icon={faShieldAlt} />,
         Notifications: <FontAwesomeIcon icon={faBell} />,
         Theme: <FontAwesomeIcon icon={faPalette} />,
+        Support: <FontAwesomeIcon icon={faHandsHelping} />,
       },
     });
   }
 
   componentWillMount() {
     const { currentTheme } = this.state;
-    console.log('currentTheme', currentTheme);
     loadThemeByName(currentTheme);
-    this.theme = getTheme();
     this.classNames = mergeStyleSets({
       layout: {
         display: 'flex',
         flex: '1 1 100%',
-        background: this.theme.palette.white,
+        background: '#fff',
         height: '100%',
         position: 'absolute',
         left: 0,
@@ -98,18 +98,25 @@ class AuthorizedLayout extends Component<Props, IState> {
     this.props.loginRequest();
   }
 
-  public onChangeTheme = (theme: string) => {
+  onChangeTheme = (theme: string) => {
     console.log('onChangeTheme', theme);
+    loadThemeByName(theme);
     this.setState({ currentTheme: theme });
+    console.log('currentTheme', theme);
+    loadThemeByName(theme);
   };
+
+  componentDidMount() {}
 
   public render() {
     //const { userInfo } = this.state;
+    const theme = getTheme();
+
     return (
       <div id="authorizedLayout" className={this.classNames.layout}>
-        <NavMenu theme={this.theme} />
+        <NavMenu theme={theme} />
         <div className={this.classNames.mainContent}>
-          <TopMenu theme={this.theme} onChangeTheme={this.onChangeTheme} />
+          <TopMenu theme={theme} onChangeTheme={this.onChangeTheme} />
           <div className={this.classNames.panelContent}>
             {this.props.children}
           </div>
