@@ -1,5 +1,4 @@
-﻿import '../styles/authorizedLayout.scss';
-import React, { Component, ReactNode } from 'react';
+﻿import React, { Component, ReactNode } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
@@ -11,7 +10,12 @@ import NavMenu from '../components/shared/NavMenu';
 import Footer from '../components/shared/Footer';
 
 import { initializeIcons } from '@uifabric/icons';
-import { mergeStyleSets, registerIcons, getTheme } from '@uifabric/styling';
+import {
+  mergeStyleSets,
+  registerIcons,
+  getTheme,
+  ITheme,
+} from '@uifabric/styling';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -21,6 +25,7 @@ import {
   faShieldAlt,
   faPalette,
   faBell,
+  faHandsHelping,
 } from '@fortawesome/free-solid-svg-icons';
 import loadThemeByName from '../styles/loadThemeByName';
 import AuthorizationService from '../api/AuthorizationService';
@@ -42,8 +47,9 @@ interface IState {
 
 class AuthorizedLayout extends Component<Props, IState> {
   props: Props;
-  private fetch: () => void;
-  theme: void;
+  protected fetch: () => void;
+  protected theme: ITheme;
+  protected classNames: any;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -59,28 +65,61 @@ class AuthorizedLayout extends Component<Props, IState> {
         Security: <FontAwesomeIcon icon={faShieldAlt} />,
         Notifications: <FontAwesomeIcon icon={faBell} />,
         Theme: <FontAwesomeIcon icon={faPalette} />,
+        Support: <FontAwesomeIcon icon={faHandsHelping} />,
       },
     });
   }
 
   componentWillMount() {
-    this.theme = loadThemeByName(this.state.currentTheme);
+    const { currentTheme } = this.state;
+    loadThemeByName(currentTheme);
+    this.classNames = mergeStyleSets({
+      layout: {
+        display: 'flex',
+        flex: '1 1 100%',
+        background: '#fff',
+        height: '100%',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        right: 0,
+      },
+      mainContent: {
+        display: 'flex',
+        flex: '1 0 90%',
+        flexDirection: 'column',
+      },
+      panelContent: {
+        padding: '0 20px 30px',
+      },
+    });
+
     this.props.loginRequest();
   }
 
-  protected onChangeTheme = (theme: string) => {
+  onChangeTheme = (theme: string) => {
     console.log('onChangeTheme', theme);
+    loadThemeByName(theme);
     this.setState({ currentTheme: theme });
+    console.log('currentTheme', theme);
+    loadThemeByName(theme);
   };
+
+  componentDidMount() {}
 
   public render() {
     //const { userInfo } = this.state;
+    const theme = getTheme();
+
     return (
-      <div id="authorizedLayout" className="layout">
-        <NavMenu theme={this.theme} />
-        <div className="mainContent">
-          <TopMenu theme={this.theme} onChangeTheme={this.onChangeTheme} />
-          <div className="panel-content">{this.props.children}</div>
+      <div id="authorizedLayout" className={this.classNames.layout}>
+        <NavMenu theme={theme} />
+        <div className={this.classNames.mainContent}>
+          <TopMenu theme={theme} onChangeTheme={this.onChangeTheme} />
+          <div className={this.classNames.panelContent}>
+            {this.props.children}
+          </div>
           <Footer />
         </div>
         <ToastContainer />

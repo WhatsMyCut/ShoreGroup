@@ -2,17 +2,10 @@ import React, { Component } from 'react';
 import {
   IPersonaSharedProps,
   Persona,
-  IPersonaProps,
 } from 'office-ui-fabric-react/lib/components/Persona';
-import {
-  mergeStyleSets,
-  ITheme,
-  createTheme,
-} from 'office-ui-fabric-react/lib/Styling';
+import { ITheme, createTheme } from 'office-ui-fabric-react/lib/Styling';
 import {
   Shimmer,
-  IShimmerStyleProps,
-  IShimmerStyles,
   ShimmerElementsGroup,
   ShimmerElementType,
 } from 'office-ui-fabric-react/lib/Shimmer';

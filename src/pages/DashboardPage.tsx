@@ -16,10 +16,8 @@ import {
   _getUserPersona,
   _getAccountPersona,
 } from '../components/shared/AppPersona';
-import { Panel } from 'office-ui-fabric-react/lib/components/Panel';
-import { mergeStyleSets } from '@uifabric/styling';
-import { theme } from '../components/attachments/Attachment';
-import { IJobAccount } from '../models/IJobModel';
+import { mergeStyleSets, getTheme } from '@uifabric/styling';
+import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
 
 interface IProps {
   userInfo?: IUserInfoModel;
@@ -30,9 +28,13 @@ interface IState {
 }
 class DashboardPage extends AppComponent<IProps, IState> {
   classNames: any;
+  protected theme: any;
   constructor(props: IProps, state: IState) {
     super(props);
     this.state = state;
+  }
+  componentWillMount() {
+    const theme = getTheme();
     this.classNames = mergeStyleSets({
       dashboardContainer: {
         display: 'flex',
@@ -91,8 +93,50 @@ class DashboardPage extends AppComponent<IProps, IState> {
         flex: '1 1 30%',
         paddingLeft: 25,
       },
+
+      sidePanel: {
+        display: 'flex',
+        flex: '1 1 100%',
+        selectors: {
+          '& ul': {
+            listStyleType: 'none',
+            paddingLeft: 0,
+          },
+          '& li': {
+            display: 'flex',
+            flex: '1 1 100%',
+            flexDirection: 'row',
+            width: '100%',
+            verticalAlign: 'middle',
+          },
+          '& li *:last-child': {
+            paddingTop: 5,
+          },
+          '& li i': {
+            marginRight: 15,
+          },
+        },
+      },
     });
   }
+
+  private _getSidePanel = (): JSX.Element => {
+    return (
+      <div className={this.classNames.sidePanel}>
+        <ul>
+          <li>
+            <Icon iconName={'PDF'} style={{ fontSize: 22 }} />
+            <span>New User Guide</span>
+          </li>
+          <li>
+            <Icon iconName={'PDF'} style={{ fontSize: 22 }} />
+            <span>Release Notes (v0.1beta)</span>
+          </li>
+        </ul>
+      </div>
+    );
+  };
+
   render() {
     const { userInfo } = this.props;
     const user = userInfo ? userInfo.guid : '–';
@@ -116,9 +160,11 @@ class DashboardPage extends AppComponent<IProps, IState> {
           </div>
           <div className={this.classNames.userTaskPanel}>
             <div className={this.classNames.userInfoPanelHeader}>
-              Important Information
+              Getting Started
             </div>
-            <div className={this.classNames.userInfoPanelContent}>Tasks</div>
+            <div className={this.classNames.userInfoPanelContent}>
+              {this._getSidePanel()}
+            </div>
           </div>
         </div>
       </div>
