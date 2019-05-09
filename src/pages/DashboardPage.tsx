@@ -16,10 +16,7 @@ import {
   _getUserPersona,
   _getAccountPersona,
 } from '../components/shared/AppPersona';
-import { Panel } from 'office-ui-fabric-react/lib/components/Panel';
-import { mergeStyleSets } from '@uifabric/styling';
-import { theme } from '../components/attachments/Attachment';
-import { IJobAccount } from '../models/IJobModel';
+import { mergeStyleSets, getTheme } from '@uifabric/styling';
 
 interface IProps {
   userInfo?: IUserInfoModel;
@@ -30,9 +27,12 @@ interface IState {
 }
 class DashboardPage extends AppComponent<IProps, IState> {
   classNames: any;
+  protected theme: any;
   constructor(props: IProps, state: IState) {
     super(props);
     this.state = state;
+    this.theme = getTheme();
+    console.log('theme', this.theme);
     this.classNames = mergeStyleSets({
       dashboardContainer: {
         display: 'flex',
@@ -54,10 +54,10 @@ class DashboardPage extends AppComponent<IProps, IState> {
 
       userInfoPanel: {
         flex: '1 1 70%',
-        border: '1px solid' + theme.palette.themePrimary,
+        border: '1px solid' + this.theme.palette.themePrimary,
         borderRadius: 10,
-        backgroundColor: theme.palette.white,
-        color: theme.palette.black,
+        backgroundColor: this.theme.palette.white,
+        color: this.theme.palette.black,
         minHeight: 100,
         width: 300,
         marginRight: 25,
@@ -70,21 +70,21 @@ class DashboardPage extends AppComponent<IProps, IState> {
       },
 
       userInfoPanelHeader: {
-        backgroundColor: theme.palette.themeTertiary,
+        backgroundColor: this.theme.palette.themeTertiary,
         fontWeight: 'bold',
-        color: theme.palette.black,
+        color: this.theme.palette.black,
         padding: 10,
       },
 
       userTaskPanel: {
         flex: '1 1 30%',
-        border: '1px solid' + theme.palette.themePrimary,
+        border: '1px solid' + this.theme.palette.themePrimary,
         borderRadius: 10,
       },
 
       userCompanyInfo: {
         flex: '1 1 70%',
-        borderRight: '1px solid' + theme.palette.themeLight,
+        borderRight: '1px solid' + this.theme.palette.themeLight,
       },
 
       userPersona: {

@@ -1,5 +1,4 @@
-﻿import '../styles/authorizedLayout.scss';
-import React, { Component, ReactNode } from 'react';
+﻿import React, { Component, ReactNode } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
@@ -11,7 +10,12 @@ import NavMenu from '../components/shared/NavMenu';
 import Footer from '../components/shared/Footer';
 
 import { initializeIcons } from '@uifabric/icons';
-import { mergeStyleSets, registerIcons, getTheme } from '@uifabric/styling';
+import {
+  mergeStyleSets,
+  registerIcons,
+  getTheme,
+  ITheme,
+} from '@uifabric/styling';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -42,12 +46,13 @@ interface IState {
 
 class AuthorizedLayout extends Component<Props, IState> {
   props: Props;
-  private fetch: () => void;
-  theme: void;
+  protected fetch: () => void;
+  protected theme: ITheme;
+  protected classNames: any;
   constructor(props: Props) {
     super(props);
     this.state = {
-      currentTheme: 'default',
+      currentTheme: 'orange',
     };
     initializeIcons();
     registerIcons({
@@ -64,11 +69,36 @@ class AuthorizedLayout extends Component<Props, IState> {
   }
 
   componentWillMount() {
-    this.theme = loadThemeByName(this.state.currentTheme);
+    const { currentTheme } = this.state;
+    console.log('currentTheme', currentTheme);
+    loadThemeByName(currentTheme);
+    this.theme = getTheme();
+    this.classNames = mergeStyleSets({
+      layout: {
+        display: 'flex',
+        flex: '1 1 100%',
+        background: this.theme.palette.white,
+        height: '100%',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        right: 0,
+      },
+      mainContent: {
+        display: 'flex',
+        flex: '1 0 90%',
+        flexDirection: 'column',
+      },
+      panelContent: {
+        padding: '0 20px 30px',
+      },
+    });
+
     this.props.loginRequest();
   }
 
-  protected onChangeTheme = (theme: string) => {
+  public onChangeTheme = (theme: string) => {
     console.log('onChangeTheme', theme);
     this.setState({ currentTheme: theme });
   };
@@ -76,11 +106,13 @@ class AuthorizedLayout extends Component<Props, IState> {
   public render() {
     //const { userInfo } = this.state;
     return (
-      <div id="authorizedLayout" className="layout">
+      <div id="authorizedLayout" className={this.classNames.layout}>
         <NavMenu theme={this.theme} />
-        <div className="mainContent">
+        <div className={this.classNames.mainContent}>
           <TopMenu theme={this.theme} onChangeTheme={this.onChangeTheme} />
-          <div className="panel-content">{this.props.children}</div>
+          <div className={this.classNames.panelContent}>
+            {this.props.children}
+          </div>
           <Footer />
         </div>
         <ToastContainer />
