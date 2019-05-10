@@ -338,8 +338,19 @@ export class TaskPane extends Component<IProps, IState> {
 
   render() {
     const { task } = this.props;
-    const items = this._getPanelSections(task);
-    const contentAreas = items.map(this._createContentArea);
+    const { currentTab } = this.state;
+    let content;
+    if (currentTab === 'Comments') {
+      content = this._renderComments();
+    } else {
+      const items = this._getPanelSections(task);
+      const contentAreas = items.map(this._createContentArea);
+      content = (
+        <ScrollablePane styles={{ root: classNames.pane }}>
+          {contentAreas}
+        </ScrollablePane>
+      );
+    }
     const attId = task ? task.Id : '–';
     return (
       <div className={'task-panel-container'}>
@@ -358,22 +369,15 @@ export class TaskPane extends Component<IProps, IState> {
               },
             },
           }}
-          //overflowItems={this.getOverlflowItems()}
-          overflowButtonProps={{ ariaLabel: 'More commands' }}
-          //farItems={this.getFarItems()}
-          ariaLabel={
-            'Use left and right arrow keys to navigate between commands'
-          }
         />
 
-        <div className={classNames.wrapper}>
-          <ScrollablePane styles={{ root: classNames.pane }}>
-            {contentAreas}
-          </ScrollablePane>
-        </div>
+        <div className={classNames.wrapper}>{content}</div>
         <div className="smalltext">Id: {attId}</div>
       </div>
     );
+  }
+  private _renderComments() {
+    return <div> Task Comments </div>;
   }
   _getItems(): ICommandBarItemProps[] {
     const { currentTab } = this.state;
