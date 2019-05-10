@@ -1,13 +1,14 @@
 import '../../styles/attachments.scss';
-import React, { Component, ReactNode } from 'react';
+import React, { Component, MouseEvent } from 'react';
+import {
+  CommandBar,
+  ICommandBarItemProps,
+} from 'office-ui-fabric-react/lib/CommandBar';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { getTheme, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { ITaskModel } from '../../models/ITaskModel';
 import Moment from 'moment';
-import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
-import { Link } from 'office-ui-fabric-react/lib/components/Link';
-import { BaseButton } from 'office-ui-fabric-react/lib/components/Button';
 
 const theme = getTheme();
 const classNames = mergeStyleSets({
@@ -23,10 +24,9 @@ const classNames = mergeStyleSets({
   },
   sticky: {
     color: theme.palette.themeDark,
-    padding: '5px 20px 5px 10px',
+    padding: '3px 20px 5px 10px',
     fontSize: '13px',
-    borderTop: '1px solid ' + theme.palette.black,
-    borderBottom: '1px solid ' + theme.palette.black,
+    borderTop: '1px solid ' + theme.palette.themeSecondary,
   },
   textContent: {
     padding: '15px 10px',
@@ -97,29 +97,38 @@ const classNames = mergeStyleSets({
   panelListRow: {
     margin: '2px 0',
   },
+
+  commentsContainer: {
+    borderTop: '1px solid ' + theme.palette.themeSecondary,
+    padding: 10,
+  },
 });
 
-export interface ITaskPaneItem {
+interface ITaskPaneItem {
   color: string;
   Id: string;
   Name: string;
   data?: JSX.Element;
 }
 
-export interface IProps {
+interface IProps {
   task?: ITaskModel;
   closeTaskPanel?: any;
 }
 
-export class TaskPane extends Component<IProps, {}> {
+interface IState {
+  currentTab?: string;
+}
+
+export class TaskPane extends Component<IProps, IState> {
   private _items: ITaskPaneItem[];
 
   constructor(props: IProps) {
     super(props);
-
-    // Using splice prevents the colors from being duplicated
     const { task } = this.props;
-    console.log('THERE', task);
+    this.state = {
+      currentTab: 'Task',
+    };
   }
   componentWillUnmount() {}
 
@@ -131,7 +140,6 @@ export class TaskPane extends Component<IProps, {}> {
         return (
           <li key={i} className={classNames.panelListRow}>
             <div className={classNames.panelListKey}>{x.Name}</div>
-            <div className={classNames.panelListValue}>{x.Value}</div>
           </li>
         );
       });
@@ -162,7 +170,6 @@ export class TaskPane extends Component<IProps, {}> {
         <div className={classNames.taskDetailHeader}>{header}</div>
         <div className={classNames.taskDetailNVP}>
           <div className={classNames.panelListKey}>{name}</div>
-          <div className={classNames.panelListValue}>{value}</div>
         </div>
       </div>
     );
@@ -301,28 +308,6 @@ export class TaskPane extends Component<IProps, {}> {
     );
   }
 
-  private _getTaskIcon(task: ITaskModel) {
-    return <div>[Task Icon]</div>;
-  }
-
-  private _getCloseBtn() {
-    const { task, closeTaskPanel } = this.props;
-    return (
-      <Icon
-        iconName="ChromeClose"
-        styles={{
-          root: {
-            fontSize: 12,
-            cursor: 'pointer',
-            paddingRight: 0,
-            color: theme.palette.black,
-          },
-        }}
-        onClick={closeTaskPanel}
-      />
-    );
-  }
-
   private _getPanelSections(task: ITaskModel) {
     let items = [];
     const name = task ? task.Subject : '_';
@@ -333,7 +318,6 @@ export class TaskPane extends Component<IProps, {}> {
         Name: (
           <div>
             <b>Task: "{name}"</b>
-            <span className="close-btn">{this._getCloseBtn()}</span>
           </div>
         ),
         data: this._getFileInfo(task),
@@ -350,20 +334,94 @@ export class TaskPane extends Component<IProps, {}> {
 
   render() {
     const { task } = this.props;
-    const items = this._getPanelSections(task);
-    const contentAreas = items.map(this._createContentArea);
+    const { currentTab } = this.state;
+    let content;
+    if (currentTab === 'Comments') {
+      content = this._renderComments();
+    } else {
+      const items = this._getPanelSections(task);
+      const contentAreas = items.map(this._createContentArea);
+      content = (
+        <ScrollablePane styles={{ root: classNames.pane }}>
+          {contentAreas}
+        </ScrollablePane>
+      );
+    }
     const attId = task ? task.Id : '–';
     return (
       <div className={'task-panel-container'}>
-        <div className={classNames.wrapper}>
-          <ScrollablePane styles={{ root: classNames.pane }}>
-            {contentAreas}
-          </ScrollablePane>
-        </div>
+        <CommandBar
+          items={this._getItems()}
+          theme={theme}
+          styles={{
+            root: {
+              padding: 0,
+              margin: 0,
+              backgroundColor: 'transparent',
+            },
+          }}
+        />
+
+        <div className={classNames.wrapper}>{content}</div>
         <div className="smalltext">Id: {attId}</div>
       </div>
     );
   }
+  private _renderComments() {
+    return <div className={classNames.commentsContainer}>Task Comments</div>;
+  }
+  private _getItems(): ICommandBarItemProps[] {
+    const { currentTab } = this.state;
+    const { closeTaskPanel } = this.props;
+    const taskClassName = currentTab && currentTab === 'Task' ? 'active' : '';
+    const commentsClassName =
+      currentTab && currentTab === 'Comments' ? 'active' : '';
+    return [
+      {
+        key: '1',
+        name: 'Task',
+        className: taskClassName,
+        iconProps: { iconName: 'ActivateOrders' },
+        onClick: this._setPanelTab,
+        style: {
+          backgroundColor: 'transparent',
+          borderRight: '1px solid ' + theme.palette.themeLight,
+        },
+      },
+      {
+        key: '2',
+        name: 'Comments',
+        className: commentsClassName,
+        iconProps: { iconName: 'Comment' },
+        onClick: this._setPanelTab,
+        style: {
+          backgroundColor: 'transparent',
+          borderRight: '1px solid ' + theme.palette.themeLight,
+        },
+      },
+      {
+        key: 'close',
+        iconOnly: true,
+        iconProps: { iconName: 'ChromeClose', style: { fontSize: 12 } },
+        onClick: closeTaskPanel,
+        style: {
+          position: 'absolute',
+          right: 0,
+          backgroundColor: 'transparent',
+          cursor: 'pointer',
+        },
+      },
+    ];
+  }
+  protected _setPanelTab = (ev: MouseEvent<HTMLElement>) => {
+    ev.preventDefault();
+    const currentTab =
+      ev && ev.currentTarget
+        ? ev.currentTarget.innerText.substr(1).trim()
+        : 'Task';
+    console.log('setPanel', currentTab);
+    this.setState({ currentTab });
+  };
 
   private _createContentArea = (item: ITaskPaneItem, index: number) => {
     //console.log('_createContentArea', item);
@@ -371,6 +429,7 @@ export class TaskPane extends Component<IProps, {}> {
       <div
         key={index}
         style={{
+          flex: '1 1 100%',
           backgroundColor: item.color,
         }}
       >

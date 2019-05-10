@@ -108,8 +108,8 @@ export class TaskList extends Component<IProps, ITaskListState> {
         key: 'column3',
         name: 'Job Task Type',
         fieldName: 'Type',
-        minWidth: 20,
-        maxWidth: 100,
+        minWidth: 100,
+        maxWidth: 140,
         isRowHeader: true,
         isResizable: true,
         isSorted: false,
@@ -124,7 +124,7 @@ export class TaskList extends Component<IProps, ITaskListState> {
         key: 'column4',
         name: 'Priority',
         fieldName: 'Priority',
-        minWidth: 20,
+        minWidth: 55,
         maxWidth: 60,
         isRowHeader: true,
         isResizable: true,
@@ -140,7 +140,7 @@ export class TaskList extends Component<IProps, ITaskListState> {
         key: 'column5',
         name: 'Due Date',
         fieldName: 'DueDate',
-        minWidth: 20,
+        minWidth: 65,
         maxWidth: 100,
         isRowHeader: true,
         isResizable: true,
@@ -156,7 +156,7 @@ export class TaskList extends Component<IProps, ITaskListState> {
         key: 'column6',
         name: 'Actual End',
         fieldName: 'DueDate',
-        minWidth: 20,
+        minWidth: 65,
         maxWidth: 120,
         isRowHeader: true,
         isResizable: true,
@@ -172,8 +172,8 @@ export class TaskList extends Component<IProps, ITaskListState> {
 
     this._selection = new Selection({
       onSelectionChanged: () => {
+        console.log('HERRERER');
         const details = this._getSelectionDetails();
-        console.log('HERRERER', details);
         this.setState({
           selectionDetails: details,
         });

@@ -10,6 +10,7 @@ import { AttachmentList } from '../../components/attachments/AttachmentList';
 import { AttachmentPane } from '../../components/attachments/AttachmentPane';
 import { TaskList } from '../../components/tasks/TaskList';
 import { TaskPane } from '../tasks/TaskPane';
+import { CommentsPane } from '../comments/CommentsPane';
 import { Dropzone } from '../shared/DropZone';
 import Moment from 'moment';
 import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
@@ -131,7 +132,7 @@ class JobDetail extends Component<IProps, IState> {
         margin: '0 0 0 25px',
         border: '1px solid' + this.theme.palette.themePrimary,
         borderRadius: 5,
-        padding: '5px 0',
+        padding: '0',
       },
     });
   }
@@ -250,6 +251,7 @@ class JobDetail extends Component<IProps, IState> {
     let content;
     const { currentAttachment, currentTask } = this.state;
     const { job } = this.props;
+    const comments = job ? job.Tasks : [];
     if (currentAttachment) {
       content = (
         <div>
@@ -275,7 +277,11 @@ class JobDetail extends Component<IProps, IState> {
         </div>
       );
     } else {
-      content = <div>Comments</div>;
+      content = (
+        <div>
+          <CommentsPane comments={comments} />
+        </div>
+      );
     }
     return <div className={'job-side-panel'}>{content}</div>;
   }
@@ -362,9 +368,6 @@ class JobDetail extends Component<IProps, IState> {
                 backgroundColor: this.theme.palette.themeLight,
               },
             }}
-            //overflowItems={this.getOverlflowItems()}
-            overflowButtonProps={{ ariaLabel: 'More commands' }}
-            //farItems={this.getFarItems()}
             ariaLabel={
               'Use left and right arrow keys to navigate between commands'
             }

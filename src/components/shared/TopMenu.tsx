@@ -21,7 +21,7 @@ import { ContextualMenuItemType } from 'office-ui-fabric-react/lib/ContextualMen
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { mergeStyleSets, ITheme, getTheme } from '@uifabric/styling';
+import { mergeStyleSets, ITheme, getTheme, IStyleSet } from '@uifabric/styling';
 import { Link } from 'office-ui-fabric-react/lib/components/Link';
 
 interface IProps {
@@ -31,18 +31,25 @@ interface IProps {
 }
 
 interface IState {
-  logoutAction: boolean;
+  logoutAction?: boolean;
   userInfo?: IUserInfoModel;
+  theme?: any;
+  classNames?: any;
 }
 class TopMenu extends AppComponent<IProps, IState> {
   classNames: any;
-  constructor(props: IProps, state: IState) {
+  constructor(props: IProps) {
     super(props);
-    this.state = state;
+    const { theme } = props;
+    const classNames = this._updateClassNames(theme);
+    this.state = {
+      theme,
+      classNames,
+    };
   }
-  componentWillMount() {
-    const theme = getTheme();
-    this.classNames = mergeStyleSets({
+
+  private _updateClassNames(theme: ITheme) {
+    const classNames = mergeStyleSets({
       topmenuContainer: {
         width: '100%',
         backgroundColor: theme.palette.themeLighterAlt,
@@ -91,6 +98,13 @@ class TopMenu extends AppComponent<IProps, IState> {
         padding: 5,
       },
     });
+    return classNames;
+  }
+
+  componentWillUpdate(nextProps) {
+    console.log('componentWillUpdate', nextProps);
+    const { theme } = nextProps;
+    this._updateClassNames(theme);
   }
 
   @bind
@@ -115,13 +129,11 @@ class TopMenu extends AppComponent<IProps, IState> {
   private elDropdown: HTMLAnchorElement;
   private elCollapseButton: HTMLButtonElement;
 
-  componentDidMount() {
-    const { userInfo } = this.props;
-    // var dropdown = new Dropdown(this.elDropdown);
-    // var collapse = new Collapse(this.elCollapseButton);
+  componentWillMount() {
+    const { theme } = this.props;
+    console.log('componentDidMount', theme);
+    this._updateClassNames(theme);
   }
-
-  componentDidUpdate() {}
 
   private _initials(string: string) {
     const spl = string.split(' ');
@@ -134,7 +146,7 @@ class TopMenu extends AppComponent<IProps, IState> {
 
   render() {
     var accountList = null;
-    const { userInfo } = this.props;
+    const { userInfo, theme } = this.props;
     const user = userInfo ? userInfo.name : '–';
     const _renderIcon = (): JSX.Element => {
       const name =
@@ -144,7 +156,7 @@ class TopMenu extends AppComponent<IProps, IState> {
 
     const _renderPersona = (): JSX.Element => {
       return (
-        <div className={this.classNames.menuPersona}>
+        <div className={this.state.classNames.menuPersona}>
           {_getUserPersona(userInfo)}
         </div>
       );
@@ -189,7 +201,7 @@ class TopMenu extends AppComponent<IProps, IState> {
       );
     };
     const _getAccountItems = () => {
-      const { userInfo } = this.props;
+      const { userInfo, theme } = this.props;
       const accounts = userInfo ? userInfo.accounts : [];
       const selectedAccount = userInfo ? userInfo.account : '-';
       console.log('userInfo', userInfo, theme.palette.themePrimary);
@@ -222,12 +234,12 @@ class TopMenu extends AppComponent<IProps, IState> {
     if (this.state.logoutAction) {
       return <Redirect to="/login" />;
     }
-    const theme = getTheme();
+
     return (
-      <div className={this.classNames.topmenuContainer}>
-        <div className={this.classNames.navbarHeader}>
-          <div className={this.classNames.navbarBrandContainer}>
-            <a className={this.classNames.navbarBrand} href="/">
+      <div className={this.state.classNames.topmenuContainer}>
+        <div className={this.state.classNames.navbarHeader}>
+          <div className={this.state.classNames.navbarBrandContainer}>
+            <a className={this.state.classNames.navbarBrand} href="/">
               CompliChain
             </a>
           </div>
@@ -240,8 +252,8 @@ class TopMenu extends AppComponent<IProps, IState> {
                 width: 40,
                 minWidth: 'auto',
                 borderRadius: '50%',
-                backgroundColor: theme.palette.themePrimary,
-                color: theme.palette.white,
+                backgroundColor: this.state.theme.palette.themePrimary,
+                color: this.state.theme.palette.white,
               },
             }}
             menuProps={{
