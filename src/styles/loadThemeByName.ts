@@ -174,7 +174,6 @@ function loadThemeByName(
       fonts[fontSize].fontFamily = fontFamily;
     });
   }
-  console.log('HERErE', theme);
 
   return loadTheme(theme);
 }
