@@ -1,5 +1,9 @@
 import '../../styles/attachments.scss';
-import React, { Component, ReactNode } from 'react';
+import React, { Component, MouseEvent } from 'react';
+import {
+  CommandBar,
+  ICommandBarItemProps,
+} from 'office-ui-fabric-react/lib/CommandBar';
 import { ScrollablePane } from 'office-ui-fabric-react/lib/ScrollablePane';
 import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { getTheme, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
@@ -23,7 +27,7 @@ const classNames = mergeStyleSets({
   },
   sticky: {
     color: theme.palette.themeDark,
-    padding: '5px 20px 5px 10px',
+    padding: '0 20px 5px 10px',
     fontSize: '13px',
     borderTop: '1px solid ' + theme.palette.black,
     borderBottom: '1px solid ' + theme.palette.black,
@@ -111,7 +115,11 @@ export interface IProps {
   closeTaskPanel?: any;
 }
 
-export class TaskPane extends Component<IProps, {}> {
+interface IState {
+  currentTab?: string;
+}
+
+export class TaskPane extends Component<IProps, IState> {
   private _items: ITaskPaneItem[];
 
   constructor(props: IProps) {
@@ -119,6 +127,9 @@ export class TaskPane extends Component<IProps, {}> {
 
     // Using splice prevents the colors from being duplicated
     const { task } = this.props;
+    this.state = {
+      currentTab: 'Task',
+    };
     console.log('THERE', task);
   }
   componentWillUnmount() {}
@@ -301,28 +312,6 @@ export class TaskPane extends Component<IProps, {}> {
     );
   }
 
-  private _getTaskIcon(task: ITaskModel) {
-    return <div>[Task Icon]</div>;
-  }
-
-  private _getCloseBtn() {
-    const { task, closeTaskPanel } = this.props;
-    return (
-      <Icon
-        iconName="ChromeClose"
-        styles={{
-          root: {
-            fontSize: 12,
-            cursor: 'pointer',
-            paddingRight: 0,
-            color: theme.palette.black,
-          },
-        }}
-        onClick={closeTaskPanel}
-      />
-    );
-  }
-
   private _getPanelSections(task: ITaskModel) {
     let items = [];
     const name = task ? task.Subject : '_';
@@ -333,7 +322,6 @@ export class TaskPane extends Component<IProps, {}> {
         Name: (
           <div>
             <b>Task: "{name}"</b>
-            <span className="close-btn">{this._getCloseBtn()}</span>
           </div>
         ),
         data: this._getFileInfo(task),
@@ -355,6 +343,29 @@ export class TaskPane extends Component<IProps, {}> {
     const attId = task ? task.Id : '–';
     return (
       <div className={'task-panel-container'}>
+        <CommandBar
+          items={this._getItems()}
+          theme={theme}
+          styles={{
+            root: {
+              padding: 0,
+              margin: 0,
+              backgroundColor: 'transparent',
+              button: {
+                padding: 0,
+                margin: 0,
+                border: '1px solid ' + theme.palette.themePrimary,
+              },
+            },
+          }}
+          //overflowItems={this.getOverlflowItems()}
+          overflowButtonProps={{ ariaLabel: 'More commands' }}
+          //farItems={this.getFarItems()}
+          ariaLabel={
+            'Use left and right arrow keys to navigate between commands'
+          }
+        />
+
         <div className={classNames.wrapper}>
           <ScrollablePane styles={{ root: classNames.pane }}>
             {contentAreas}
@@ -364,6 +375,50 @@ export class TaskPane extends Component<IProps, {}> {
       </div>
     );
   }
+  _getItems(): ICommandBarItemProps[] {
+    const { currentTab } = this.state;
+    const { closeTaskPanel } = this.props;
+    const taskClassName = currentTab && currentTab === 'Task' ? 'active' : '';
+    const commentsClassName =
+      currentTab && currentTab === 'Comments' ? 'active' : '';
+    return [
+      {
+        key: '1',
+        name: 'Task',
+        className: taskClassName,
+        iconProps: { iconName: 'ActivateOrders' },
+        onClick: this._setPanelTab,
+      },
+      {
+        key: '2',
+        name: 'Comments',
+        className: commentsClassName,
+        iconProps: { iconName: 'Comment' },
+        onClick: this._setPanelTab,
+      },
+      {
+        key: 'close',
+        iconOnly: true,
+        iconProps: { iconName: 'ChromeClose', style: { fontSize: 12 } },
+        onClick: closeTaskPanel,
+        style: {
+          position: 'absolute',
+          right: 0,
+          backgroundColor: 'transparent',
+          cursor: 'pointer',
+        },
+      },
+    ];
+  }
+  protected _setPanelTab = (ev: MouseEvent<HTMLElement>) => {
+    ev.preventDefault();
+    const currentTab =
+      ev && ev.currentTarget
+        ? ev.currentTarget.innerText.substr(1).trim()
+        : 'Task';
+    console.log('setPanel', currentTab);
+    this.setState({ currentTab });
+  };
 
   private _createContentArea = (item: ITaskPaneItem, index: number) => {
     //console.log('_createContentArea', item);
@@ -371,6 +426,7 @@ export class TaskPane extends Component<IProps, {}> {
       <div
         key={index}
         style={{
+          flex: '1 1 100%',
           backgroundColor: item.color,
         }}
       >
