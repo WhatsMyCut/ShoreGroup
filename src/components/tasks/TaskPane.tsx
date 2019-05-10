@@ -9,9 +9,6 @@ import { Sticky, StickyPositionType } from 'office-ui-fabric-react/lib/Sticky';
 import { getTheme, mergeStyleSets } from 'office-ui-fabric-react/lib/Styling';
 import { ITaskModel } from '../../models/ITaskModel';
 import Moment from 'moment';
-import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
-import { Link } from 'office-ui-fabric-react/lib/components/Link';
-import { BaseButton } from 'office-ui-fabric-react/lib/components/Button';
 
 const theme = getTheme();
 const classNames = mergeStyleSets({
@@ -27,10 +24,9 @@ const classNames = mergeStyleSets({
   },
   sticky: {
     color: theme.palette.themeDark,
-    padding: '0 20px 5px 10px',
+    padding: '3px 20px 5px 10px',
     fontSize: '13px',
-    borderTop: '1px solid ' + theme.palette.black,
-    borderBottom: '1px solid ' + theme.palette.black,
+    borderTop: '1px solid ' + theme.palette.themeSecondary,
   },
   textContent: {
     padding: '15px 10px',
@@ -101,16 +97,21 @@ const classNames = mergeStyleSets({
   panelListRow: {
     margin: '2px 0',
   },
+
+  commentsContainer: {
+    borderTop: '1px solid ' + theme.palette.themeSecondary,
+    padding: 10,
+  },
 });
 
-export interface ITaskPaneItem {
+interface ITaskPaneItem {
   color: string;
   Id: string;
   Name: string;
   data?: JSX.Element;
 }
 
-export interface IProps {
+interface IProps {
   task?: ITaskModel;
   closeTaskPanel?: any;
 }
@@ -124,13 +125,10 @@ export class TaskPane extends Component<IProps, IState> {
 
   constructor(props: IProps) {
     super(props);
-
-    // Using splice prevents the colors from being duplicated
     const { task } = this.props;
     this.state = {
       currentTab: 'Task',
     };
-    console.log('THERE', task);
   }
   componentWillUnmount() {}
 
@@ -142,7 +140,6 @@ export class TaskPane extends Component<IProps, IState> {
         return (
           <li key={i} className={classNames.panelListRow}>
             <div className={classNames.panelListKey}>{x.Name}</div>
-            <div className={classNames.panelListValue}>{x.Value}</div>
           </li>
         );
       });
@@ -173,7 +170,6 @@ export class TaskPane extends Component<IProps, IState> {
         <div className={classNames.taskDetailHeader}>{header}</div>
         <div className={classNames.taskDetailNVP}>
           <div className={classNames.panelListKey}>{name}</div>
-          <div className={classNames.panelListValue}>{value}</div>
         </div>
       </div>
     );
@@ -362,11 +358,6 @@ export class TaskPane extends Component<IProps, IState> {
               padding: 0,
               margin: 0,
               backgroundColor: 'transparent',
-              button: {
-                padding: 0,
-                margin: 0,
-                border: '1px solid ' + theme.palette.themePrimary,
-              },
             },
           }}
         />
@@ -377,9 +368,9 @@ export class TaskPane extends Component<IProps, IState> {
     );
   }
   private _renderComments() {
-    return <div> Task Comments </div>;
+    return <div className={classNames.commentsContainer}>Task Comments</div>;
   }
-  _getItems(): ICommandBarItemProps[] {
+  private _getItems(): ICommandBarItemProps[] {
     const { currentTab } = this.state;
     const { closeTaskPanel } = this.props;
     const taskClassName = currentTab && currentTab === 'Task' ? 'active' : '';
@@ -392,6 +383,10 @@ export class TaskPane extends Component<IProps, IState> {
         className: taskClassName,
         iconProps: { iconName: 'ActivateOrders' },
         onClick: this._setPanelTab,
+        style: {
+          backgroundColor: 'transparent',
+          borderRight: '1px solid ' + theme.palette.themeLight,
+        },
       },
       {
         key: '2',
@@ -399,6 +394,10 @@ export class TaskPane extends Component<IProps, IState> {
         className: commentsClassName,
         iconProps: { iconName: 'Comment' },
         onClick: this._setPanelTab,
+        style: {
+          backgroundColor: 'transparent',
+          borderRight: '1px solid ' + theme.palette.themeLight,
+        },
       },
       {
         key: 'close',
