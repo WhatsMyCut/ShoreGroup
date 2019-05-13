@@ -6,7 +6,7 @@ export const adalConfig = {
   endpoints: {},
   redirectUri: ((loc, port) => `${loc.protocol}//${loc.hostname}${port}/`)(
     window.location,
-    window.location.port !== 443 ? `:${window.location.port}` : '',
+    window.location.port ? `:${window.location.port}` : '',
   ),
   cacheLocation: process.env.REACT_APP_ADAL_CACHE_LOCATION,
 };
