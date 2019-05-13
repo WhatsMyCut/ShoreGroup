@@ -45,9 +45,7 @@ export default class CommentModal extends Component<IProps, IState> {
             </button>
           </div>
         }
-        title={`Save Comment: #${this.state.modelForEdit.Id} ${
-          this.state.modelForEdit.ContentText
-        }`}
+        title={`Save Comment:`}
       >
         {this.props.children}
       </ModalComponent>

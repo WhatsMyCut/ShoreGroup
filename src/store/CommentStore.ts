@@ -6,7 +6,6 @@ import { ICommentModel } from '../models/ICommentModel';
 import { IJobModel } from '../models/IJobModel';
 
 export interface IState {
-  job?: IJobModel;
   comments: ICommentModel[];
   comment?: ICommentModel;
   indicators: {
@@ -15,139 +14,139 @@ export interface IState {
 }
 
 export enum Actions {
-  FailureResponse = 'COMMENT_FAILURE_RESPONSE',
-  FetchRequest = 'COMMENT_FETCH_REQUEST',
-  FetchResponse = 'COMMENT_FETCH_RESPONSE',
-  FetchByIdResponse = 'COMMENT_FETCH_BY_ID_RESPONSE',
-  AddRequest = 'COMMENT_ADD_REQUEST',
-  AddResponse = 'COMMENT_ADD_RESPONSE',
-  UpdateRequest = 'COMMENT_UPDATE_REQUEST',
-  UpdateResponse = 'COMMENT_UPDATE_RESPONSE',
-  DeleteRequest = 'COMMENT_DELETE_REQUEST',
-  DeleteResponse = 'COMMENT_DELETE_RESPONSE',
+  CFailureResponse = 'COMMENT_FAILURE_RESPONSE',
+  CFetchRequest = 'COMMENT_FETCH_REQUEST',
+  CFetchResponse = 'COMMENT_FETCH_RESPONSE',
+  CFetchByIdResponse = 'COMMENT_FETCH_BY_ID_RESPONSE',
+  CAddRequest = 'COMMENT_ADD_REQUEST',
+  CAddResponse = 'COMMENT_ADD_RESPONSE',
+  CUpdateRequest = 'COMMENT_UPDATE_REQUEST',
+  CUpdateResponse = 'COMMENT_UPDATE_RESPONSE',
+  CDeleteRequest = 'COMMENT_DELETE_REQUEST',
+  CDeleteResponse = 'COMMENT_DELETE_RESPONSE',
 }
 
-interface IFailureResponse {
-  type: Actions.FailureResponse;
+interface ICFailureResponse {
+  type: Actions.CFailureResponse;
 }
 
-interface IFetchRequest {
-  type: Actions.FetchRequest;
+interface ICFetchRequest {
+  type: Actions.CFetchRequest;
 }
 
-interface IFetchResponse {
-  type: Actions.FetchResponse;
+interface ICFetchResponse {
+  type: Actions.CFetchResponse;
   payload: ICommentModel[];
 }
 
-interface IFetchByIdResponse {
-  type: Actions.FetchByIdResponse;
+interface ICFetchByIdResponse {
+  type: Actions.CFetchByIdResponse;
   payload: ICommentModel;
 }
 
-interface IAddRequest {
-  type: Actions.AddRequest;
+interface ICAddRequest {
+  type: Actions.CAddRequest;
 }
 
-interface IAddResponse {
-  type: Actions.AddResponse;
+interface ICAddResponse {
+  type: Actions.CAddResponse;
   payload: ICommentModel;
 }
 
-interface IUpdateRequest {
-  type: Actions.UpdateRequest;
+interface ICUpdateRequest {
+  type: Actions.CUpdateRequest;
 }
 
-interface IUpdateResponse {
-  type: Actions.UpdateResponse;
+interface ICUpdateResponse {
+  type: Actions.CUpdateResponse;
   payload: ICommentModel;
 }
 
-interface IDeleteRequest {
-  type: Actions.DeleteRequest;
+interface ICDeleteRequest {
+  type: Actions.CDeleteRequest;
 }
 
-interface IDeleteResponse {
-  type: Actions.DeleteResponse;
+interface ICDeleteResponse {
+  type: Actions.CDeleteResponse;
   id: string;
 }
 
 type KnownAction =
-  | IFailureResponse
-  | IFetchRequest
-  | IFetchResponse
-  | IFetchByIdResponse
-  | IAddRequest
-  | IAddResponse
-  | IUpdateRequest
-  | IUpdateResponse
-  | IDeleteRequest
-  | IDeleteResponse;
+  | ICFailureResponse
+  | ICFetchRequest
+  | ICFetchResponse
+  | ICFetchByIdResponse
+  | ICAddRequest
+  | ICAddResponse
+  | ICUpdateRequest
+  | ICUpdateResponse
+  | ICDeleteRequest
+  | ICDeleteResponse;
 
 export const actionCreators = {
-  fetchRequest: (
-    job?: string,
+  fetchCommentsRequest: (
+    job?: IJobModel,
     id?: string,
   ): AppThunkAction<KnownAction> => async (dispatch, getState) => {
     // Wait for server prerendering.
-    dispatch({ type: Actions.FetchRequest });
+    dispatch({ type: Actions.CFetchRequest });
     var fetched = id
-      ? await CommentService.fetch(job, id)
-      : await CommentService.fetch(job);
+      ? await CommentService.fetchComments(job, id) // fetch one
+      : await CommentService.fetchComments(job); // fetch all
     const result = fetched;
     if (result && !result.length) {
       const retArr = result['Result'];
       if (id) {
-        dispatch({ type: Actions.FetchByIdResponse, payload: retArr });
+        dispatch({ type: Actions.CFetchByIdResponse, payload: retArr });
       } else {
-        dispatch({ type: Actions.FetchResponse, payload: retArr });
+        dispatch({ type: Actions.CFetchResponse, payload: retArr });
       }
     } else {
-      dispatch({ type: Actions.FailureResponse });
+      dispatch({ type: Actions.CFailureResponse });
     }
   },
-  addRequest: (
-    jobId: IJobModel,
+  addCommentsRequest: (
+    job: IJobModel,
     model: ICommentModel,
   ): AppThunkActionAsync<KnownAction, string> => async (dispatch, getState) => {
-    dispatch({ type: Actions.AddRequest });
-    var result = await CommentService.add(jobId, model);
+    dispatch({ type: Actions.CAddRequest });
+    var result = await CommentService.add(job, model);
 
     if (result) {
       model.Id = result;
-      dispatch({ type: Actions.AddResponse, payload: model });
+      dispatch({ type: Actions.CAddResponse, payload: model });
     } else {
-      dispatch({ type: Actions.FailureResponse });
+      dispatch({ type: Actions.CFailureResponse });
     }
 
     return result;
   },
-  updateRequest: (
+  updateCommentRequest: (
     model: ICommentModel,
   ): AppThunkActionAsync<KnownAction, ICommentModel> => async (
     dispatch,
     getState,
   ) => {
-    dispatch({ type: Actions.UpdateRequest });
+    dispatch({ type: Actions.CUpdateRequest });
     var result = await CommentService.update(model);
     if (result) {
-      dispatch({ type: Actions.UpdateResponse, payload: model });
+      dispatch({ type: Actions.CUpdateResponse, payload: model });
     } else {
-      dispatch({ type: Actions.FailureResponse });
+      dispatch({ type: Actions.CFailureResponse });
     }
 
     return result;
   },
-  deleteRequest: (id: string): AppThunkAction<KnownAction> => async (
+  deleteCommentsRequest: (id: string): AppThunkAction<KnownAction> => async (
     dispatch,
     getState,
   ) => {
-    dispatch({ type: Actions.DeleteRequest });
+    dispatch({ type: Actions.CDeleteRequest });
     var result = await CommentService.delete(id);
     if (result) {
-      dispatch({ type: Actions.DeleteResponse, id });
+      dispatch({ type: Actions.CDeleteResponse, id });
     } else {
-      dispatch({ type: Actions.FailureResponse });
+      dispatch({ type: Actions.CFailureResponse });
     }
   },
 };
@@ -177,49 +176,49 @@ export const reducer: Reducer<IState> = (
   );
   //console.log('here4', action);
   switch (action.type) {
-    case Actions.FailureResponse:
+    case Actions.CFailureResponse:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
       return { ...currentState, indicators };
-    case Actions.FetchRequest:
+    case Actions.CFetchRequest:
       var indicators = cloneIndicators();
       indicators.operationLoading = true;
       return { ...currentState, indicators };
-    case Actions.FetchResponse:
+    case Actions.CFetchResponse:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
       return { ...currentState, indicators, comments: action.payload };
-    case Actions.FetchByIdResponse:
+    case Actions.CFetchByIdResponse:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
       var newState = { ...currentState, indicators, job: action.payload };
       return newState;
-    case Actions.UpdateRequest:
+    case Actions.CUpdateRequest:
       var indicators = cloneIndicators();
       indicators.operationLoading = true;
       return { ...currentState, indicators };
-    case Actions.UpdateResponse:
+    case Actions.CUpdateResponse:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
       var data = clone(currentState.comments);
       var itemToUpdate = data.filter(x => x.Id === action.payload.Id)[0];
       itemToUpdate.ContentText = action.payload.ContentText;
       return { ...currentState, indicators, comments: data };
-    case Actions.AddRequest:
+    case Actions.CAddRequest:
       var indicators = cloneIndicators();
       indicators.operationLoading = true;
       return { ...currentState, indicators };
-    case Actions.AddResponse:
+    case Actions.CAddResponse:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
       var data = clone(currentState.comments);
       data.push(action.payload);
       return { ...currentState, indicators, comments: data };
-    case Actions.DeleteRequest:
+    case Actions.CDeleteRequest:
       var indicators = cloneIndicators();
       indicators.operationLoading = true;
       return { ...currentState, indicators };
-    case Actions.DeleteResponse:
+    case Actions.CDeleteResponse:
       var indicators = cloneIndicators();
       indicators.operationLoading = false;
       var data = clone(currentState.comments).filter(x => x.Id !== action.id);

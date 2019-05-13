@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import * as JobStore from '../../store/JobStore';
 import { ApplicationState, reducers } from '../../store/index';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
-import { IJobModel, IJobType } from '../../models/IJobModel';
+import { IJobModel } from '../../models/IJobModel';
 import { AttachmentList } from '../../components/attachments/AttachmentList';
 import { AttachmentPane } from '../../components/attachments/AttachmentPane';
 import { TaskList } from '../../components/tasks/TaskList';
@@ -251,7 +251,7 @@ class JobDetail extends Component<IProps, IState> {
     let content;
     const { currentAttachment, currentTask } = this.state;
     const { job } = this.props;
-    const comments = job ? job.Tasks : [];
+    const jobId = job ? job.Id : '0';
     if (currentAttachment) {
       content = (
         <div>
@@ -279,7 +279,7 @@ class JobDetail extends Component<IProps, IState> {
     } else {
       content = (
         <div>
-          <CommentsPane comments={comments} />
+          <CommentsPane job={job} />
         </div>
       );
     }

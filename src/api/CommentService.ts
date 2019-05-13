@@ -22,14 +22,14 @@ export default class CommentService extends ServiceBase {
    * @param id String
    * @returns Promise<ICommentModel[]>
    */
-  public static async fetch(
-    job: string = null,
+  public static async fetchComments(
+    job: IJobModel = null,
     id: string = null,
   ): Promise<ICommentModel[]> {
-    job = job == null ? '' : `/${job}`;
     var result = await this.requestJson<ICommentModel[]>({
-      url:
-        `${process.env.REACT_APP_API_ENDPOINT_URL}/api/job` + job + '/comment',
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/job/${
+        job.Id
+      }/comment`,
       method: 'GET',
     });
     return result.value;
@@ -73,14 +73,13 @@ export default class CommentService extends ServiceBase {
    * @param id ICommentModel
    */
   public static async add(
-    jobId: IJobModel,
+    job: IJobModel,
     model: ICommentModel,
   ): Promise<string> {
     var result = await this.requestJson<ICommentModel>({
-      url:
-        `${process.env.REACT_APP_API_ENDPOINT_URL}/api/job/` +
-        jobId +
-        '/comment',
+      url: `${process.env.REACT_APP_API_ENDPOINT_URL}/api/job/${
+        job.Id
+      }/comment`,
       method: 'POST',
       data: model,
     });

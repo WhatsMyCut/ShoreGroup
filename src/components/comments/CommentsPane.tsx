@@ -9,22 +9,24 @@ import { TooltipHost } from 'office-ui-fabric-react/lib/components/Tooltip';
 import AwesomeDebouncePromise from 'awesome-debounce-promise';
 import * as CommentStore from '../../store/CommentStore';
 import { ICommentModel } from '../../models/ICommentModel';
+import { IJobModel } from '../../models/IJobModel';
 import { ApplicationState } from '../../store/index';
 
-interface ICommentPaneItem {
+export interface ICommentPaneItem {
   color: string;
   Id: string;
   Subject: string;
   data?: JSX.Element;
 }
 
-interface ICommentsProps {
-  jobId?: string;
+interface ICommentProps {
+  job?: IJobModel;
 }
 
 interface IState {
   currentComment?: ICommentModel;
 }
+
 const theme = getTheme();
 const classNames = mergeStyleSets({
   commentContainer: {
@@ -67,52 +69,43 @@ const classNames = mergeStyleSets({
   },
 });
 
-type Props = ICommentsProps &
+type Props = RouteComponentProps<ICommentProps> &
   typeof CommentStore.actionCreators &
   CommentStore.IState;
 
 export class CommentsPane extends AppComponent<Props, IState> {
-  private fetch: (jobId: string, id: string) => void;
+  private fetch: (job: IJobModel, id: string) => void;
   constructor(props: Props) {
     super(props);
-    this.fetch = AwesomeDebouncePromise((jobId: string, id: string) => {
-      props.fetchRequest(jobId, id);
+    this.fetch = AwesomeDebouncePromise((job: IJobModel, id: string) => {
+      props.fetchCommentsRequest(job, id);
     }, 500);
-    this.state = {
-      currentComment: {
-        Id: '0',
-        ContentText: 'No Comments',
-        Username: '',
-      },
-    };
+    this.state = {};
   }
 
-  componentWillMount() {
-    const { jobId } = this.props;
-    this.fetch(jobId, null);
-  }
+  componentWillMount() {}
 
   getItems(): ICommentPaneItem[] {
-    const { comments } = this.props;
+    // const { comments } = this.props;
     const retArr = [] as ICommentPaneItem[];
-    if (comments && comments.length > 0) {
-      comments.map((x: ICommentPaneItem, i: number) => {
-        retArr.push({
-          color: '#fff',
-          Id: i.toString(),
-          Subject: x.Subject,
-          data: <div>{x.Subject}</div>,
-        });
-      });
-    } else {
-      retArr.push({
-        color: 'transparent',
-        Id: '-1',
-        Subject: 'There are no Comments',
-        data: <div className={classNames.noData}>No Comments. [ADD]</div>,
-      });
-    }
-    console.log('retARr', comments, retArr);
+    // if (comments && comments.length > 0) {
+    //   comments.map((x: ICommentPaneItem, i: number) => {
+    //     retArr.push({
+    //       color: '#fff',
+    //       Id: i.toString(),
+    //       Subject: x.Subject,
+    //       data: <div>{x.Subject}</div>,
+    //     });
+    //   });
+    // } else {
+    //   retArr.push({
+    //     color: 'transparent',
+    //     Id: '-1',
+    //     Subject: 'There are no Comments',
+    //     data: <div className={classNames.noData}>No Comments. [ADD]</div>,
+    //   });
+    // }
+    // console.log('retARr', comments, retArr);
     return retArr;
   }
 
