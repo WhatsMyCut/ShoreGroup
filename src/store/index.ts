@@ -1,12 +1,14 @@
 import * as LoginStore from './LoginStore';
 import * as TaskStore from './TaskStore';
 import * as JobStore from './JobStore';
+import * as CommentStore from './CommentStore';
 // The top-level state object
 export interface ApplicationState {
   login: LoginStore.IState;
   tasks: TaskStore.IState;
   jobs: JobStore.IState;
   job: JobStore.IState;
+  comments: CommentStore.IState;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
