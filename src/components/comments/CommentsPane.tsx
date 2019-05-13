@@ -19,7 +19,7 @@ export interface ICommentPaneItem {
   data?: JSX.Element;
 }
 
-interface ICommentProps {
+interface ICommentProps extends RouteComponentProps {
   job?: IJobModel;
 }
 
@@ -69,11 +69,11 @@ const classNames = mergeStyleSets({
   },
 });
 
-type Props = RouteComponentProps<ICommentProps> &
+type Props = ICommentProps &
   typeof CommentStore.actionCreators &
   CommentStore.IState;
 
-export class CommentsPane extends AppComponent<Props, IState> {
+export class CommentsPane extends AppComponent<any, IState> {
   private fetch: (job: IJobModel, id: string) => void;
   constructor(props: Props) {
     super(props);
