@@ -72,7 +72,7 @@ export default class JobList extends Component<IProps, IJobsListState> {
         onRender: (item: IJobModel) => {
           return (
             <NavLink to={`/jobs/${item.Id}`} data-automation-id="test">
-              J-{item.JobName}
+              {item.JobNumber}
             </NavLink>
           );
         },

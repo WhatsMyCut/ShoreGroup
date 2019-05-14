@@ -34,7 +34,7 @@ export interface IJobModel {
   DataFileQuantity?: string;
   Description?: string;
   DueDate?: string;
-  JobName?: string;
+  JobNumber?: string;
   ModifiedOn?: string;
   Owner?: IJobOwner;
   Type?: IJobType;
