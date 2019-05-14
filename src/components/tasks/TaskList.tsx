@@ -320,7 +320,7 @@ function _copyAndSort<T>(
 }
 
 function _generateDocuments(tasks: ITaskModel[]) {
-  console.log('tasks', tasks);
+  //console.log('tasks', tasks);
   const items: IDocument[] = [];
   const rows = tasks ? tasks : [];
   rows.map((task: ITaskModel) => {

@@ -102,7 +102,7 @@ class TopMenu extends AppComponent<IProps, IState> {
   }
 
   componentWillUpdate(nextProps) {
-    console.log('componentWillUpdate', nextProps);
+    // console.log('componentWillUpdate', nextProps);
     const { theme } = nextProps;
     this._updateClassNames(theme);
   }
@@ -131,7 +131,7 @@ class TopMenu extends AppComponent<IProps, IState> {
 
   componentWillMount() {
     const { theme } = this.props;
-    console.log('componentDidMount', theme);
+    //console.log('componentDidMount', theme);
     this._updateClassNames(theme);
   }
 
@@ -204,7 +204,7 @@ class TopMenu extends AppComponent<IProps, IState> {
       const { userInfo, theme } = this.props;
       const accounts = userInfo ? userInfo.accounts : [];
       const selectedAccount = userInfo ? userInfo.account : '-';
-      console.log('userInfo', userInfo, theme.palette.themePrimary);
+      // console.log('userInfo', userInfo, theme.palette.themePrimary);
       const retArr = [];
       if (accounts && accounts.length) {
         for (let i = 0; i < accounts.length; i++) {

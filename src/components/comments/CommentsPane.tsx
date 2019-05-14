@@ -80,32 +80,38 @@ export class CommentsPane extends AppComponent<any, IState> {
     this.fetch = AwesomeDebouncePromise((job: IJobModel, id: string) => {
       props.fetchCommentsRequest(job, id);
     }, 500);
-    this.state = {};
+    this.state = {
+      currentComment: null,
+    };
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    const { job } = this.props;
+    this.fetch(this.props.job, null);
+  }
 
   getItems(): ICommentPaneItem[] {
-    // const { comments } = this.props;
+    const { comments } = this.props;
+    console.log('getItems', comments);
     const retArr = [] as ICommentPaneItem[];
-    // if (comments && comments.length > 0) {
-    //   comments.map((x: ICommentPaneItem, i: number) => {
-    //     retArr.push({
-    //       color: '#fff',
-    //       Id: i.toString(),
-    //       Subject: x.Subject,
-    //       data: <div>{x.Subject}</div>,
-    //     });
-    //   });
-    // } else {
-    //   retArr.push({
-    //     color: 'transparent',
-    //     Id: '-1',
-    //     Subject: 'There are no Comments',
-    //     data: <div className={classNames.noData}>No Comments. [ADD]</div>,
-    //   });
-    // }
-    // console.log('retARr', comments, retArr);
+    if (comments && comments.length > 0) {
+      comments.map((x: ICommentPaneItem, i: number) => {
+        retArr.push({
+          color: '#fff',
+          Id: i.toString(),
+          Subject: x.Subject,
+          data: <div>{x.Subject}</div>,
+        });
+      });
+    } else {
+      retArr.push({
+        color: 'transparent',
+        Id: '-1',
+        Subject: 'There are no Comments',
+        data: <div className={classNames.noData}>No Comments. [ADD]</div>,
+      });
+    }
+    console.log('retARr', comments, retArr);
     return retArr;
   }
 

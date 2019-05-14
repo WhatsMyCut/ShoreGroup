@@ -302,7 +302,7 @@ const FILE_ICONS: { name: string }[] = [
 ];
 
 function _generateDocuments(attachments: IAttachmentModel[]) {
-  console.log('attachments', attachments);
+  // console.log('attachments', attachments);
   const items: IDocument[] = [];
   const rows = attachments ? attachments : [];
   rows.map((attachment: IAttachmentModel) => {

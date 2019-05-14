@@ -32,6 +32,7 @@ export default class CommentService extends ServiceBase {
       }/comment`,
       method: 'GET',
     });
+    console.log('result', result);
     return result.value;
   }
 
