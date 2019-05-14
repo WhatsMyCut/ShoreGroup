@@ -4,6 +4,10 @@ export const adalConfig = {
   tenant: process.env.REACT_APP_ADAL_TENANT,
   clientId: process.env.REACT_APP_ADAL_CLIENTID,
   endpoints: {},
+  redirectUri: ((loc, port) => `${loc.protocol}//${loc.hostname}${port}/`)(
+    window.location,
+    window.location.port ? `:${window.location.port}` : '',
+  ),
   cacheLocation: process.env.REACT_APP_ADAL_CACHE_LOCATION,
 };
 

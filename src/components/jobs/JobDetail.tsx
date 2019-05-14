@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import * as JobStore from '../../store/JobStore';
 import { ApplicationState, reducers } from '../../store/index';
 import { CommandBar } from 'office-ui-fabric-react/lib/CommandBar';
-import { IJobModel, IJobType } from '../../models/IJobModel';
+import { IJobModel } from '../../models/IJobModel';
 import { AttachmentList } from '../../components/attachments/AttachmentList';
 import { AttachmentPane } from '../../components/attachments/AttachmentPane';
 import { TaskList } from '../../components/tasks/TaskList';
@@ -16,7 +16,7 @@ import Moment from 'moment';
 import { Icon } from 'office-ui-fabric-react/lib/components/Icon';
 import { List } from 'office-ui-fabric-react/lib/components/List';
 import { ITheme } from 'office-ui-fabric-react/lib/Styling';
-import { mergeStyleSets } from '@uifabric/styling';
+import { mergeStyleSets, getTheme } from '@uifabric/styling';
 import { ITaskModel } from '../../models/ITaskModel';
 
 export interface IProps {
@@ -35,6 +35,7 @@ export interface IState {
   currentAttachment?: any;
   currentTask?: any;
   job?: IJobModel;
+  classNames?: any;
 }
 export const State: IState = {
   currentTab: 'general',
@@ -43,18 +44,26 @@ export const State: IState = {
   job: null,
 };
 class JobDetail extends Component<IProps, IState> {
-  protected theme: ITheme;
   protected classNames: any;
   constructor(props: IProps, state: IState) {
     super(props);
-    this.theme = props.theme;
     this.state = state;
     window.onresize = () => this.render();
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.getHash();
-    this.classNames = mergeStyleSets({
+    this.setState({ classNames: this._updateClassNames(this.props) });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { theme } = nextProps;
+    console.log('hterererer', nextProps);
+    this.setState({ classNames: this._updateClassNames(nextProps) });
+  }
+
+  private _updateClassNames(props) {
+    const classNames = mergeStyleSets({
       jobDetailList: {
         width: '100%',
         fontSize: 'medium',
@@ -66,16 +75,16 @@ class JobDetail extends Component<IProps, IState> {
         flexBasis: '100%',
         flexDirection: 'row',
         width: '100%',
-        borderBottom: '1px solid ' + this.theme.palette.themeLighter,
+        borderBottom: '1px solid ' + props.theme.palette.themeLighter,
       },
       jobDetailKey: {
         flexGrow: 1,
         flexShrink: 1,
         flexBasis: '25%',
-        backgroundColor: this.theme.palette.themeLighter,
-        color: this.theme.palette.black,
-        borderBottom: '1px solid ' + this.theme.palette.themeLight,
-        borderRight: '1px solid ' + this.theme.palette.themeLight,
+        backgroundColor: props.theme.palette.themeLighter,
+        color: props.theme.palette.themeDark,
+        borderBottom: '1px solid ' + props.theme.palette.themeLight,
+        borderRight: '1px solid ' + props.theme.palette.themeLight,
         padding: 10,
         fontSize: 12,
         selectors: {
@@ -99,9 +108,9 @@ class JobDetail extends Component<IProps, IState> {
       },
       jobDetailTabs: {
         marginBottom: 15,
-        border: '1px solid' + this.theme.palette.themePrimary,
+        border: '1px solid' + props.theme.palette.themePrimary,
         borderRadius: 5,
-        backgroundColor: this.theme.palette.themeLighter,
+        backgroundColor: props.theme.palette.themeLighter,
         selectors: {
           '& .ms-CommandBar': {
             padding: 0,
@@ -114,14 +123,14 @@ class JobDetail extends Component<IProps, IState> {
         },
       },
       active: {
-        borderBottom: '3px solid' + this.theme.palette.themePrimary,
+        borderBottom: '3px solid' + props.theme.palette.themePrimary,
       },
       jobDetailMain: {
         flexGrow: 1,
         flexShrink: 1,
         flexBasis: '100%',
         flexDirection: 'row',
-        border: '1px solid' + this.theme.palette.themePrimary,
+        border: '1px solid' + props.theme.palette.themePrimary,
         borderRadius: 5,
         padding: 0,
       },
@@ -130,11 +139,12 @@ class JobDetail extends Component<IProps, IState> {
         flexShrink: 0,
         flexBasis: '30%',
         margin: '0 0 0 25px',
-        border: '1px solid' + this.theme.palette.themePrimary,
+        border: '1px solid' + props.theme.palette.themePrimary,
         borderRadius: 5,
         padding: '0',
       },
     });
+    return classNames;
   }
 
   alertClicked(e: MouseEvent) {
@@ -176,13 +186,13 @@ class JobDetail extends Component<IProps, IState> {
   };
 
   // Data for CommandBar
-  private getItems = () => {
+  private getItems = (classNames: any) => {
     const hash = this.state.currentTab;
     return [
       {
         key: 'main',
         name: 'General',
-        className: hash === 'general' || '' ? this.classNames.active : '',
+        className: hash === 'general' || '' ? classNames.active : '',
         iconProps: {
           iconName: 'BulletedList',
         },
@@ -192,7 +202,7 @@ class JobDetail extends Component<IProps, IState> {
       {
         key: 'attachments',
         name: 'Attachments',
-        className: hash === 'attachments' ? this.classNames.active : '',
+        className: hash === 'attachments' ? classNames.active : '',
         iconProps: {
           iconName: 'FilePDB',
         },
@@ -202,7 +212,7 @@ class JobDetail extends Component<IProps, IState> {
       {
         key: 'share',
         name: 'Tasks',
-        className: hash === 'tasks' ? this.classNames.active : '',
+        className: hash === 'tasks' ? classNames.active : '',
         iconProps: {
           iconName: 'ActivateOrders',
         },
@@ -218,10 +228,10 @@ class JobDetail extends Component<IProps, IState> {
     ) : (
       <div className="attachments-container">
         <div className="attachments-dropzone">
-          <Dropzone theme={this.theme}>
+          <Dropzone theme={this.props.theme}>
             <Icon
               iconName="FileUpload"
-              style={{ color: this.theme.palette.themePrimary }}
+              style={{ color: this.props.theme.palette.themePrimary }}
             />
           </Dropzone>
         </div>
@@ -251,7 +261,7 @@ class JobDetail extends Component<IProps, IState> {
     let content;
     const { currentAttachment, currentTask } = this.state;
     const { job } = this.props;
-    const comments = job ? job.Tasks : [];
+    const jobId = job ? job.Id : '0';
     if (currentAttachment) {
       content = (
         <div>
@@ -279,7 +289,7 @@ class JobDetail extends Component<IProps, IState> {
     } else {
       content = (
         <div>
-          <CommentsPane comments={comments} />
+          <CommentsPane job={job} />
         </div>
       );
     }
@@ -297,7 +307,7 @@ class JobDetail extends Component<IProps, IState> {
     return this.state;
   }
 
-  private _renderList(): JSX.Element {
+  private _renderList(classNames: any): JSX.Element {
     const { job } = this.props;
     const columns = [
       {
@@ -318,7 +328,7 @@ class JobDetail extends Component<IProps, IState> {
       },
     ];
     const jobName = job ? job.Name : '–';
-    const jobNumber = job && job.JobName ? job.JobName : '–';
+    const jobNumber = job && job.JobNumber ? job.JobNumber : '–';
     const dueDate = Moment(job.DueDate).format('l');
     const account = job && job.Account ? job.Account.name : '–';
     const owner = job && job.Owner ? job.Owner.FullName : '–';
@@ -336,12 +346,12 @@ class JobDetail extends Component<IProps, IState> {
     return (
       <List
         items={items}
-        className={this.classNames.jobDetailList}
+        className={classNames.jobDetailList}
         onRenderCell={(item, itemProps) => {
           return (
-            <div className={this.classNames.jobDetailRow}>
-              <div className={this.classNames.jobDetailKey}>{item.name}</div>
-              <div className={this.classNames.jobDetailValue}>{item.value}</div>
+            <div className={classNames.jobDetailRow} {...itemProps}>
+              <div className={classNames.jobDetailKey}>{item.name}</div>
+              <div className={classNames.jobDetailValue}>{item.value}</div>
             </div>
           );
         }}
@@ -356,16 +366,16 @@ class JobDetail extends Component<IProps, IState> {
     let generalActive = currentTab === 'general' || '' ? 'active' : '';
     let attachmentsActive = currentTab === 'attachments' ? 'active' : '';
     let tasksActive = currentTab === 'tasks' ? 'active' : '';
-
+    let classNames = this._updateClassNames(this.props);
     return (
-      <div className={this.classNames.jobDetailContainer}>
-        <div className={this.classNames.jobDetailTabs}>
+      <div className={classNames.jobDetailContainer}>
+        <div className={classNames.jobDetailTabs}>
           <CommandBar
-            items={this.getItems()}
-            theme={this.theme}
+            items={this.getItems(classNames)}
+            theme={this.props.theme}
             styles={{
               root: {
-                backgroundColor: this.theme.palette.themeLight,
+                backgroundColor: this.props.theme.palette.themeLight,
               },
             }}
             ariaLabel={
@@ -374,10 +384,10 @@ class JobDetail extends Component<IProps, IState> {
           />
         </div>
         <div className="job-detail-content">
-          <div className={this.classNames.jobDetailMain}>
+          <div className={classNames.jobDetailMain}>
             <div className="job-detail-panel">
               <div className={'general ' + generalActive}>
-                {this._renderList()}
+                {this._renderList(classNames)}
               </div>
               <div className={'attachments ' + attachmentsActive}>
                 {this._renderAttachments()}
@@ -387,7 +397,7 @@ class JobDetail extends Component<IProps, IState> {
               </div>
             </div>
           </div>
-          <div className={this.classNames.jobDetailComments}>
+          <div className={classNames.jobDetailComments}>
             <div className="job-detail-comments-list">
               {this._renderSidePanel()}
             </div>

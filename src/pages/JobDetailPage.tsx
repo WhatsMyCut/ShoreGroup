@@ -15,6 +15,7 @@ import { ApplicationState, reducers } from '../store/index';
 import { IJobModel } from '../models/IJobModel';
 import JobHeader from '../components/jobs/JobHeader';
 import JobDetail from '../components/jobs/JobDetail';
+import CommentsModal from '../components/comments/CommentModal';
 import * as JobStore from '../store/JobStore';
 import AppBreadcrumb from '../components/shared/AppBreadcrumb';
 import { getTheme } from 'office-ui-fabric-react/lib/Styling';
@@ -68,15 +69,20 @@ class JobDetailPage extends AppComponent<Props, IState> {
     this.fetch(jobId);
   }
 
+  onSaveComment() {
+    console.log('onSaveComment');
+  }
+
   render() {
     const { job, indicators } = this.props;
-    console.log('job', job);
+    // console.log('job', job);
     return (
       <div className="job-detail">
         <AppBreadcrumb show={true} job={job} />
         <Loader show={indicators.operationLoading} />
         <JobHeader job={job} />
         <JobDetail job={job} currentTab={this.currentTab} theme={this.theme} />
+        <CommentsModal onSaveComment={this.onSaveComment} />
       </div>
     );
   }

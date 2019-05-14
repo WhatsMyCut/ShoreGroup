@@ -43,6 +43,7 @@ type Props = RouteComponentProps<{}> &
 
 interface IState {
   currentTheme?: string;
+  classNames?: any;
 }
 
 class AuthorizedLayout extends Component<Props, IState> {
@@ -54,6 +55,7 @@ class AuthorizedLayout extends Component<Props, IState> {
     super(props);
     this.state = {
       currentTheme: 'default',
+      classNames: this._updateClassNames(),
     };
     initializeIcons();
     registerIcons({
@@ -70,10 +72,8 @@ class AuthorizedLayout extends Component<Props, IState> {
     });
   }
 
-  componentWillMount() {
-    const { currentTheme } = this.state;
-    loadThemeByName(currentTheme);
-    this.classNames = mergeStyleSets({
+  private _updateClassNames() {
+    const classNames = mergeStyleSets({
       layout: {
         display: 'flex',
         flex: '1 1 100%',
@@ -94,32 +94,34 @@ class AuthorizedLayout extends Component<Props, IState> {
         padding: '0 20px 30px',
       },
     });
+    return classNames;
+  }
 
+  componentWillMount() {
+    const { currentTheme } = this.state;
+    this.onChangeTheme(currentTheme);
     this.props.loginRequest();
   }
 
   onChangeTheme = (theme: string) => {
-    console.log('onChangeTheme', theme);
-    loadThemeByName(theme);
-    this.setState({ currentTheme: theme });
-    console.log('currentTheme', theme);
-    loadThemeByName(theme);
+    const { currentTheme } = this.state;
+    console.log('onChangeTheme', currentTheme);
+    if (theme !== currentTheme) {
+      loadThemeByName(theme);
+      this.setState({ currentTheme: theme });
+    }
   };
-
-  componentDidMount() {}
 
   public render() {
     //const { userInfo } = this.state;
-    const theme = getTheme();
+    const { currentTheme, classNames } = this.state;
 
     return (
-      <div id="authorizedLayout" className={this.classNames.layout}>
-        <NavMenu theme={theme} />
-        <div className={this.classNames.mainContent}>
-          <TopMenu theme={theme} onChangeTheme={this.onChangeTheme} />
-          <div className={this.classNames.panelContent}>
-            {this.props.children}
-          </div>
+      <div id="authorizedLayout" className={classNames.layout}>
+        <NavMenu theme={currentTheme} />
+        <div className={classNames.mainContent}>
+          <TopMenu theme={currentTheme} onChangeTheme={this.onChangeTheme} />
+          <div className={classNames.panelContent}>{this.props.children}</div>
           <Footer />
         </div>
         <ToastContainer />
