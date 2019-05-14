@@ -33,22 +33,21 @@ interface IProps {
 interface IState {
   logoutAction?: boolean;
   userInfo?: IUserInfoModel;
-  theme?: any;
+  theme?: ITheme;
   classNames?: any;
 }
 class TopMenu extends AppComponent<IProps, IState> {
   classNames: any;
   constructor(props: IProps) {
     super(props);
-    const { theme } = props;
-    const classNames = this._updateClassNames(theme);
     this.state = {
-      theme,
-      classNames,
+      theme: props.theme,
+      classNames: {},
     };
   }
 
-  private _updateClassNames(theme: ITheme) {
+  _updateClassNames() {
+    const { theme } = this.props;
     const classNames = mergeStyleSets({
       topmenuContainer: {
         width: '100%',
@@ -97,14 +96,17 @@ class TopMenu extends AppComponent<IProps, IState> {
       menuPersona: {
         padding: 5,
       },
+      buttonIcon: {
+        margin: 10,
+        height: 40,
+        width: 40,
+        minWidth: 'auto',
+        borderRadius: '50%',
+        backgroundColor: theme.palette.themePrimary,
+        color: theme.palette.white,
+      },
     });
     return classNames;
-  }
-
-  componentWillUpdate(nextProps) {
-    // console.log('componentWillUpdate', nextProps);
-    const { theme } = nextProps;
-    this._updateClassNames(theme);
   }
 
   @bind
@@ -129,10 +131,10 @@ class TopMenu extends AppComponent<IProps, IState> {
   private elDropdown: HTMLAnchorElement;
   private elCollapseButton: HTMLButtonElement;
 
-  componentWillMount() {
-    const { theme } = this.props;
-    //console.log('componentDidMount', theme);
-    this._updateClassNames(theme);
+  componentWillReceiveProps(nextProps) {
+    console.log('TopHERE', nextProps);
+    //    nextProps.onChangeTheme();
+    //    this._updateClassNames();
   }
 
   private _initials(string: string) {
@@ -143,83 +145,87 @@ class TopMenu extends AppComponent<IProps, IState> {
     }
     return retVal;
   }
+  _renderPersona = (): JSX.Element => {
+    const { userInfo, theme } = this.props;
+    return (
+      <div className={this.state.classNames.menuPersona}>
+        {_getUserPersona(userInfo)}
+      </div>
+    );
+  };
+
+  _onChangeTheme = (theme: string) => {
+    const { onChangeTheme } = this.props;
+    onChangeTheme(theme);
+  };
+
+  _getThemesItems = () => {
+    const retArr = [];
+    const { theme } = this.props;
+    if (themes) {
+      const themeNames = Object.keys(themes);
+      themeNames.map((x, i) => {
+        const c = themes[x];
+        const cPrime =
+          c && c.palette
+            ? c.palette.themePrimary
+            : { palette: { themePrimary: '#000' } };
+        const tPrime =
+          theme && theme.palette
+            ? theme.palette.themePrimary
+            : { palette: { themePrimary: '#000' } };
+        retArr.push({
+          key: i,
+          text: x,
+          canCheck: true,
+          isChecked: cPrime === tPrime,
+          onClick: () => this._onChangeTheme(x),
+        });
+      });
+    }
+    return retArr;
+  };
+
+  _renderEmail = (text: string, subject: string): JSX.Element => {
+    return (
+      <a href={'mailto:support@sepire.com&Subject=' + encodeURI(subject)}>
+        {text}
+      </a>
+    );
+  };
+
+  _getAccountItems = () => {
+    const { userInfo, theme } = this.props;
+    const accounts = userInfo ? userInfo.accounts : [];
+    const selectedAccount = userInfo ? userInfo.account : '-';
+    console.log('userInfo', userInfo, theme);
+    const retArr = [];
+    if (accounts && accounts.length) {
+      for (let i = 0; i < accounts.length; i++) {
+        const x = accounts[i];
+        retArr.push({
+          key: i,
+          text: x.name,
+          canCheck: true,
+          isChecked: x.guid === selectedAccount,
+          onClick: () => console.log('account clicked', x),
+        });
+      }
+    }
+    return retArr;
+  };
+
+  _renderIcon = (): JSX.Element => {
+    const { userInfo } = this.props;
+    const name =
+      userInfo && userInfo.name ? this._initials(userInfo.name) : '–';
+    return <div className={'profileCoin'}>{name}</div>;
+  };
 
   render() {
     var accountList = null;
     const { userInfo, theme } = this.props;
     const user = userInfo ? userInfo.name : '–';
-    const _renderIcon = (): JSX.Element => {
-      const name =
-        userInfo && userInfo.name ? this._initials(userInfo.name) : '–';
-      return <div className={'profileCoin'}>{name}</div>;
-    };
-
-    const _renderPersona = (): JSX.Element => {
-      return (
-        <div className={this.state.classNames.menuPersona}>
-          {_getUserPersona(userInfo)}
-        </div>
-      );
-    };
-
-    const _onChangeTheme = (theme: string) => {
-      const { onChangeTheme } = this.props;
-      onChangeTheme(theme);
-    };
-
-    const _getThemesItems = () => {
-      const retArr = [];
-      const { theme } = this.props;
-      if (themes) {
-        const themeNames = Object.keys(themes);
-        themeNames.map((x, i) => {
-          const c = themes[x];
-          const cPrime =
-            c && c.palette
-              ? c.palette.themePrimary
-              : { palette: { themePrimary: '#000' } };
-          const tPrime =
-            theme && theme.palette
-              ? theme.palette.themePrimary
-              : { palette: { themePrimary: '#000' } };
-          retArr.push({
-            key: i,
-            text: x,
-            canCheck: true,
-            isChecked: cPrime === tPrime,
-            onClick: () => _onChangeTheme(x),
-          });
-        });
-      }
-      return retArr;
-    };
-    const _renderEmail = (text: string, subject: string): JSX.Element => {
-      return (
-        <a href={'mailto:support@sepire.com&Subject=' + encodeURI(subject)}>
-          {text}
-        </a>
-      );
-    };
-    const _getAccountItems = () => {
-      const { userInfo, theme } = this.props;
-      const accounts = userInfo ? userInfo.accounts : [];
-      const selectedAccount = userInfo ? userInfo.account : '-';
-      // console.log('userInfo', userInfo, theme.palette.themePrimary);
-      const retArr = [];
-      if (accounts && accounts.length) {
-        for (let i = 0; i < accounts.length; i++) {
-          const x = accounts[i];
-          retArr.push({
-            key: i,
-            text: x.name,
-            canCheck: true,
-            isChecked: x.guid === selectedAccount,
-            onClick: () => console.log('account clicked', x),
-          });
-        }
-      }
-      return retArr;
-    };
 
     if (this.state.userInfo && this.state.userInfo.accounts) {
       accountList = this.state.userInfo.accounts.map(function(account) {
@@ -234,6 +240,8 @@ class TopMenu extends AppComponent<IProps, IState> {
     if (this.state.logoutAction) {
       return <Redirect to="/login" />;
     }
+    const bgColor =
+      theme && theme.palette ? theme.palette.themePrimary : '#000';
 
     return (
       <div className={this.state.classNames.topmenuContainer}>
@@ -244,7 +252,7 @@ class TopMenu extends AppComponent<IProps, IState> {
             </a>
           </div>
           <DefaultButton
-            onRenderMenuIcon={_renderIcon}
+            onRenderMenuIcon={this._renderIcon}
             styles={{
               root: {
                 margin: 10,
@@ -252,8 +260,8 @@ class TopMenu extends AppComponent<IProps, IState> {
                 width: 40,
                 minWidth: 'auto',
                 borderRadius: '50%',
-                backgroundColor: this.state.theme.palette.themePrimary,
-                color: this.state.theme.palette.white,
+                backgroundColor: bgColor,
+                color: '#fff',
               },
             }}
             menuProps={{
@@ -261,7 +269,7 @@ class TopMenu extends AppComponent<IProps, IState> {
               items: [
                 {
                   key: 'persona',
-                  onRender: _renderPersona,
+                  onRender: this._renderPersona,
                   styles: { root: { padding: 5 } },
                 },
                 {
@@ -282,7 +290,7 @@ class TopMenu extends AppComponent<IProps, IState> {
                     iconName: 'AccountManagement',
                   },
                   subMenuProps: {
-                    items: _getAccountItems(),
+                    items: this._getAccountItems(),
                   },
                 },
                 {
@@ -300,7 +308,7 @@ class TopMenu extends AppComponent<IProps, IState> {
                   text: 'Theme',
                   iconProps: { iconName: 'Theme' },
                   subMenuProps: {
-                    items: _getThemesItems(),
+                    items: this._getThemesItems(),
                   },
                 },
                 {
@@ -317,7 +325,7 @@ class TopMenu extends AppComponent<IProps, IState> {
                     items: [
                       {
                         key: 1,
-                        name: _renderEmail(
+                        name: this._renderEmail(
                           'Report a Site Issue',
                           'CompliChain Site Issue',
                         ),
@@ -325,7 +333,7 @@ class TopMenu extends AppComponent<IProps, IState> {
                       },
                       {
                         key: 2,
-                        name: _renderEmail(
+                        name: this._renderEmail(
                           'Report Compliance Issue',
                           'Compliance Issue',
                         ),
@@ -333,7 +341,7 @@ class TopMenu extends AppComponent<IProps, IState> {
                       },
                       {
                         key: 3,
-                        name: _renderEmail('Request Help', 'Help'),
+                        name: this._renderEmail('Request Help', 'Help'),
                         iconProps: { iconName: 'Help' },
                       },
                     ],

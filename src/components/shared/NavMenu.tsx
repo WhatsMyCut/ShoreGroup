@@ -29,6 +29,11 @@ class NavMenu extends Component<IProps, IState> {
     super(props);
     this.state = State;
   }
+
+  componentWillReceiveProps(nextProps) {
+    const { theme } = nextProps;
+  }
+
   componentWillMount() {
     const theme = getTheme();
     this.classNames = mergeStyleSets({
@@ -83,8 +88,6 @@ class NavMenu extends Component<IProps, IState> {
     // var dropdown = new Dropdown(this.elDropdown);
     // var collapse = new Collapse(this.elCollapseButton);
   }
-
-  componentDidUpdate() {}
 
   toggleExpanded() {
     console.log('toggleExpanded');

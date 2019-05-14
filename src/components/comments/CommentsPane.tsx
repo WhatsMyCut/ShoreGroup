@@ -78,7 +78,7 @@ export class CommentsPane extends AppComponent<any, IState> {
   constructor(props: Props) {
     super(props);
     this.fetch = AwesomeDebouncePromise((job: IJobModel, id: string) => {
-      props.fetchCommentsRequest(job, id);
+      //props.fetchCommentsRequest(job, id);
     }, 500);
     this.state = {
       currentComment: null,
